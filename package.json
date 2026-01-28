@@ -9,7 +9,7 @@
     "test:ci": "jest --ci --coverage",
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "build": "next build",
+    "build": "echo 'No build required'",
     "lint": "eslint src/",
     "precommit": "npm run test:golden && npm run lint",
     "predeploy": "npm run test:golden && npm run test:ci"
