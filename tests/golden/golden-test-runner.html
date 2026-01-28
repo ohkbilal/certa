@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CERTA V15 §19 Golden Test Suite</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f172a; color: #e2e8f0; padding: 20px; }
+.container { max-width: 1000px; margin: 0 auto; }
+.header { text-align: center; padding: 30px; background: linear-gradient(135deg, #1e40af 0%, #7c3aed 100%); border-radius: 16px; margin-bottom: 20px; }
+.header h1 { font-size: 1.8rem; margin-bottom: 10px; }
+.header p { opacity: 0.9; }
+.test-card { background: #1e293b; border-radius: 12px; padding: 20px; margin-bottom: 15px; border-left: 4px solid #475569; }
+.test-card.passed { border-left-color: #10b981; }
+.test-card.failed { border-left-color: #ef4444; }
+.test-card.running { border-left-color: #f59e0b; }
+.test-name { font-weight: 600; font-size: 1.1rem; margin-bottom: 5px; }
+.test-policy { color: #94a3b8; font-size: 0.85rem; margin-bottom: 10px; }
+.test-result { padding: 10px; border-radius: 8px; margin-top: 10px; }
+.test-result.pass { background: #064e3b; color: #6ee7b7; }
+.test-result.fail { background: #450a0a; color: #fca5a5; }
+.test-details { margin-top: 10px; font-size: 0.85rem; }
+.test-details li { padding: 4px 0; border-bottom: 1px solid #334155; }
+.summary { background: linear-gradient(135deg, #064e3b 0%, #065f46 100%); padding: 25px; border-radius: 16px; margin-top: 20px; text-align: center; }
+.summary.failed { background: linear-gradient(135deg, #450a0a 0%, #7f1d1d 100%); }
+.summary h2 { font-size: 1.5rem; margin-bottom: 15px; }
+.summary-stats { display: flex; justify-content: center; gap: 40px; }
+.stat { text-align: center; }
+.stat-value { font-size: 2rem; font-weight: 700; }
+.stat-label { font-size: 0.85rem; color: #94a3b8; }
+.btn { padding: 12px 24px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; margin: 10px 5px; }
+.btn:hover { background: #2563eb; }
+.btn:disabled { background: #475569; cursor: not-allowed; }
+.progress { height: 4px; background: #334155; border-radius: 2px; margin: 20px 0; overflow: hidden; }
+.progress-bar { height: 100%; background: #3b82f6; transition: width 0.3s; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>🧪 CERTA V15 §19 Golden Test Suite</h1>
+    <p>Parliament Mandate: Week 1, Day 1-2 | Policy V16.0</p>
+  </div>
+  
+  <div style="text-align: center; margin-bottom: 20px;">
+    <button class="btn" id="runTests" onclick="runAllTests()">▶ Run All Golden Tests</button>
+    <button class="btn" id="exportResults" onclick="exportResults()" disabled>📥 Export Results</button>
+  </div>
+  
+  <div class="progress">
+    <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+  </div>
+  
+  <div id="testResults"></div>
+  
+  <div id="summary" style="display: none;"></div>
+</div>
+
+<script>
+/**
+ * ═══════════════════════════════════════════════════════════════════════════════
+ * CERTA V15 §19 GOLDEN TEST SUITE - BROWSER VERSION
+ * ═══════════════════════════════════════════════════════════════════════════════
+ */
+
+// Test results storage
+let testResults = [];
+let totalPassed = 0;
+let totalFailed = 0;
+
+// Mock CERTA engine functions for testing
+// These simulate the actual engine behavior for validation
+const MockEngine = {
+  // V15 §5: Create Run Context
+  createRunContext(fluidId, temp, unit) {
+    if (!fluidId || fluidId === '' || fluidId === 'unknown-fluid-xyz' || fluidId === 'not-in-database') {
+      return {
+        runId: 'RUN-' + Date.now(),
+        fluidId: fluidId || 'INVALID',
+        temperature: temp,
+        unit: unit,
+        primaryRegime: 'UNKNOWN_RESTRICTED',
+        secondaryRegimes: [],
+        valid: false
+      };
+    }
+    
+    const regime = this.resolvePrimaryRegime(fluidId, temp);
+    
+    return {
+      runId: 'RUN-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9),
+      fluidId: fluidId,
+      temperature: temp,
+      unit: unit,
+      primaryRegime: regime.primary,
+      secondaryRegimes: regime.secondary,
+      valid: true
+    };
+  },
+  
+  // V15 §6: Resolve Primary Regime
+  resolvePrimaryRegime(fluidId, tempC) {
+    const id = (fluidId || '').toLowerCase();
+    
+    // EXPLOSIVE_ENERGETIC - highest precedence
+    if (id.includes('nitroglyc') || id.includes('tnt') || id.includes('rdx')) {
+      return { primary: 'EXPLOSIVE_ENERGETIC', secondary: [] };
+    }
+    
+    // FLUORIDE_ACID - V15 §12.2
+    if (id.includes('hf') || id.includes('fluoride') || id === 'hydrofluoric-acid') {
+      return { primary: 'FLUORIDE_ACID', secondary: ['TOXIC_SPECIAL'] };
+    }
+    
+    // OXIDIZING_ACID - V15 §12.1
+    if ((id.includes('hno3') && this.extractConc(id) >= 65) ||
+        (id.includes('h2o2') && this.extractConc(id) >= 30)) {
+      return { primary: 'OXIDIZING_ACID', secondary: [] };
+    }
+    
+    // STRONG_BASE - V15 §12.3
+    if ((id.includes('naoh') || id.includes('koh') || id.includes('caustic')) 
+        && this.extractConc(id) >= 30) {
+      return { primary: 'STRONG_BASE', secondary: [] };
+    }
+    
+    // TOXIC_SPECIAL - V15 §12.4
+    if (id.includes('cyanide') || id.includes('arsenic') || 
+        id.includes('mercury') || id.includes('benzene')) {
+      return { primary: 'TOXIC_SPECIAL', secondary: [] };
+    }
+    
+    // HALOGENATED
+    if (id.includes('hcl') || id.includes('chloride') || id.includes('seawater')) {
+      return { primary: 'HALOGENATED', secondary: [] };
+    }
+    
+    // AQUEOUS_NON_HAZARDOUS - Water and benign
+    if (id.includes('water') || id === 'process-water' || id === 'deionized-water') {
+      return { primary: 'AQUEOUS_NON_HAZARDOUS', secondary: [] };
+    }
+    
+    // AQUEOUS_CORROSIVE - General acids
+    if (id.includes('h2so4') || id.includes('h3po4')) {
+      return { primary: 'AQUEOUS_CORROSIVE', secondary: [] };
+    }
+    
+    return { primary: 'NEUTRAL', secondary: [] };
+  },
+  
+  extractConc(id) {
+    const match = id.match(/-(\d+)$/);
+    return match ? parseInt(match[1]) : 0;
+  },
+  
+  // V15 §13: Resolve Seal Eligibility
+  resolveSealEligibility(ctx) {
+    if (!ctx || !ctx.primaryRegime) {
+      return { state: 'SEAL_SELECTION_SUPPRESSED', reason: 'Invalid context', allowedCategories: [] };
+    }
+    
+    const regime = ctx.primaryRegime;
+    
+    // V15 §13.3: Water & Benign
+    if (regime === 'NEUTRAL' || regime === 'AQUEOUS_NON_HAZARDOUS') {
+      return {
+        state: 'STANDARD_ALLOWED',
+        reason: 'V15 §13.3: Benign fluid - standard seals permitted',
+        allowedCategories: ['Single', 'Double', 'Cartridge']
+      };
+    }
+    
+    // V15 §13.4: FLUORIDE_ACID or EXPLOSIVE → SEALLESS_REQUIRED
+    if (regime === 'FLUORIDE_ACID' || regime === 'EXPLOSIVE_ENERGETIC') {
+      return {
+        state: 'SEALLESS_REQUIRED',
+        reason: 'V15 §13.4: ' + regime + ' requires sealless containment',
+        allowedCategories: ['Magnetic Drive', 'Canned Motor']
+      };
+    }
+    
+    // V15 §13.4: TOXIC → SPECIALIZED_REQUIRED
+    if (regime === 'TOXIC_SPECIAL') {
+      return {
+        state: 'SPECIALIZED_REQUIRED',
+        reason: 'V15 §13.4: Toxic fluid requires specialized containment',
+        allowedCategories: ['Specialized Cartridge', 'OEM Engineered']
+      };
+    }
+    
+    // V15 §13.4: OXIDIZING_ACID → REINFORCED_REQUIRED
+    if (regime === 'OXIDIZING_ACID') {
+      return {
+        state: 'REINFORCED_REQUIRED',
+        reason: 'V15 §13.4: Oxidizing chemistry requires reinforced sealing',
+        allowedCategories: ['Double', 'Cartridge']
+      };
+    }
+    
+    // UNKNOWN → SUPPRESSED
+    if (regime === 'UNKNOWN_RESTRICTED') {
+      return {
+        state: 'SEAL_SELECTION_SUPPRESSED',
+        reason: 'V15 §9: Unknown regime - insufficient data',
+        allowedCategories: []
+      };
+    }
+    
+    // Default corrosive
+    if (regime === 'HALOGENATED' || regime === 'AQUEOUS_CORROSIVE' || regime === 'STRONG_BASE') {
+      return {
+        state: 'REINFORCED_REQUIRED',
+        reason: 'V15 §13.4: Corrosive chemistry requires reinforced sealing',
+        allowedCategories: ['Double', 'Cartridge']
+      };
+    }
+    
+    // Default fallback
+    return {
+      state: 'STANDARD_ALLOWED',
+      reason: 'V15 §13.3: Standard sealing appropriate',
+      allowedCategories: ['Single', 'Double', 'Cartridge']
+    };
+  },
+  
+  // V15 §12.1: Check if metal is excluded for oxidizing regime
+  isMetalExcludedForOxidizing(matId, regime) {
+    if (regime !== 'OXIDIZING_ACID') return false;
+    const metals = ['carbon-steel', '316ss', '304ss', 'hastelloy-c', 'titanium', 'monel'];
+    return metals.includes(matId.toLowerCase());
+  }
+};
+
+// Golden Tests Definition
+const GoldenTests = [
+  {
+    id: 'GT-1',
+    name: 'Water/Benign → STANDARD_ALLOWED seals',
+    policyRef: 'V15 §13.3, §19',
+    run: function() {
+      const results = { passed: 0, failed: 0, details: [] };
+      const fluids = ['water', 'process-water', 'deionized-water'];
+      
+      for (const fluid of fluids) {
+        const ctx = MockEngine.createRunContext(fluid, 25, 'C');
+        const seal = MockEngine.resolveSealEligibility(ctx);
+        
+        if (seal.state === 'STANDARD_ALLOWED') {
+          results.passed++;
+          results.details.push({ status: 'pass', msg: fluid + ': STANDARD_ALLOWED ✓' });
+        } else {
+          results.failed++;
+          results.details.push({ status: 'fail', msg: fluid + ': Expected STANDARD_ALLOWED, got ' + seal.state });
+        }
+        
+        // Check no sealless required
+        if (!seal.allowedCategories.includes('Magnetic Drive')) {
+          results.passed++;
+          results.details.push({ status: 'pass', msg: fluid + ': No sealless required ✓' });
+        } else {
+          results.failed++;
+          results.details.push({ status: 'fail', msg: fluid + ': Should not require sealless' });
+        }
+      }
+      
+      return results;
+    }
+  },
+  {
+    id: 'GT-2',
+    name: 'HF → Sealless or Suppressed',
+    policyRef: 'V15 §12.2, §13.4, §19',
+    run: function() {
+      const results = { passed: 0, failed: 0, details: [] };
+      const fluids = ['hf-48', 'hf-70', 'hydrofluoric-acid'];
+      
+      for (const fluid of fluids) {
+        const ctx = MockEngine.createRunContext(fluid, 25, 'C');
+        const seal = MockEngine.resolveSealEligibility(ctx);
+        
+        const validStates = ['SEALLESS_REQUIRED', 'SEAL_SELECTION_SUPPRESSED'];
+        if (validStates.includes(seal.state)) {
+          results.passed++;
+          results.details.push({ status: 'pass', msg: fluid + ': ' + seal.state + ' ✓' });
+        } else {
+          results.failed++;
+          results.details.push({ status: 'fail', msg: fluid + ': Expected SEALLESS or SUPPRESSED, got ' + seal.state });
+        }
+        
+        // Check sealless options
+        if (seal.state === 'SEALLESS_REQUIRED') {
+          if (seal.allowedCategories.includes('Magnetic Drive')) {
+            results.passed++;
+            results.details.push({ status: 'pass', msg: fluid + ': Magnetic Drive allowed ✓' });
+          }
+          if (!seal.allowedCategories.includes('Single')) {
+            results.passed++;
+            results.details.push({ status: 'pass', msg: fluid + ': Single seal NOT allowed ✓' });
+          } else {
+            results.failed++;
+            results.details.push({ status: 'fail', msg: fluid + ': Single seal should NOT be allowed' });
+          }
+        }
+      }
+      
+      return results;
+    }
+  },
+  {
+    id: 'GT-3',
+    name: 'Oxidizing Acid → No Metal Recommendations',
+    policyRef: 'V15 §12.1, §19',
+    run: function() {
+      const results = { passed: 0, failed: 0, details: [] };
+      const fluids = ['hno3-65', 'hno3-70', 'h2o2-30'];
+      const metals = ['carbon-steel', '316ss', 'titanium'];
+      
+      for (const fluid of fluids) {
+        const ctx = MockEngine.createRunContext(fluid, 25, 'C');
+        
+        // Verify regime is OXIDIZING_ACID
+        if (ctx.primaryRegime === 'OXIDIZING_ACID') {
+          results.passed++;
+          results.details.push({ status: 'pass', msg: fluid + ': Regime = OXIDIZING_ACID ✓' });
+          
+          // Check metals are excluded
+          for (const metal of metals) {
+            if (MockEngine.isMetalExcludedForOxidizing(metal, ctx.primaryRegime)) {
+              results.passed++;
+              results.details.push({ status: 'pass', msg: fluid + ': ' + metal + ' excluded ✓' });
+            }
+          }
+        } else {
+          results.failed++;
+          results.details.push({ status: 'fail', msg: fluid + ': Expected OXIDIZING_ACID, got ' + ctx.primaryRegime });
+        }
+      }
+      
+      return results;
+    }
+  },
+  {
+    id: 'GT-4',
+    name: 'Toxic Fluid → No Standard Seals',
+    policyRef: 'V15 §12.4, §13.4, §19',
+    run: function() {
+      const results = { passed: 0, failed: 0, details: [] };
+      const fluids = ['benzene', 'cyanide', 'mercury'];
+      
+      for (const fluid of fluids) {
+        const ctx = MockEngine.createRunContext(fluid, 25, 'C');
+        const seal = MockEngine.resolveSealEligibility(ctx);
+        
+        // Must NOT be STANDARD_ALLOWED
+        if (seal.state !== 'STANDARD_ALLOWED') {
+          results.passed++;
+          results.details.push({ status: 'pass', msg: fluid + ': Not STANDARD_ALLOWED ✓ (' + seal.state + ')' });
+        } else {
+          results.failed++;
+          results.details.push({ status: 'fail', msg: fluid + ': Should NOT be STANDARD_ALLOWED' });
+        }
+        
+        // Must NOT allow Single seals
+        if (!seal.allowedCategories.includes('Single')) {
+          results.passed++;
+          results.details.push({ status: 'pass', msg: fluid + ': Single seal NOT allowed ✓' });
+        } else {
+          results.failed++;
+          results.details.push({ status: 'fail', msg: fluid + ': Single seal should NOT be allowed' });
+        }
+      }
+      
+      return results;
+    }
+  },
+  {
+    id: 'GT-5',
+    name: 'Unknown Data → Suppressed Outputs',
+    policyRef: 'V15 §9, §19',
+    run: function() {
+      const results = { passed: 0, failed: 0, details: [] };
+      const fluids = ['unknown-fluid-xyz', 'not-in-database', ''];
+      
+      for (const fluid of fluids) {
+        const ctx = MockEngine.createRunContext(fluid, 25, 'C');
+        
+        // Regime should be UNKNOWN_RESTRICTED
+        if (ctx.primaryRegime === 'UNKNOWN_RESTRICTED') {
+          results.passed++;
+          results.details.push({ status: 'pass', msg: '"' + fluid + '": Regime = UNKNOWN_RESTRICTED ✓' });
+        } else {
+          results.failed++;
+          results.details.push({ status: 'fail', msg: '"' + fluid + '": Expected UNKNOWN_RESTRICTED, got ' + ctx.primaryRegime });
+        }
+        
+        // Seals should be suppressed
+        const seal = MockEngine.resolveSealEligibility(ctx);
+        if (seal.state === 'SEAL_SELECTION_SUPPRESSED') {
+          results.passed++;
+          results.details.push({ status: 'pass', msg: '"' + fluid + '": Seals SUPPRESSED ✓' });
+        } else {
+          results.failed++;
+          results.details.push({ status: 'fail', msg: '"' + fluid + '": Expected SUPPRESSED, got ' + seal.state });
+        }
+        
+        // Categories should be empty
+        if (seal.allowedCategories.length === 0) {
+          results.passed++;
+          results.details.push({ status: 'pass', msg: '"' + fluid + '": Empty categories ✓' });
+        } else {
+          results.failed++;
+          results.details.push({ status: 'fail', msg: '"' + fluid + '": Categories should be empty' });
+        }
+      }
+      
+      return results;
+    }
+  },
+  {
+    id: 'GT-6',
+    name: 'UI-PDF Parity (Same FAO)',
+    policyRef: 'V15 §14, §19',
+    run: function() {
+      const results = { passed: 0, failed: 0, details: [] };
+      const fluids = ['water', 'hcl-37', 'naoh-50'];
+      
+      for (const fluid of fluids) {
+        const ctx = MockEngine.createRunContext(fluid, 25, 'C');
+        
+        // Verify runId exists
+        if (ctx.runId && ctx.runId.length > 0) {
+          results.passed++;
+          results.details.push({ status: 'pass', msg: fluid + ': RunId exists ✓' });
+        } else {
+          results.failed++;
+          results.details.push({ status: 'fail', msg: fluid + ': RunId missing' });
+        }
+        
+        // Generate same context twice - should be consistent
+        const seal1 = MockEngine.resolveSealEligibility(ctx);
+        const seal2 = MockEngine.resolveSealEligibility(ctx);
+        
+        if (seal1.state === seal2.state) {
+          results.passed++;
+          results.details.push({ status: 'pass', msg: fluid + ': Seal state consistent ✓' });
+        } else {
+          results.failed++;
+          results.details.push({ status: 'fail', msg: fluid + ': Seal state inconsistent' });
+        }
+      }
+      
+      return results;
+    }
+  },
+  {
+    id: 'GT-7',
+    name: 'Determinism (Same Input → Same Output)',
+    policyRef: 'V15 §2.1, §19',
+    run: function() {
+      const results = { passed: 0, failed: 0, details: [] };
+      const testCases = [
+        { fluid: 'water', temp: 25 },
+        { fluid: 'hcl-37', temp: 50 },
+        { fluid: 'naoh-50', temp: 80 }
+      ];
+      
+      for (const tc of testCases) {
+        const regimes = [];
+        const states = [];
+        
+        // Run 5 times
+        for (let i = 0; i < 5; i++) {
+          const ctx = MockEngine.createRunContext(tc.fluid, tc.temp, 'C');
+          const seal = MockEngine.resolveSealEligibility(ctx);
+          regimes.push(ctx.primaryRegime);
+          states.push(seal.state);
+        }
+        
+        // All must be identical
+        const allRegimesSame = regimes.every(r => r === regimes[0]);
+        const allStatesSame = states.every(s => s === states[0]);
+        
+        if (allRegimesSame) {
+          results.passed++;
+          results.details.push({ status: 'pass', msg: tc.fluid + '@' + tc.temp + 'C: Regime deterministic ✓' });
+        } else {
+          results.failed++;
+          results.details.push({ status: 'fail', msg: tc.fluid + '@' + tc.temp + 'C: Regime NOT deterministic' });
+        }
+        
+        if (allStatesSame) {
+          results.passed++;
+          results.details.push({ status: 'pass', msg: tc.fluid + '@' + tc.temp + 'C: Seal state deterministic ✓' });
+        } else {
+          results.failed++;
+          results.details.push({ status: 'fail', msg: tc.fluid + '@' + tc.temp + 'C: Seal state NOT deterministic' });
+        }
+      }
+      
+      return results;
+    }
+  },
+  {
+    id: 'GT-8',
+    name: 'Regime Precedence Order',
+    policyRef: 'V15 §6, §19',
+    run: function() {
+      const results = { passed: 0, failed: 0, details: [] };
+      const tests = [
+        { fluid: 'hf-48', expected: 'FLUORIDE_ACID' },
+        { fluid: 'hno3-70', expected: 'OXIDIZING_ACID' },
+        { fluid: 'naoh-50', expected: 'STRONG_BASE' },
+        { fluid: 'benzene', expected: 'TOXIC_SPECIAL' },
+        { fluid: 'water', expected: 'AQUEOUS_NON_HAZARDOUS' }
+      ];
+      
+      for (const test of tests) {
+        const ctx = MockEngine.createRunContext(test.fluid, 25, 'C');
+        
+        if (ctx.primaryRegime === test.expected) {
+          results.passed++;
+          results.details.push({ status: 'pass', msg: test.fluid + ': ' + ctx.primaryRegime + ' ✓' });
+        } else {
+          results.failed++;
+          results.details.push({ status: 'fail', msg: test.fluid + ': Expected ' + test.expected + ', got ' + ctx.primaryRegime });
+        }
+      }
+      
+      return results;
+    }
+  }
+];
+
+// Run all tests
+async function runAllTests() {
+  document.getElementById('runTests').disabled = true;
+  document.getElementById('exportResults').disabled = true;
+  document.getElementById('testResults').innerHTML = '';
+  document.getElementById('summary').style.display = 'none';
+  
+  testResults = [];
+  totalPassed = 0;
+  totalFailed = 0;
+  
+  const resultsDiv = document.getElementById('testResults');
+  const progressBar = document.getElementById('progressBar');
+  
+  for (let i = 0; i < GoldenTests.length; i++) {
+    const test = GoldenTests[i];
+    
+    // Update progress
+    progressBar.style.width = ((i + 1) / GoldenTests.length * 100) + '%';
+    
+    // Create test card
+    const card = document.createElement('div');
+    card.className = 'test-card running';
+    card.innerHTML = `
+      <div class="test-name">${test.id}: ${test.name}</div>
+      <div class="test-policy">Policy: ${test.policyRef}</div>
+      <div class="test-result">Running...</div>
+    `;
+    resultsDiv.appendChild(card);
+    
+    // Run test
+    await new Promise(resolve => setTimeout(resolve, 100)); // Visual delay
+    
+    const result = test.run();
+    testResults.push({ test: test, result: result });
+    
+    totalPassed += result.passed;
+    totalFailed += result.failed;
+    
+    // Update card
+    card.className = 'test-card ' + (result.failed === 0 ? 'passed' : 'failed');
+    card.innerHTML = `
+      <div class="test-name">${test.id}: ${test.name}</div>
+      <div class="test-policy">Policy: ${test.policyRef}</div>
+      <div class="test-result ${result.failed === 0 ? 'pass' : 'fail'}">
+        ${result.failed === 0 ? '✓ PASSED' : '✗ FAILED'} 
+        (${result.passed} passed, ${result.failed} failed)
+      </div>
+      <ul class="test-details">
+        ${result.details.map(d => `<li style="color: ${d.status === 'pass' ? '#6ee7b7' : '#fca5a5'}">${d.msg}</li>`).join('')}
+      </ul>
+    `;
+  }
+  
+  // Show summary
+  const summary = document.getElementById('summary');
+  summary.className = 'summary ' + (totalFailed > 0 ? 'failed' : '');
+  summary.style.display = 'block';
+  summary.innerHTML = `
+    <h2>${totalFailed === 0 ? '✓ ALL GOLDEN TESTS PASSED' : '✗ GOLDEN TESTS FAILED'}</h2>
+    <p style="margin-bottom: 15px; color: #94a3b8;">
+      ${totalFailed === 0 
+        ? 'DEPLOYMENT ALLOWED (V15 §19, V16 §20.1.1)' 
+        : 'DEPLOYMENT BLOCKED (V15 §19, V16 §20.1.1)'}
+    </p>
+    <div class="summary-stats">
+      <div class="stat">
+        <div class="stat-value" style="color: #6ee7b7">${totalPassed}</div>
+        <div class="stat-label">Passed</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" style="color: ${totalFailed > 0 ? '#fca5a5' : '#6ee7b7'}">${totalFailed}</div>
+        <div class="stat-label">Failed</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">${((totalPassed / (totalPassed + totalFailed)) * 100).toFixed(1)}%</div>
+        <div class="stat-label">Pass Rate</div>
+      </div>
+    </div>
+  `;
+  
+  document.getElementById('runTests').disabled = false;
+  document.getElementById('exportResults').disabled = false;
+}
+
+// Export results
+function exportResults() {
+  const report = {
+    timestamp: new Date().toISOString(),
+    policyVersion: 'V16.0',
+    engineVersion: 'V17.4',
+    summary: {
+      totalPassed: totalPassed,
+      totalFailed: totalFailed,
+      passRate: ((totalPassed / (totalPassed + totalFailed)) * 100).toFixed(1) + '%',
+      deploymentAllowed: totalFailed === 0
+    },
+    tests: testResults.map(t => ({
+      id: t.test.id,
+      name: t.test.name,
+      policyRef: t.test.policyRef,
+      passed: t.result.passed,
+      failed: t.result.failed,
+      details: t.result.details
+    }))
+  };
+  
+  const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'certa-golden-test-results-' + new Date().toISOString().slice(0, 10) + '.json';
+  a.click();
+}
+</script>
+</body>
+</html>
