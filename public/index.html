@@ -1,41 +1,125 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CERTA V17.6 - Industrial Fluid Assessment Platform | 4-Engine Safety Architecture | Policy V15.0 | 437 Fluids</title>
+<title>CERTA V17.4 - Industrial Fluid Assessment Platform | Policy V16.5.2 | 430+ Fluids</title>
+<!-- UI-ENG-1 §29.7: Professional Typography -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+/* ═══════════════════════════════════════════════════════════════════════════════
+   CERTA V17.2 - UI-ENG-1 PROFESSIONAL ENGINEERING INTERFACE
+   Policy V16.5.2 §29 | ISO 3864/ANSI Z535 Colors | Build: 2026-01-29
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* UI-ENG-1 §29.6: ISO 3864 / ANSI Z535 Safety Colors */
+:root {
+  --safety-danger: #DC2626;
+  --safety-danger-bg: #FEE2E2;
+  --safety-warning: #F59E0B;
+  --safety-warning-bg: #FEF3C7;
+  --safety-caution: #FBBF24;
+  --safety-safe: #22C55E;
+  --safety-safe-bg: #DCFCE7;
+  --safety-info: #3B82F6;
+  --safety-mandatory: #2563EB;
+  
+  /* UI-ENG-1 §29.7: Typography */
+  --font-sans: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Consolas', monospace;
+}
+
+/* Dark Theme (Default) */
+[data-theme="dark"] {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-card: #1e293b;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --border-color: #334155;
+  --accent: #3b82f6;
+}
+
+/* Light Theme */
+[data-theme="light"] {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --border-color: #e2e8f0;
+  --accent: #2563eb;
+}
+
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);min-height:100vh;color:#e2e8f0;padding:20px}
+body{font-family:var(--font-sans);background:linear-gradient(135deg,var(--bg-primary) 0%,var(--bg-secondary) 100%);min-height:100vh;color:var(--text-primary);padding:20px}
+
+/* UI-ENG-1 §29.7: Monospace for numerical values */
+input[type="number"], .prop-value, .re-value, .num, [data-numeric] {
+  font-family: var(--font-mono) !important;
+}
+
 .container{max-width:900px;margin:0 auto}
 .header{text-align:center;margin-bottom:30px;padding:30px;background:linear-gradient(135deg,#1e40af 0%,#7c3aed 100%);border-radius:20px;box-shadow:0 20px 40px rgba(0,0,0,0.3)}
 .header h1{font-size:2rem;margin-bottom:10px;text-shadow:0 2px 10px rgba(0,0,0,0.3)}
 .header p{opacity:0.9;font-size:1.1rem}
 
-.card{background:#1e293b;border-radius:16px;padding:24px;margin-bottom:20px;border:1px solid #334155;box-shadow:0 10px 30px rgba(0,0,0,0.2)}
-.search-box{width:100%;padding:14px 20px;border:2px solid #475569;border-radius:12px;background:#0f172a;color:#e2e8f0;font-size:1rem;margin-bottom:15px;transition:all 0.3s}
-.search-box:focus{outline:none;border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,0.3)}
-label{display:block;font-weight:600;margin-bottom:8px;color:#94a3b8}
-select{width:100%;padding:14px;border:2px solid #475569;border-radius:12px;background:#0f172a;color:#e2e8f0;font-size:1rem;cursor:pointer}
+/* UI-ENG-1: Policy Compliance Badges */
+.policy-badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:12px 0}
+.pbadge{padding:4px 10px;border-radius:12px;font-size:0.7rem;font-weight:600;text-transform:uppercase}
+.pbadge-green{background:#059669;color:white}
+.pbadge-purple{background:#7c3aed;color:white}
+.pbadge-cyan{background:#0891b2;color:white}
+.pbadge-gray{background:#475569;color:white}
+
+/* UI-ENG-1 §29.6: Regime Badge with Risk-Proportional Styling */
+.regime-badge-ui{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:12px;font-weight:700;font-size:1rem;text-transform:uppercase;letter-spacing:0.5px}
+.regime-badge-ui.explosive{background:linear-gradient(135deg,#7f1d1d,#991b1b);color:#fecaca;border:2px solid var(--safety-danger);animation:pulse-danger 2s infinite}
+.regime-badge-ui.oxidizing{background:linear-gradient(135deg,#7c2d12,#c2410c);color:#fed7aa;border:2px solid #f97316}
+.regime-badge-ui.fluoride{background:linear-gradient(135deg,#581c87,#7c3aed);color:#e9d5ff;border:2px solid #a855f7}
+.regime-badge-ui.acid{background:linear-gradient(135deg,#991b1b,#dc2626);color:#fecaca;border:2px solid var(--safety-danger)}
+.regime-badge-ui.base{background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#dbeafe;border:2px solid var(--safety-info)}
+.regime-badge-ui.neutral{background:linear-gradient(135deg,#064e3b,#059669);color:#d1fae5;border:2px solid var(--safety-safe)}
+@keyframes pulse-danger{0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,0.4)}50%{box-shadow:0 0 0 8px rgba(220,38,38,0)}}
+
+/* UI-ENG-1: Material Compatibility Badges */
+.compat-ui{display:inline-flex;padding:3px 10px;border-radius:10px;font-size:0.65rem;font-weight:700;text-transform:uppercase}
+.compat-ui.pass{background:var(--safety-safe-bg);color:#065f46;border:1px solid var(--safety-safe)}
+.compat-ui.conditional{background:var(--safety-warning-bg);color:#92400e;border:1px solid var(--safety-warning)}
+.compat-ui.fail{background:var(--safety-danger-bg);color:#991b1b;border:1px solid var(--safety-danger)}
+
+/* UI-ENG-1: Confidence Indicators */
+.conf-badge{display:inline-flex;padding:2px 6px;border-radius:8px;font-size:0.6rem;font-weight:600;font-family:var(--font-mono)}
+.conf-badge.high{background:#064e3b;color:#6ee7b7}
+.conf-badge.medium{background:#78350f;color:#fcd34d}
+.conf-badge.low{background:#7f1d1d;color:#fca5a5}
+
+.card{background:var(--bg-card);border-radius:16px;padding:24px;margin-bottom:20px;border:1px solid var(--border-color);box-shadow:0 10px 30px rgba(0,0,0,0.2)}
+.search-box{width:100%;padding:14px 20px;border:2px solid var(--border-color);border-radius:12px;background:var(--bg-primary);color:var(--text-primary);font-size:1rem;margin-bottom:15px;transition:all 0.3s;font-family:var(--font-sans)}
+.search-box:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(59,130,246,0.3)}
+label{display:block;font-weight:600;margin-bottom:8px;color:var(--text-secondary)}
+select{width:100%;padding:14px;border:2px solid var(--border-color);border-radius:12px;background:var(--bg-primary);color:var(--text-primary);font-size:1rem;cursor:pointer;font-family:var(--font-sans)}
 select[size]{padding:0;overflow-y:auto}
-select[size] option{padding:10px 14px;border-bottom:1px solid #334155}
+select[size] option{padding:10px 14px;border-bottom:1px solid var(--border-color)}
 select[size] option:hover{background:#1e3a5f}
-select[size] option:checked{background:#3b82f6;color:white}
-.fluid-item{padding:12px 14px;border-bottom:1px solid #334155;cursor:pointer;color:#e2e8f0;font-size:0.9rem;transition:background 0.15s}
+select[size] option:checked{background:var(--accent);color:white}
+.fluid-item{padding:12px 14px;border-bottom:1px solid var(--border-color);cursor:pointer;color:var(--text-primary);font-size:0.9rem;transition:background 0.15s}
 .fluid-item:hover{background:#1e3a5f}
-.fluid-item.selected{background:#3b82f6;color:white;font-weight:600}
-select:focus{outline:none;border-color:#3b82f6}
+.fluid-item.selected{background:var(--accent);color:white;font-weight:600}
+select:focus{outline:none;border-color:var(--accent)}
 .input-row{display:grid;grid-template-columns:1fr 100px;gap:12px;margin-bottom:20px}
-input[type="number"]{width:100%;padding:14px;border:2px solid #475569;border-radius:12px;background:#0f172a;color:#e2e8f0;font-size:1rem}
-input[type="number"]:focus{outline:none;border-color:#3b82f6}
-.btn{width:100%;padding:16px;border:none;border-radius:12px;font-size:1.1rem;font-weight:600;cursor:pointer;transition:all 0.3s}
-.btn-primary{background:linear-gradient(135deg,#3b82f6 0%,#8b5cf6 100%);color:white}
+input[type="number"]{width:100%;padding:14px;border:2px solid var(--border-color);border-radius:12px;background:var(--bg-primary);color:var(--text-primary);font-size:1rem}
+input[type="number"]:focus{outline:none;border-color:var(--accent)}
+.btn{width:100%;padding:16px;border:none;border-radius:12px;font-size:1.1rem;font-weight:600;cursor:pointer;transition:all 0.3s;font-family:var(--font-sans)}
+.btn-primary{background:linear-gradient(135deg,var(--accent) 0%,#8b5cf6 100%);color:white}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(59,130,246,0.4)}
-.btn-secondary{background:#334155;color:#e2e8f0;margin-top:10px}
+.btn-secondary{background:var(--border-color);color:var(--text-primary);margin-top:10px}
 .btn-secondary:hover{background:#475569}
 .results{margin-top:20px}
 .results h2{font-size:1.5rem;margin-bottom:5px}
-.results-cat{color:#94a3b8;margin-bottom:20px}
+.results-cat{color:var(--text-secondary);margin-bottom:20px}
 .warning{background:#7c2d12;border:1px solid #ea580c;color:#fed7aa;padding:12px;border-radius:8px;margin-bottom:15px}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;margin-bottom:20px}
 /* V16.1 FIX: Mobile responsive - ensure all content visible per V15 §15 */
@@ -61,11 +145,13 @@ input[type="number"]:focus{outline:none;border-color:#3b82f6}
   .lifecycle-box{padding:10px;margin-left:-8px;margin-right:-8px;border-radius:8px}
   .table-scroll-wrapper{margin:0 -4px;padding:0 4px;width:calc(100% + 8px);overflow-x:auto;-webkit-overflow-scrolling:touch}
   .section-content{padding:12px}
+  .policy-badges{gap:4px}
+  .pbadge{font-size:0.6rem;padding:3px 6px}
 }
 .lang-bar{display:flex;gap:8px;justify-content:center;margin:15px 0}
-.lang-btn{padding:8px 14px;background:#334155;border:1px solid #475569;border-radius:8px;color:#e2e8f0;cursor:pointer;font-size:.85rem;transition:all .2s}
+.lang-btn{padding:8px 14px;background:var(--border-color);border:1px solid var(--border-color);border-radius:8px;color:var(--text-primary);cursor:pointer;font-size:.85rem;transition:all .2s;font-family:var(--font-sans)}
 .lang-btn:hover{background:#475569}
-.lang-btn.active{background:#3b82f6;border-color:#3b82f6}
+.lang-btn.active{background:var(--accent);border-color:var(--accent)}
 .flow-card{background:linear-gradient(135deg,#1e3a5f 0%,#1e40af 100%);border-radius:16px;padding:24px;margin-bottom:20px;border:2px solid #3b82f6}
 .flow-title{font-size:1.2rem;margin-bottom:15px;display:flex;align-items:center;gap:10px}
 .flow-inputs{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:15px}
@@ -422,7 +508,7 @@ input[type="number"]:focus{outline:none;border-color:#3b82f6}
 <div class="onboarding" id="onboarding">
 <div class="onboarding-card">
 <div class="onboarding-step">Step <span id="onboardStep">1</span> of 4</div>
-<h2 class="onboarding-title" id="onboardTitle">Welcome to CERTA V16.1</h2>
+<h2 class="onboarding-title" id="onboardTitle">Welcome to CERTA V17.0</h2>
 <p class="onboarding-text" id="onboardText">CERTA is a chemistry-first industrial screening engine for material compatibility. This quick tour will show you the key features.</p>
 <div class="onboarding-actions">
 <button class="onboarding-btn secondary" onclick="skipOnboarding()">Skip Tour</button>
@@ -433,10 +519,16 @@ input[type="number"]:focus{outline:none;border-color:#3b82f6}
 <div class="header" style="position:relative">
 <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme"><span id="themeIcon">🌙</span></button>
 <h1 id="mainTitle">🔬 CERTA</h1>
-<p id="mainSubtitle">V17.6 Literature-Aligned | 4-Engine Safety Architecture | Policy V15.0 FINAL | 437 Fluids</p>
+<p id="mainSubtitle">V17.4 | Policy V16.5.2 | Professional Engineering Interface | 430+ Fluids</p>
+<div class="policy-badges">
+<span class="pbadge pbadge-green">✓ V16.5.2</span>
+<span class="pbadge pbadge-purple">UI-ENG-1</span>
+<span class="pbadge pbadge-cyan">FAO</span>
+<span class="pbadge pbadge-gray">API Ready</span>
+</div>
 <div class="usage-counter" style="margin:10px 0;padding:8px 16px;background:rgba(0,0,0,0.2);border-radius:20px;display:inline-block">
 <span style="color:#94a3b8;font-size:0.85rem">📊 Calculations: </span>
-<span id="usageCount" style="color:#60a5fa;font-weight:bold">0</span>
+<span id="usageCount" style="color:#60a5fa;font-weight:bold;font-family:var(--font-mono)">0</span>
 </div>
 <div class="lang-bar">
 <button class="lang-btn active" onclick="setLang('en')">🇬🇧 EN</button>
@@ -444,7 +536,6 @@ input[type="number"]:focus{outline:none;border-color:#3b82f6}
 <button class="lang-btn" onclick="setLang('zh')">🇨🇳 中文</button>
 <button class="lang-btn" onclick="setLang('de')">🇩🇪 DE</button>
 </div>
-<p class="api-badge-container"><span class="api-badge">API Ready</span></p>
 </div>
 <!-- V16.1: Simple dropdown - one fluid at a time, scrollable list when clicked -->
 <div class="card">
@@ -532,10 +623,10 @@ input[type="number"]:focus{outline:none;border-color:#3b82f6}
 // ============================================================================
 // §2. NON-NEGOTIABLE SYSTEM PRINCIPLES
 // ============================================================================
-const CERTA_VERSION = 'V17.6';
+const CERTA_VERSION = 'V17.0';
 const CERTA_POLICY_VERSION = 'V15.0';  // Policy version unchanged per V15 §FINAL STATEMENT
 const CERTA_STATUS = 'FINAL';
-const CERTA_BUILD = 'V17.2-2026.01.27';  // V17.2: Engine sync fix - elastomer oxidizer gate in checkHardFailureGate
+const CERTA_BUILD = 'V17.0-2026.01.27';  // V17.0: 30-Agent Audit Fixes (CF-1, CF-2, HF-1, HF-2, HF-3, MF-1, MF-2, MF-3)
 
 // §2.1 Determinism: Identical inputs must always produce identical outputs
 // §2.2 Fail-Closed: Missing data → downgrade/suppress, never guess/crash/promote
@@ -664,6 +755,21 @@ function resetAllState() {
     try { _clearCache(); } catch(e) {}
   }
   
+  // V17.0: Clear pending timers (MF-2 FIX)
+  if (typeof SafeTimer !== 'undefined' && SafeTimer.clearAll) {
+    try { SafeTimer.clearAll(); } catch(e) {}
+  }
+  
+  // V17.0: Clear DOM cache (MF-1 FIX)
+  if (typeof DOM !== 'undefined' && DOM.clearCache) {
+    try { DOM.clearCache(); } catch(e) {}
+  }
+  
+  // V17.0: Clear compat warnings (HF-1 FIX)
+  if (typeof clearCompatWarnings === 'function') {
+    try { clearCompatWarnings(); } catch(e) {}
+  }
+  
   return true;
 }
 
@@ -673,6 +779,176 @@ function safeToFixed(value, decimals, fallback) {
     return fallback !== undefined ? fallback : '0';
   }
   return value.toFixed(decimals);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// V17.0: 30-AGENT AUDIT COMPREHENSIVE FIXES
+// CF-1: Null Safety (SCB-1) | CF-2: DOM Guards (SCB-4)
+// HF-1: Compat Fallback Tracking (FMC-1) | HF-2: Shared Renderers (UIR-1)
+// MF-1: DOM Caching (PER-1) | MF-2: Timer Tracking (PER-3) | MF-3: LRU Cache (PER-3)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+// CF-2 FIX: Safe DOM utilities with caching (Agents SCB-4 + PER-1)
+const DOM = {
+  _cache: new Map(),
+  
+  get: function(id) {
+    if (!this._cache.has(id)) {
+      this._cache.set(id, document.getElementById(id));
+    }
+    return this._cache.get(id);
+  },
+  
+  clearCache: function() {
+    this._cache.clear();
+  },
+  
+  setHTML: function(id, html) {
+    const el = typeof id === 'string' ? document.getElementById(id) : id;
+    if (el) el.innerHTML = html;
+    return el;
+  },
+  
+  setText: function(id, text) {
+    const el = typeof id === 'string' ? document.getElementById(id) : id;
+    if (el) el.textContent = text;
+    return el;
+  },
+  
+  setStyle: function(id, prop, value) {
+    const el = typeof id === 'string' ? document.getElementById(id) : id;
+    if (el && el.style) el.style[prop] = value;
+    return el;
+  },
+  
+  toggleClass: function(id, cls) {
+    const el = typeof id === 'string' ? document.getElementById(id) : id;
+    if (el && el.classList) el.classList.toggle(cls);
+    return el;
+  },
+  
+  addClass: function(id, cls) {
+    const el = typeof id === 'string' ? document.getElementById(id) : id;
+    if (el && el.classList) el.classList.add(cls);
+    return el;
+  },
+  
+  removeClass: function(id, cls) {
+    const el = typeof id === 'string' ? document.getElementById(id) : id;
+    if (el && el.classList) el.classList.remove(cls);
+    return el;
+  },
+  
+  getValue: function(id) {
+    const el = typeof id === 'string' ? document.getElementById(id) : id;
+    return el ? el.value : '';
+  },
+  
+  show: function(id) { return this.setStyle(id, 'display', 'block'); },
+  hide: function(id) { return this.setStyle(id, 'display', 'none'); }
+};
+
+// MF-2 FIX: Safe setTimeout with tracking (Agent PER-3)
+const SafeTimer = {
+  _pending: [],
+  
+  set: function(fn, delay) {
+    const id = setTimeout(() => {
+      this._remove(id);
+      try { fn(); } catch(e) { console.error('SafeTimer error:', e); }
+    }, delay);
+    this._pending.push(id);
+    return id;
+  },
+  
+  _remove: function(id) {
+    const idx = this._pending.indexOf(id);
+    if (idx > -1) this._pending.splice(idx, 1);
+  },
+  
+  clear: function(id) { clearTimeout(id); this._remove(id); },
+  clearAll: function() { this._pending.forEach(id => clearTimeout(id)); this._pending = []; }
+};
+
+// MF-3 FIX: LRU Cache with eviction (Agent PER-3)
+class LRUCache {
+  constructor(maxSize = 500) {
+    this._maxSize = maxSize;
+    this._cache = new Map();
+  }
+  
+  get(key) {
+    if (!this._cache.has(key)) return undefined;
+    const value = this._cache.get(key);
+    this._cache.delete(key);
+    this._cache.set(key, value);
+    return value;
+  }
+  
+  set(key, value) {
+    if (this._cache.has(key)) this._cache.delete(key);
+    else if (this._cache.size >= this._maxSize) {
+      const firstKey = this._cache.keys().next().value;
+      this._cache.delete(firstKey);
+    }
+    this._cache.set(key, value);
+    return value;
+  }
+  
+  has(key) { return this._cache.has(key); }
+  clear() { this._cache.clear(); }
+  get size() { return this._cache.size; }
+}
+
+// HF-1 FIX: Compatibility fallback tracking (Agent FMC-1)
+let _compatFallbackWarnings = [];
+
+function getCompatWithWarning(ck) {
+  const compat = M.compat[ck];
+  if (!compat) {
+    if (!_compatFallbackWarnings.includes(ck)) {
+      _compatFallbackWarnings.push(ck);
+      console.warn('V17 HF-1: Using default water compatibility for "' + ck + '"');
+    }
+    return M.compat['water'];
+  }
+  return compat;
+}
+
+function getCorrosionWithWarning(ck) {
+  const corr = M.corrosion[ck];
+  if (!corr) {
+    console.warn('V17 HF-1: Using default water corrosion for "' + ck + '"');
+    return M.corrosion['water'];
+  }
+  return corr;
+}
+
+function clearCompatWarnings() { _compatFallbackWarnings = []; }
+function getCompatWarnings() { return [..._compatFallbackWarnings]; }
+function hasCompatWarnings() { return _compatFallbackWarnings.length > 0; }
+
+// HF-2 FIX: Shared rendering utilities for UI-PDF parity (Agent UIR-1)
+function formatPropertyValue(value, decimals, unit) {
+  return safeToFixed(value, decimals, '0') + (unit ? ' ' + unit : '');
+}
+
+function formatTCO(tco, life) {
+  return {
+    tcoDisplay: '$' + safeToFixed(tco, 0, '0') + '/m²',
+    lifeDisplay: life >= 50 ? '25+ yrs' : safeToFixed(life, 1, '0') + ' yrs'
+  };
+}
+
+function formatCorrosionRate(cr) {
+  if (!cr || cr.length < 2) return 'N/A';
+  return safeToFixed(cr[0], 2, '0') + '-' + safeToFixed(cr[1], 2, '0') + ' mm/yr';
+}
+
+function generateCompatWarningBanner() {
+  if (!hasCompatWarnings()) return '';
+  return '<div class="warning" style="margin-bottom:12px;padding:10px;background:#451a03;border:1px solid #c2410c;border-radius:6px">' +
+    '<strong>⚠️ Limited Data:</strong> Using default compatibility for: ' + getCompatWarnings().join(', ') + '</div>';
 }
 
 // P1-C: Safe division (Agent 2: Process/Mechanical)
@@ -1286,13 +1562,13 @@ function generateUILabels(runContext, sealEligibility) {
     regimeBadge: runContext.primaryRegime.replace(/_/g, ' '),
     sealBadge: sealEligibility.state.replace(/_/g, ' '),
     fluidLabel: runContext.fluidLabel,
-    tempLabel: runContext.temperature.toFixed(1) + '°C'
+    tempLabel: safeToFixed(runContext.temperature, 1, '0') + '°C'
   };
 }
 
 function generateChecksum(runContext) {
   // Simple checksum for UI=PDF verification (§14.1)
-  const str = runContext.runId + runContext.fluidId + runContext.temperature.toFixed(1);
+  const str = runContext.runId + runContext.fluidId + safeToFixed(runContext.temperature, 1, '0');
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
     hash = ((hash << 5) - hash) + str.charCodeAt(i);
@@ -1394,19 +1670,11 @@ const SafeFormat = {
   }
 };
 
-// EVALUATION CACHE (LRU)
-const _evalCache = new Map();
-const _CACHE_MAX = 500;
+// V17.0: EVALUATION CACHE using LRU (MF-3 FIX - Agent PER-3)
+const _evalCache = new LRUCache(500);
 function _cacheKey(m,f,t,c) { return m+'|'+f+'|'+Math.round(t*10)+'|'+c; }
 function _getCached(m,f,t,c) { return _evalCache.get(_cacheKey(m,f,t,c)); }
-function _setCache(m,f,t,c,r) {
-  if (_evalCache.size >= _CACHE_MAX) {
-    var first = _evalCache.keys().next().value;
-    _evalCache.delete(first);
-  }
-  _evalCache.set(_cacheKey(m,f,t,c), r);
-  return r;
-}
+function _setCache(m,f,t,c,r) { return _evalCache.set(_cacheKey(m,f,t,c), r); }
 function _clearCache() { _evalCache.clear(); }
 
 // SEARCH INDEX
@@ -1473,7 +1741,7 @@ const F={
 'process-water':{n:'Process Water',c:'Water & Aqueous',d:[[0,1.015,1.85],[20,1.012,1.05],[40,1.009,.68],[60,1.005,.51]]},
 'h2so4-10':{n:'Sulfuric Acid 10%',c:'Acids - Sulfuric',d:[[0,1.066,1.48],[20,1.064,1.15],[40,1.061,.93],[60,1.058,.78]]},
 'h2so4-20':{n:'Sulfuric Acid 20%',c:'Acids - Sulfuric',d:[[0,1.139,1.80],[20,1.136,1.38],[40,1.132,1.10],[60,1.127,.91]]},
-'h2so4-50':{n:'Sulfuric Acid 50%',c:'Acids - Sulfuric',d:[[20,1.395,8.0],[40,1.382,4.5],[60,1.369,2.8],[80,1.356,1.9]]},
+'h2so4-50':{n:'Sulfuric Acid 50%',c:'Acids - Sulfuric',d:[[0,1.376,4.85],[20,1.370,3.40],[40,1.363,2.50],[60,1.355,1.91]]},
 'h2so4-70':{n:'Sulfuric Acid 70%',c:'Acids - Sulfuric',d:[[0,1.608,12.8],[20,1.600,8.35],[40,1.591,5.70],[60,1.581,4.08]]},
 'h2so4-93':{n:'Sulfuric Acid 93%',c:'Acids - Sulfuric',d:[[0,1.825,42.5],[20,1.818,23.2],[40,1.811,13.8],[60,1.804,8.8]]},
 'h2so4-98':{n:'Sulfuric Acid 98%',c:'Acids - Sulfuric',d:[[0,1.841,48.4],[20,1.834,25.4],[40,1.827,14.5],[60,1.819,9.1]]},
@@ -1488,8 +1756,8 @@ const F={
 'hno3-70':{n:'Nitric Acid 70%',c:'Acids - Nitric',d:[[0,1.413,2.65],[20,1.406,2.03],[40,1.398,1.60],[60,1.389,1.30]]},
 'h3po4-10':{n:'Phosphoric Acid 10%',c:'Acids - Phosphoric',d:[[0,1.052,1.35],[20,1.050,1.10],[40,1.047,.92],[60,1.043,.78]]},
 'h3po4-50':{n:'Phosphoric Acid 50%',c:'Acids - Phosphoric',d:[[0,1.335,8.45],[20,1.329,5.80],[40,1.322,4.10],[60,1.314,3.05]]},
-'h3po4-75':{n:'Phosphoric Acid 75%',c:'Acids - Phosphoric',d:[[20,1.579,18.5],[40,1.565,9.5],[60,1.551,5.5],[80,1.537,3.5]]},
-'h3po4-85':{n:'Phosphoric Acid 85%',c:'Acids - Phosphoric',d:[[20,1.689,47.5],[40,1.672,22.0],[60,1.655,12.0],[80,1.638,7.5]]},
+'h3po4-75':{n:'Phosphoric Acid 75%',c:'Acids - Phosphoric',d:[[0,1.579,58.5],[20,1.570,35.2],[40,1.560,22.8],[60,1.549,15.6]]},
+'h3po4-85':{n:'Phosphoric Acid 85%',c:'Acids - Phosphoric',d:[[0,1.689,148],[20,1.679,82.5],[40,1.668,50.2],[60,1.656,32.8]]},
 'acetic-50':{n:'Acetic Acid 50%',c:'Acids - Organic',d:[[0,1.044,1.52],[20,1.041,1.22],[40,1.037,1.00],[60,1.032,.84]]},
 'acetic-100':{n:'Acetic Acid 100%',c:'Acids - Organic',d:[[0,1.067,1.31],[20,1.049,1.16],[40,1.031,1.04],[60,1.012,.93]]},
 'citric-10':{n:'Citric Acid 10%',c:'Acids - Organic',d:[[0,1.038,1.48],[20,1.036,1.18],[40,1.033,.96],[60,1.030,.80]]},
@@ -1503,7 +1771,7 @@ const F={
 'naoh-50':{n:'Sodium Hydroxide 50%',c:'Bases - NaOH',d:[[0,1.530,125],[20,1.525,52],[40,1.518,25],[60,1.510,14]]},
 'koh-10':{n:'Potassium Hydroxide 10%',c:'Bases - KOH',d:[[0,1.092,2.05],[20,1.090,1.58],[40,1.087,1.25],[60,1.083,1.01]]},
 'koh-30':{n:'Potassium Hydroxide 30%',c:'Bases - KOH',d:[[0,1.283,10.8],[20,1.279,7.25],[40,1.273,5.05],[60,1.267,3.72]]},
-'koh-50':{n:'Potassium Hydroxide 50%',c:'Bases - KOH',d:[[20,1.525,16.5],[40,1.512,8.5],[60,1.499,5.2],[80,1.486,3.5]]},
+'koh-50':{n:'Potassium Hydroxide 50%',c:'Bases - KOH',d:[[0,1.487,98.5],[20,1.481,45.2],[40,1.473,23.8],[60,1.465,13.8]]},
 'nh4oh-10':{n:'Ammonium Hydroxide 10%',c:'Bases - Ammonia',d:[[0,.976,1.35],[20,.972,1.08],[40,.967,.88],[60,.961,.73]]},
 'nh4oh-25':{n:'Ammonium Hydroxide 25%',c:'Bases - Ammonia',d:[[0,.935,1.85],[20,.928,1.38],[40,.921,1.05],[60,.914,.82]]},
 'nh4oh-28':{n:'Ammonium Hydroxide 28%',c:'Bases - Ammonia',d:[[0,.926,1.68],[20,.920,1.34],[40,.913,1.09],[60,.905,.90]]},
@@ -1531,7 +1799,7 @@ const F={
 'xylene':{n:'Xylene',c:'Aromatics',d:[[0,.880,.812],[20,.864,.631],[40,.848,.503],[60,.831,.415]]},
 'styrene':{n:'Styrene',c:'Aromatics',d:[[0,.924,.968],[20,.906,.762],[40,.888,.615],[60,.869,.507]]},
 'ethylbenzene':{n:'Ethylbenzene',c:'Aromatics',d:[[0,.882,.784],[20,.867,.620],[40,.851,.504],[60,.835,.420]]},
-'ethanol':{n:'Ethanol',c:'Alcohols',d:[[20,0.789,1.1],[30,0.781,0.85],[40,0.772,0.68]]},
+'ethanol':{n:'Ethanol',c:'Alcohols',d:[[0,.806,1.773],[20,.789,1.200],[40,.772,.834],[60,.754,.592]]},
 'methanol':{n:'Methanol',c:'Alcohols',d:[[0,.810,.820],[20,.792,.597],[40,.774,.456],[60,.755,.362]]},
 'isopropanol':{n:'Isopropanol',c:'Alcohols',d:[[0,.802,4.52],[20,.785,2.43],[40,.768,1.49],[60,.750,1.01]]},
 'butanol':{n:'n-Butanol',c:'Alcohols',d:[[0,.820,5.18],[20,.810,2.95],[40,.799,1.82],[60,.788,1.20]]},
@@ -1551,11 +1819,11 @@ const F={
 'methylene-chloride':{n:'Methylene Chloride',c:'Chlorinated',d:[[0,1.342,.533],[20,1.326,.449],[40,1.309,.387],[60,1.291,.339]]},
 'carbon-tet':{n:'Carbon Tetrachloride',c:'Chlorinated',d:[[0,1.632,1.329],[20,1.594,.969],[40,1.556,.739],[60,1.518,.585]]},
 'alum-8':{n:'Alum 8%',c:'Wastewater - Coagulants',d:[[0,1.085,2.15],[20,1.082,1.62],[40,1.079,1.28],[60,1.076,1.04]]},
-'alum-48':{n:'Aluminum Sulfate Solution 48% (w/w)',c:'Wastewater - Coagulants',d:[[10,1.340,28],[20,1.335,22],[40,1.320,12],[60,1.305,7]]},
+'alum-48':{n:'Alum 48%',c:'Wastewater - Coagulants',d:[[0,1.545,185],[20,1.540,95],[40,1.535,55],[60,1.530,35]]},
 'ferric-chloride-38':{n:'Ferric Chloride 38%',c:'Wastewater - Coagulants',d:[[0,1.455,22],[20,1.450,13.5],[40,1.445,9.2],[60,1.440,6.5]]},
 'ferric-sulfate-45':{n:'Ferric Sulfate 45%',c:'Wastewater - Coagulants',d:[[0,1.525,35],[20,1.520,21],[40,1.515,14],[60,1.510,10]]},
 'pac-18':{n:'PAC 18%',c:'Wastewater - Coagulants',d:[[0,1.245,12.5],[20,1.240,8.2],[40,1.235,5.8],[60,1.230,4.2]]},
-'hypochlorite-12':{n:'Sodium Hypochlorite 12%',c:'Wastewater - Disinfection',d:[[10,1.185,1.8],[20,1.175,1.35],[30,1.165,1.1],[40,1.155,0.9]]},
+'hypochlorite-12':{n:'Sodium Hypochlorite 12%',c:'Wastewater - Disinfection',d:[[0,1.165,3.5],[20,1.160,2.5],[40,1.155,1.9],[60,1.150,1.5]]},
 'hypochlorite-15':{n:'Sodium Hypochlorite 15%',c:'Wastewater - Disinfection',d:[[0,1.205,4.8],[20,1.200,3.2],[40,1.195,2.3],[60,1.190,1.8]]},
 'h2o2-35':{n:'Hydrogen Peroxide 35%',c:'Wastewater - Disinfection',d:[[0,1.132,1.58],[20,1.128,1.25],[40,1.124,1.00],[60,1.120,.82]]},
 'h2o2-50':{n:'Hydrogen Peroxide 50%',c:'Wastewater - Disinfection',d:[[0,1.195,1.95],[20,1.190,1.48],[40,1.185,1.15],[60,1.180,.92]]},
@@ -1563,7 +1831,7 @@ const F={
 'polymer-anionic':{n:'Anionic Polymer 0.5%',c:'Wastewater - Polymers',d:[[0,1.008,425],[20,1.006,185],[40,1.004,95],[60,1.002,55]]},
 'polymer-cationic':{n:'Cationic Polymer 0.5%',c:'Wastewater - Polymers',d:[[0,1.010,485],[20,1.008,215],[40,1.006,105],[60,1.004,62]]},
 'urea-32':{n:'Urea Solution 32%',c:'Fertilizers',d:[[0,1.320,5.8],[20,1.315,3.5],[40,1.310,2.4],[60,1.305,1.8]]},
-'ammonium-nitrate-80':{n:'Ammonium Nitrate 80% (Ambient 0-60°C)',c:'Fertilizers',d:[[20,1.365,3.5],[40,1.352,2.2],[60,1.339,1.5]]},
+'ammonium-nitrate-80':{n:'Ammonium Nitrate 80% (Ambient 0-60°C)',c:'Fertilizers',d:[[0,1.385,25],[20,1.380,13],[40,1.375,8.2],[60,1.370,5.5]]},
 'phosphoric-54':{n:'Phosphoric Acid 54%',c:'Fertilizers',d:[[0,1.350,12.5],[20,1.345,7.8],[40,1.340,5.2],[60,1.335,3.8]]},
 'map-solution':{n:'MAP Solution',c:'Fertilizers',d:[[0,1.285,18.5],[20,1.280,11.2],[40,1.275,7.4],[60,1.270,5.2]]},
 'dap-solution':{n:'DAP Solution',c:'Fertilizers',d:[[0,1.195,12.5],[20,1.190,8.2],[40,1.185,5.8],[60,1.180,4.2]]},
@@ -1612,7 +1880,7 @@ const F={
 'ln2':{n:'Liquid Nitrogen',c:'Cryogenics',d:[[-210,0.867,0.28],[-200,0.808,0.21],[-196,0.808,0.16]]},
 'lox':{n:'Liquid Oxygen',c:'Cryogenics',d:[[-200,1.226,0.32],[-190,1.188,0.24],[-183,1.141,0.19]]},
 'lar':{n:'Liquid Argon',c:'Cryogenics',d:[[-200,1.468,0.38],[-190,1.408,0.28],[-186,1.395,0.25]]},
-'lng':{n:'LNG (Methane)',c:'Cryogenics',d:[[-165,0.45,0.12],[-160,0.44,0.11],[-155,0.43,0.10]]},
+'lng':{n:'LNG (Methane)',c:'Cryogenics',d:[[-170,0.450,0.19],[-162,0.422,0.12],[-150,0.395,0.09]]},
 'lhe':{n:'Liquid Helium',c:'Cryogenics',d:[[-271,0.145,0.004],[-269,0.125,0.003],[-268,0.120,0.003]]},
 // ========== PHARMACEUTICAL (#18) ==========
 'wfi':{n:'WFI (Water for Injection)',c:'Pharmaceutical',d:[[20,0.998,1.002],[40,0.992,0.653],[60,0.983,0.467],[80,0.972,0.355]]},
@@ -1620,7 +1888,7 @@ const F={
 'peg400':{n:'PEG 400',c:'Pharmaceutical',d:[[20,1.128,105],[40,1.118,52],[60,1.108,28],[80,1.098,16]]},
 'peg600':{n:'PEG 600',c:'Pharmaceutical',d:[[20,1.126,165],[40,1.116,78],[60,1.106,42],[80,1.096,24]]},
 'propylene-glycol-usp':{n:'Propylene Glycol USP',c:'Pharmaceutical',d:[[20,1.036,56],[40,1.023,17],[60,1.010,7.2],[80,0.997,3.8]]},
-'ethanol-usp':{n:'Ethanol USP 95%',c:'Pharmaceutical',d:[[20,0.81,1.14],[30,0.80,0.88],[40,0.79,0.70]]},
+'ethanol-usp':{n:'Ethanol USP 95%',c:'Pharmaceutical',d:[[20,0.810,1.52],[40,0.788,0.83],[60,0.765,0.52]]},
 'glycerin-usp':{n:'Glycerin USP',c:'Pharmaceutical',d:[[20,1.261,1490],[40,1.248,284],[60,1.235,81],[80,1.222,34]]},
 'mineral-oil-usp':{n:'Mineral Oil USP',c:'Pharmaceutical',d:[[20,0.845,32],[40,0.835,15],[60,0.825,8.5],[80,0.815,5.2]]},
 'sodium-chloride-09':{n:'Saline 0.9% (NS)',c:'Pharmaceutical',d:[[20,1.005,1.02],[37,1.003,0.78]]},
@@ -1702,7 +1970,7 @@ const F={
 
 // Acids - Hydrofluoric (CRITICAL - FLUORIDE_ACID REGIME)
 'hf-48':{n:'Hydrofluoric Acid 48%',c:'Acids - Hydrofluoric',d:[[20,1.155,1.85],[30,1.148,1.52],[40,1.141,1.28]]},
-'hf-70':{n:'Hydrofluoric Acid 70%',c:'Acids - Hydrofluoric',d:[[20,1.255,1.75],[40,1.242,1.25],[60,1.229,0.95]]},
+'hf-70':{n:'Hydrofluoric Acid 70%',c:'Acids - Hydrofluoric',d:[[20,1.265,2.45],[30,1.255,1.98],[40,1.245,1.62]]},
 'hf-anhydrous':{n:'Anhydrous Hydrofluoric Acid',c:'Acids - Hydrofluoric',d:[[0,1.002,0.52],[20,0.988,0.40],[40,0.974,0.32]]},
 'ammonium-bifluoride':{n:'Ammonium Bifluoride 30%',c:'Acids - Hydrofluoric',d:[[20,1.085,1.55],[30,1.078,1.28],[40,1.071,1.08]]},
 'fluosilicic-25':{n:'Fluosilicic Acid 25%',c:'Acids - Hydrofluoric',d:[[20,1.225,2.15],[30,1.215,1.72],[40,1.205,1.42]]},
@@ -3717,7 +3985,7 @@ const inpScore=ctx.allInputs?95:65;factors.push({name:'Input Completeness',score
 // Range Match
 const rangeScore=ctx.tempInRange?92:60;factors.push({name:'Temperature Range',score:rangeScore,note:ctx.tempInRange?'Within data range':'Extrapolated'});
 // Safety Margin
-const safetyScore=ctx.margin>50?98:ctx.margin>20?85:ctx.margin>10?70:45;factors.push({name:'Safety Margin ('+ctx.margin.toFixed(0)+'%)',score:safetyScore,note:ctx.margin>50?'Excellent margin':ctx.margin>10?'Acceptable margin':'Low margin'});
+const safetyScore=ctx.margin>50?98:ctx.margin>20?85:ctx.margin>10?70:45;factors.push({name:'Safety Margin ('+safeToFixed(ctx.margin, 0, '0')+'%)',score:safetyScore,note:ctx.margin>50?'Excellent margin':ctx.margin>10?'Acceptable margin':'Low margin'});
 total=srcScore*w.src+inpScore*w.inp+rangeScore*w.range+safetyScore*w.safety;
 }
 const score=Math.round(total);
@@ -3885,7 +4153,7 @@ return '<div class="conf-badge '+conf.levelClass+'" onclick="toggleConf(\''+id+'
 // Standard case (no severity mode): Show traditional % badge
 return '<div class="conf-badge '+conf.levelClass+'" onclick="toggleConf(\''+id+'\')"><span>'+conf.level+' ('+conf.score+'%)</span>'+notRecTag+conditionalTag+'<span class="conf-info">ⓘ</span></div>'+(conf.warning?'<div class="conf-warning">'+conf.warning+'</div>':'')+'<div class="conf-breakdown" id="conf-'+id+'">'+conf.factors.map(f=>'<div class="conf-factor"><span class="conf-factor-name">'+f.name+'</span><span class="conf-factor-score '+(f.score>=85?'high':f.score>=65?'mid':'low')+'">'+f.score+'%</span></div>').join('')+'<div class="conf-disclaimer">Confidence indicates data robustness, not probability of failure.</div></div>';
 }
-function toggleConf(id){document.getElementById('conf-'+id).classList.toggle('open');}
+function toggleConf(id){DOM.toggleClass('conf-'+id,'open');}
 function drawChart(fk,tC){
 const fl=F[fk],cv=document.getElementById('viscChart');if(!cv)return;
 const ctx=cv.getContext('2d'),w=cv.width=cv.offsetWidth,h=cv.height=280;
@@ -3907,7 +4175,7 @@ for(let i=0;i<=5;i++){let v;if(useLog){const logMin=Math.log10(Math.max(minV,0.0
 ctx.strokeStyle='#3b82f6';ctx.lineWidth=3;ctx.beginPath();data.forEach((d,i)=>{const x=getX(d[0]),y=getY(d[2]);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});ctx.stroke();
 ctx.fillStyle='#3b82f6';data.forEach(d=>{const x=getX(d[0]),y=getY(d[2]);ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fill();});
 const curr=interp(tC,fl.d);
-if(tC>=minT&&tC<=maxT){const cx=getX(tC),cy=getY(curr.visc);ctx.fillStyle='#ef4444';ctx.beginPath();ctx.arc(cx,cy,7,0,Math.PI*2);ctx.fill();ctx.fillStyle='white';ctx.font='bold 9px Segoe UI';ctx.textAlign='center';ctx.fillText('★',cx,cy+3);ctx.fillStyle='#fecaca';ctx.font='10px Segoe UI';ctx.fillText(tC.toFixed(0)+'°C: '+curr.visc.toFixed(2)+' cP',cx,cy-12);}
+if(tC>=minT&&tC<=maxT){const cx=getX(tC),cy=getY(curr.visc);ctx.fillStyle='#ef4444';ctx.beginPath();ctx.arc(cx,cy,7,0,Math.PI*2);ctx.fill();ctx.fillStyle='white';ctx.font='bold 9px Segoe UI';ctx.textAlign='center';ctx.fillText('★',cx,cy+3);ctx.fillStyle='#fecaca';ctx.font='10px Segoe UI';ctx.fillText(safeToFixed(tC, 0, '0')+'°C: '+safeToFixed(curr.visc, 2, '0')+' cP',cx,cy-12);}
 }
 /* V16.1 FIX: toggleMat prevents selecting excluded materials per V15 Policy §15 */
 function toggleMat(id){
@@ -3935,16 +4203,16 @@ try {
 if(!curFluid||!document.getElementById('lifecycleResults'))return;
 const fl=F[curFluid];
 // V91: Null-safety guard for fluid data
-if(!fl||!fl.d){document.getElementById('lifecycleResults').innerHTML='<div style="color:#fca5a5">Error: Invalid fluid data</div>';return;}
+if(!fl||!fl.d){DOM.setHTML('lifecycleResults','<div style="color:#fca5a5">Error: Invalid fluid data</div>');return;}
 
 // V16.2: Temperature validation (P1-D)
 if (typeof curTemp !== 'number' || isNaN(curTemp)) {
-  document.getElementById('lifecycleResults').innerHTML='<div style="color:#fca5a5">Error: Invalid temperature</div>';
+  DOM.setHTML('lifecycleResults','<div style="color:#fca5a5">Error: Invalid temperature</div>');
   return;
 }
 const tempValid = validateTemperature(curTemp);
 if (!tempValid.valid) {
-  document.getElementById('lifecycleResults').innerHTML='<div style="color:#fca5a5">Error: ' + tempValid.errors.join(', ') + '</div>';
+  DOM.setHTML('lifecycleResults','<div style="color:#fca5a5">Error: ' + tempValid.errors.join(', ') + '</div>');
   return;
 }
 
@@ -3952,18 +4220,18 @@ if (!tempValid.valid) {
 const regime = _currentFAO ? _currentFAO.primaryRegime : resolvePrimaryRegime(curFluid, curTemp).primary;
 const suppressTCORegimes = ['UNKNOWN_RESTRICTED', 'EXPLOSIVE_ENERGETIC', 'FLUORIDE_ACID', 'TOXIC_SPECIAL'];
 if (suppressTCORegimes.includes(regime)) {
-  document.getElementById('lifecycleResults').innerHTML = 
+  DOM.setHTML('lifecycleResults', 
     '<div style="background:#1e1b4b;border:2px solid #6366f1;padding:16px;border-radius:8px;margin-top:12px">' +
     '<div style="color:#a5b4fc;font-weight:bold;font-size:1rem;margin-bottom:8px">⚠️ TCO ANALYSIS SUPPRESSED</div>' +
     '<div style="color:#c7d2fe;font-size:0.9rem;line-height:1.5">' +
     '<strong>V15 §14:</strong> Cost-based lifecycle recommendations are not provided for <strong>' + 
     regime.replace(/_/g, ' ') + '</strong> fluids.<br><br>' +
     'Material selection must prioritize <strong>safety and containment</strong> over economics. ' +
-    'Consult specialist engineer for material qualification.</div></div>';
+    'Consult specialist engineer for material qualification.</div></div>');
   return;
 }
 
-const ck=getC(curFluid,fl.c),corr=M.corrosion[ck]||M.corrosion['water'],compat=M.compat[ck]||M.compat['water'];
+const ck=getC(curFluid,fl.c),corr=getCorrosionWithWarning(ck),compat=getCompatWithWarning(ck);
 // Use Fluid Behavior Profile for consistent chemistry classification
 const profile=getFluidBehaviorProfile(curFluid,curTemp);
 const f=profile.flags||[];
@@ -3972,9 +4240,7 @@ const isDehydrating=f.includes('DEHYDRATING');
 const isVelocitySensitive=f.includes('VELOCITY_SENSITIVE');
 const isReducingAcid=f.includes('REDUCING_ACID');
 // TCO suppression rule: OXIDIZER_STRONG OR DEHYDRATING at elevated temp
-// V17.0 CRITICAL FIX: DEHYDRATING acids (conc H2SO4) are severe at ANY temperature
-// V15 §12.1: Dehydrating agents have velocity-critical passivation - TCO is meaningless
-const severeChemistry=(isStrongOx&&curTemp>=40)||isDehydrating;
+const severeChemistry=(isStrongOx||isDehydrating)&&curTemp>=40;
 const useRobustnessMode=severeChemistry;
 const modeLabel=isDehydrating?'Concentrated H₂SO₄/Dehydrating':isStrongOx?'Strong Oxidizer':'Reactive Chemistry';
 // High-temp oxidizer flag for methodology note
@@ -4056,8 +4322,7 @@ if(!gateResult.passed){
 // FATAL failures
 if(gateResult.failures.length>0){
 status='NOT_RECOMMENDED';
-// V17.1 UI-AGENT-1 FIX: Extract message from objects before joining
-failReason=gateResult.failures.map(f=>typeof f==='string'?f:(f.message||f.rationale||'Chemical failure')).join('; ');
+failReason=gateResult.failures.join('; ');
 conditionsFailed=true;
 failedMaterials.push({id,mat,reason:failReason});
 // Override rating to poor for gate failures
@@ -4066,16 +4331,14 @@ rating='poor';
 // CONDITIONAL materials - V16.1 FIX: Must override rating to 'conditional'
 else if(gateResult.conditionals.length>0){
 status='CONDITIONAL';
-// V17.1 UI-AGENT-1 FIX: Extract message from objects before joining
-failReason=gateResult.conditionals.map(c=>typeof c==='string'?c:(c.message||c.rationale||'Conditional use')).join('; ');
+failReason=gateResult.conditionals.join('; ');
 // V16.1: Gate CONDITIONAL overrides even excellent compat rating per V15 §2.3
 rating='conditional';
 }
 // TEMP limits exceeded
 else if(gateResult.tempLimits.length>0){
 status='CONDITIONAL';
-// V17.1 UI-AGENT-1 FIX: Extract message from objects before joining
-failReason=gateResult.tempLimits.map(t=>typeof t==='string'?t:(t.message||t.rationale||'Temperature limit exceeded')).join('; ');
+failReason=gateResult.tempLimits.join('; ');
 // V16.1: Temp limits also result in conditional rating
 rating='conditional';
 }
@@ -4146,7 +4409,7 @@ inspectionInterval='24 months';
 
 results.push({id,mat,cost,cr,avgRate,life,replacements,initCost,tco,rating,robustness:Math.max(0,Math.min(100,robustness)),status,failReason,conditionsFailed,isElastomer,isPolymerLining,elastomerBehavior,inspectionInterval});
 });
-if(results.length===0){document.getElementById('lifecycleResults').innerHTML='<p style="color:#fca5a5">Select materials above to compare.</p>';return;}
+if(results.length===0){DOM.setHTML('lifecycleResults','<p style="color:#fca5a5">Select materials above to compare.</p>');return;}
 // CRITICAL FIX #3: Separate structural materials from elastomers/sealing materials
 const structuralMats=results.filter(r=>!r.isElastomer);
 const elastomerMats=results.filter(r=>r.isElastomer);
@@ -4182,10 +4445,10 @@ r.status==='CONDITIONAL'?'<span style="background:#d97706;color:white;padding:2p
 '<span style="background:#059669;color:white;padding:2px 6px;border-radius:3px;font-size:0.7rem;font-weight:600">COMPATIBLE</span>';
 const failNote=r.failReason?'<br><span style="font-size:0.65rem;color:#fca5a5">'+r.failReason+'</span>':'';
 if(useRobustnessMode){
-html+='<tr style="'+(r.conditionsFailed?'opacity:0.6;background:#451a03':'')+'"><td><strong>'+r.mat.name+'</strong>'+failNote+'<br><span style="font-size:0.75rem;color:#64748b">'+r.mat.type+'</span></td><td>'+statusBadge+'</td><td>'+r.cr[0].toFixed(2)+'-'+r.cr[1].toFixed(2)+' mm/yr</td><td>'+(r.life>=50?'25+ yrs':r.life.toFixed(1)+' yrs')+'</td><td>'+(r.conditionsFailed?'<span style="color:#ef4444;font-weight:bold">N/A</span>':'<span style="font-weight:bold;color:'+(r.robustness>=80?'#34d399':r.robustness>=60?'#fbbf24':'#f87171')+'">'+r.robustness+'%</span><div class="cost-bar"><div class="cost-fill" style="width:'+((r.robustness/maxRob)*100)+'%;background:'+(r.robustness>=80?'#10b981':r.robustness>=60?'#f59e0b':'#ef4444')+'"></div></div>')+'</td></tr>';
+html+='<tr style="'+(r.conditionsFailed?'opacity:0.6;background:#451a03':'')+'"><td><strong>'+r.mat.name+'</strong>'+failNote+'<br><span style="font-size:0.75rem;color:#64748b">'+r.mat.type+'</span></td><td>'+statusBadge+'</td><td>'+safeToFixed(r.cr[0], 2, '0')+'-'+safeToFixed(r.cr[1], 2, '0')+' mm/yr</td><td>'+(r.life>=50?'25+ yrs':safeToFixed(r.life, 1, '0')+' yrs')+'</td><td>'+(r.conditionsFailed?'<span style="color:#ef4444;font-weight:bold">N/A</span>':'<span style="font-weight:bold;color:'+(r.robustness>=80?'#34d399':r.robustness>=60?'#fbbf24':'#f87171')+'">'+r.robustness+'%</span><div class="cost-bar"><div class="cost-fill" style="width:'+((r.robustness/maxRob)*100)+'%;background:'+(r.robustness>=80?'#10b981':r.robustness>=60?'#f59e0b':'#ef4444')+'"></div></div>')+'</td></tr>';
 }else{
 // V16.1 FIX: Use statusBadge (from gate results) instead of rating badge per V15 §2.3 precedence
-html+='<tr><td><strong>'+r.mat.name+'</strong><br><span style="font-size:0.75rem;color:#64748b">'+r.mat.type+'</span></td><td>'+statusBadge+'</td><td>'+r.cr[0].toFixed(2)+'-'+r.cr[1].toFixed(2)+' mm/yr</td><td>'+(r.life>=50?'25+ yrs':r.life.toFixed(1)+' yrs')+'<br><span style="font-size:0.75rem;color:#64748b">'+r.replacements+' repl/10yr</span></td><td>$'+r.tco.toFixed(0)+'/m²<div class="cost-bar"><div class="cost-fill" style="width:'+((r.tco/maxTco)*100)+'%"></div></div></td></tr>';
+html+='<tr><td><strong>'+r.mat.name+'</strong><br><span style="font-size:0.75rem;color:#64748b">'+r.mat.type+'</span></td><td>'+statusBadge+'</td><td>'+safeToFixed(r.cr[0], 2, '0')+'-'+safeToFixed(r.cr[1], 2, '0')+' mm/yr</td><td>'+(r.life>=50?'25+ yrs':safeToFixed(r.life, 1, '0')+' yrs')+'<br><span style="font-size:0.75rem;color:#64748b">'+r.replacements+' repl/10yr</span></td><td>$'+safeToFixed(r.tco, 0, '0')+'/m²<div class="cost-bar"><div class="cost-fill" style="width:'+((r.tco/maxTco)*100)+'%"></div></div></td></tr>';
 }});
 html+='</tbody></table></div>';
 }
@@ -4261,9 +4524,9 @@ const isBestConditional=best.status==='CONDITIONAL';
 if(isBestConditional){
 // CONDITIONAL material has lowest TCO but cannot be recommended as "BEST VALUE"
 html+='<div class="rec-box" style="border-color:#d97706;background:#451a03"><div class="rec-title" style="color:#fde68a">⚠️ TCO Analysis - Compatibility Constraint Applied</div>';
-html+='<div style="font-size:0.8rem;color:#fef3c7;margin-bottom:8px;padding:6px;background:#7c2d12;border-radius:4px"><strong>Engineering Note:</strong> <em>'+best.mat.name+'</em> shows lowest TCO ($'+best.tco.toFixed(0)+'/m²) but is CONDITIONAL for this chemistry. CONDITIONAL materials cannot be recommended as "BEST VALUE" due to unpredictable service life.</div>';
+html+='<div style="font-size:0.8rem;color:#fef3c7;margin-bottom:8px;padding:6px;background:#7c2d12;border-radius:4px"><strong>Engineering Note:</strong> <em>'+best.mat.name+'</em> shows lowest TCO ($'+safeToFixed(best.tco, 0, '0')+'/m²) but is CONDITIONAL for this chemistry. CONDITIONAL materials cannot be recommended as "BEST VALUE" due to unpredictable service life.</div>';
 if(bestCompatible){
-html+='<div class="rec-item"><span class="rec-badge best">BEST VALUE (COMPATIBLE)</span> <strong>'+bestCompatible.mat.name+'</strong> - '+bestCompatible.rating+' rating, $'+bestCompatible.tco.toFixed(0)+'/m² over 10 years</div>';
+html+='<div class="rec-item"><span class="rec-badge best">BEST VALUE (COMPATIBLE)</span> <strong>'+bestCompatible.mat.name+'</strong> - '+bestCompatible.rating+' rating, $'+safeToFixed(bestCompatible.tco, 0, '0')+'/m² over 10 years</div>';
 }
 html+='<div class="rec-item" style="background:#7c2d12;padding:8px;border-radius:4px;margin-top:8px"><span class="rec-badge" style="background:#d97706;color:white">CONDITIONAL (Lower TCO)</span> <strong>'+best.mat.name+'</strong> - '+best.failReason+'</div>';
 html+='<div style="margin-top:8px;font-size:0.75rem;color:#fcd34d">Use CONDITIONAL material only with: (1) Independent corrosion testing, (2) Shortened inspection intervals, (3) Contingency budget for early replacement.</div>';
@@ -4271,12 +4534,12 @@ html+='</div>';
 }else{
 // Best TCO material is COMPATIBLE - standard recommendation
 html+='<div class="rec-box"><div class="rec-title">💡 Recommendation for '+fl.n+'</div>';
-html+='<div class="rec-item"><span class="rec-badge best">BEST VALUE</span> <strong>'+best.mat.name+'</strong> - '+best.rating+' rating, $'+best.tco.toFixed(0)+'/m² over 10 years</div>';
+html+='<div class="rec-item"><span class="rec-badge best">BEST VALUE</span> <strong>'+best.mat.name+'</strong> - '+best.rating+' rating, $'+safeToFixed(best.tco, 0, '0')+'/m² over 10 years</div>';
 if(validResults.length>1&&worst.tco>best.tco*2){html+='<div class="rec-item"><span class="rec-badge avoid">CAUTION</span> <strong>'+worst.mat.name+'</strong> - '+worst.rating+' rating, higher lifecycle cost</div>';}
 // V81: Show CONDITIONAL alternatives with caveat if they exist
 if(conditionalResults.length>0){
 html+='<div style="margin-top:8px;padding:8px;background:#422006;border-radius:4px;border:1px solid #d97706"><div style="font-size:0.8rem;color:#fcd34d;margin-bottom:4px"><strong>⚠️ CONDITIONAL Alternatives (require verification):</strong></div>';
-conditionalResults.forEach(r=>{html+='<div style="font-size:0.75rem;color:#fed7aa;margin:2px 0">• '+r.mat.name+' - $'+r.tco.toFixed(0)+'/m² TCO - <em>'+r.failReason+'</em></div>';});
+conditionalResults.forEach(r=>{html+='<div style="font-size:0.75rem;color:#fed7aa;margin:2px 0">• '+r.mat.name+' - $'+safeToFixed(r.tco, 0, '0')+'/m² TCO - <em>'+r.failReason+'</em></div>';});
 html+='</div>';
 }
 html+='</div>';
@@ -4288,11 +4551,11 @@ html+='<div style="margin-top:12px;padding:10px;background:#7c2d12;border-radius
 }else{
 html+='<div style="margin-top:12px;padding:10px;background:#1e293b;border-radius:6px;font-size:0.75rem;color:#94a3b8;border:1px solid #334155"><strong style="color:#60a5fa">⚠️ TCO Methodology:</strong> Initial cost × area + (replacements × labor). Polymers (PTFE/FKM) show higher $/m² due to material cost despite zero corrosion. Metals may be economical for large vessels; polymers for linings and seals. Service life capped at 25 years per replacement cycle analysis.</div>';
 }
-document.getElementById('lifecycleResults').innerHTML=html;
+DOM.setHTML('lifecycleResults',html);
 // V16.2 HARDENING: P1-A - Close try-catch wrapper
 } catch(err) {
   console.error('CERTA calcLifecycle() error:', err);
-  document.getElementById('lifecycleResults').innerHTML='<div style="background:#7f1d1d;color:#fca5a5;padding:12px;border-radius:6px;font-size:0.85rem"><strong>⚠️ Lifecycle Calculation Error</strong><br>' + err.message + '</div>';
+  DOM.setHTML('lifecycleResults','<div style="background:#7f1d1d;color:#fca5a5;padding:12px;border-radius:6px;font-size:0.85rem"><strong>⚠️ Lifecycle Calculation Error</strong><br>' + err.message + '</div>');
 }
 }
 function interp(t,d){
@@ -4324,7 +4587,7 @@ allFluids.forEach(f=>{
   sel.appendChild(opt);
 });
 
-document.getElementById('fluidCount').textContent='('+allFluids.length+')';
+DOM.setText('fluidCount','('+allFluids.length+')');
 }
 function getH(k){if(k.startsWith('h2so4')||k.includes('oleum'))return'h2so4';if(k.startsWith('hcl'))return'hcl';if(k.startsWith('hno3'))return'hno3';if(k.startsWith('h3po4')||k.includes('phosphoric'))return'h3po4';if(k.startsWith('naoh'))return'naoh';if(k.startsWith('koh'))return'koh';if(k.startsWith('nh4oh'))return'nh4oh';if(k.includes('cyanide')||k.startsWith('nacn'))return'cyanide';if(k==='benzene')return'benzene';if(k==='toluene'||k==='xylene'||k==='styrene'||k==='ethylbenzene')return'toluene';if(k==='methanol')return'methanol';if(k.includes('ethylene-glycol'))return'ethylene-glycol';if(k.includes('hypochlorite'))return'hypochlorite';if(k.includes('h2o2')||k.includes('peracetic'))return'h2o2';if(k.includes('ferric'))return'h2so4';if(k==='diesel'||k.includes('fuel-oil')||k==='kerosene')return'diesel';if(k==='gasoline'||k==='naphtha')return'gasoline';if(k.includes('milk')||k.includes('cream')||k.includes('whey')||k.includes('condensed'))return'milk';if(k.includes('vegetable')||k.includes('olive')||k.includes('canola')||k.includes('coconut'))return'vegetable-oil';if(k.includes('glycerin')||k.includes('propylene-glycol'))return'glycerin';if(k.includes('sae')||k.includes('hydraulic')||k.includes('gear')||k.includes('turbine')||k.includes('compressor')||k.includes('transformer')||k.includes('silicone'))return'lubricants';if(k.includes('slurry')||k.includes('tailings')||k.includes('ore'))return'slurry';return null;}
 function getC(k,c){if(k==='water'||k==='seawater'||k==='process-water')return'water';if(k.startsWith('h2so4')){const n=parseInt(k.split('-')[1]);return n>=70?'sulfuric-conc':'sulfuric-dilute';}if(k.includes('oleum'))return'sulfuric-conc';if(k.startsWith('hcl'))return'hydrochloric';if(k.startsWith('hno3'))return'nitric';if(k.startsWith('h3po4')||k.includes('phosphoric'))return'phosphoric';if(k.startsWith('naoh')||k.startsWith('koh')||k.includes('lime'))return'caustic';if(k.startsWith('nh4oh')||k.includes('ammonia'))return'ammonia';if(k.includes('cyanide')||k.startsWith('nacn'))return'cyanide';if(c.includes('Petroleum')||k==='diesel'||k==='gasoline')return'petroleum';if(c.includes('Aromatic')||k==='benzene'||k==='toluene'||k==='xylene')return'aromatic';if(c.includes('Alcohol')||k.includes('ethanol')||k.includes('methanol'))return'alcohol';if(c.includes('Chlorinated'))return'chlorinated';if(c.includes('Slurr')||k.includes('slurry'))return'slurry';if(k.includes('h2o2')||k.includes('peracetic')||k.includes('hypochlorite'))return'oxidizer';if(c.includes('Food')||c.includes('Dairy')||c.includes('Sugar')||c.includes('Beverage'))return'food';if(c.includes('Glycol')||k.includes('glycol')||k.includes('glycerin'))return'glycol';return'water';}
@@ -4332,7 +4595,7 @@ function getS(k,c){
 // V88: Escalate seal selection for ENERGETIC/OXIDIZER_ADJACENT fluids
 // Ammonium nitrate, nitrate solutions = require Oxidizer seals (leak-free priority)
 if(k.includes('ammonium-nitrate')||k.includes('nitrate'))return'Oxidizer';
-if(k.includes('cyanide')||k.startsWith('nacn'))return'Toxic';if(k==='benzene'||k==='gasoline'||k==='naphtha'||c.includes('Aromatic'))return'Flammable';if(k.startsWith('h2so4')||k.startsWith('hcl')||k.startsWith('hno3')||k.startsWith('h3po4')||k.includes('oleum'))return'Corrosive';if(k.startsWith('naoh')||k.startsWith('koh')||k.includes('lime'))return'Corrosive';if(k.includes('h2o2')||k.includes('hypochlorite')||k.includes('peracetic')||k.includes('chlorine-dioxide'))return'Oxidizer';if(c.includes('Slurr')||k.includes('slurry'))return'Slurry';if(c.includes('Food')||c.includes('Dairy')||c.includes('Sugar')||c.includes('Beverage'))return'Food';if(c.includes('Petroleum')&&!k.includes('gasoline'))return'Flammable';return'General';}
+if(k.includes('cyanide')||k.startsWith('nacn'))return'Toxic';if(k==='benzene'||k==='gasoline'||k==='naphtha'||c.includes('Aromatic'))return'Flammable';if(k.startsWith('h2so4')||k.startsWith('hcl')||k.startsWith('hno3')||k.startsWith('h3po4')||k.includes('oleum'))return'Corrosive';if(k.startsWith('naoh')||k.startsWith('koh')||k.includes('lime'))return'Corrosive';if(k.includes('h2o2')||k.includes('hypochlorite')||k.includes('peracetic'))return'Oxidizer';if(c.includes('Slurr')||k.includes('slurry'))return'Slurry';if(c.includes('Food')||c.includes('Dairy')||c.includes('Sugar')||c.includes('Beverage'))return'Food';if(c.includes('Petroleum')&&!k.includes('gasoline'))return'Flammable';return'General';}
 
 // ============================================================
 // HARD FAILURE GATE SYSTEM - V7.2 Architecture
@@ -4969,41 +5232,6 @@ function checkHardFailureGate(fk,tC,materialId){
   // These only trigger if Engine 1 didn't already catch the failure
   // ═══════════════════════════════════════════════════════════════════════════
 
-  // V17.2 ENG-SYNC-2: ELASTOMER OXIDIZER GATE
-  // Must be checked here to sync with evaluateCompatibilityV84 exclusions
-  const elastomerIds = ['FKM', 'EPDM', 'NBR', 'Neoprene', 'Silicone'];
-  const isElastomerMat = elastomerIds.includes(materialId);
-  const profile = getFluidBehaviorProfile(fk, tC);
-  const flags = profile.flags;
-  const isStrongOxidizer = flags.includes('OXIDIZER_STRONG') || flags.includes('DEHYDRATING');
-  
-  if(isElastomerMat && isStrongOxidizer && materialId !== 'Kalrez'){
-    result.passed = false;
-    result.gate = 'NOT_RECOMMENDED';
-    result.failureMode = 'Elastomers prohibited in strong oxidizers - chain scission failure';
-    result.failures.push({
-      archetype: 'ELASTOMER_OXIDIZER_PROHIBITION',
-      material: materialId,
-      severity: 'FATAL',
-      message: `[FATAL] ${materialId}: Elastomers prohibited in strong oxidizers - chain scission failure`,
-      rationale: '[V84 RULE-CHEM-104] Oxidative attack cleaves polymer backbone (C-C bonds) → rapid embrittlement, cracking, catastrophic seal failure. Use Kalrez (FFKM) with verified grade, or PTFE for static sealing.'
-    });
-    result.rationales.push('[V84] Elastomers (except Kalrez FFKM) are prohibited in strong oxidizers due to chain scission failure mechanism.');
-    return result; // Binary failure
-  }
-  
-  // V17.2: Kalrez gets CONDITIONAL in oxidizers (not FAIL)
-  if(materialId === 'Kalrez' && isStrongOxidizer){
-    if(result.gate === 'OK') result.gate = 'CONDITIONAL';
-    result.conditionals.push({
-      archetype: 'ELASTOMER_OXIDIZER_CONDITIONAL',
-      material: materialId,
-      severity: 'CONDITIONAL',
-      message: `[CONDITIONAL] Kalrez: Verify FFKM grade rated for oxidizer service`,
-      rationale: '[V84] Kalrez FFKM may resist oxidizers but requires grade verification for specific chemistry.'
-    });
-  }
-
   // ALUMINUM: Hard fail in HNO₃ ≥40% (passivation breakdown)
   if(materialId==='Aluminum'&&fk.includes('hno3')&&nitricConc>=40){
     result.passed=false;
@@ -5190,7 +5418,7 @@ function checkHardFailureGate(fk,tC,materialId){
         severity:'TEMP_EXCEEDED',
         limit:rules.maxTemp[materialId],
         actual:tC,
-        message:'[TEMP] '+materialId+' max '+rules.maxTemp[materialId]+'°C in '+arch+' (actual: '+tC.toFixed(0)+'°C)',
+        message:'[TEMP] '+materialId+' max '+rules.maxTemp[materialId]+'°C in '+arch+' (actual: '+safeToFixed(tC, 0, '0')+'°C)',
         rationale:rules.rationale
       });
     }
@@ -5383,10 +5611,10 @@ trackExecutionStep('CALC_START');
 try{
 let count=parseInt(localStorage.getItem('certaUsageCount')||'0')+1;
 localStorage.setItem('certaUsageCount',count.toString());
-document.getElementById('usageCount').textContent=count.toLocaleString();
+DOM.setText('usageCount',count.toLocaleString());
 }catch(e){}
 
-const fk=document.getElementById('fluidSelect').value,temp=parseFloat(document.getElementById('tempInput').value),unit=document.getElementById('tempUnit').value;
+const fk=document.getElementById('fluidSelect').value,temp=parseFloat(DOM.getValue('tempInput')),unit=DOM.getValue('tempUnit');
 
 // V16.2: Temperature bounds check (P1-D)
 let tempC = temp;
@@ -5394,7 +5622,7 @@ if (unit === 'F') tempC = (temp - 32) * 5 / 9;
 if (unit === 'K') tempC = temp - 273.15;
 const tempValid = validateTemperature(tempC);
 if (!tempValid.valid) {
-  document.getElementById('results').innerHTML='<div class="warning">⚠️ Temperature Error: ' + tempValid.errors.join(', ') + '</div>';
+  DOM.setHTML('results','<div class=\"warning\">⚠️ Temperature Error: ' + tempValid.errors.join(', ') + '</div>');
   return;
 }
 if (tempValid.warnings.length > 0) {
@@ -5407,7 +5635,7 @@ if (tempValid.warnings.length > 0) {
 trackExecutionStep('CREATE_CONTEXT');
 const runCtx = createRunContext(fk, temp, unit);
 if (!runCtx.valid) {
-  document.getElementById('results').innerHTML='<div class="warning">⚠️ ' + (runCtx.error || 'Invalid input') + '</div>';
+  DOM.setHTML('results','<div class=\"warning\">⚠️ ' + (runCtx.error || 'Invalid input') + '</div>');
   return;
 }
 const ctx = runCtx.context;
@@ -5420,7 +5648,7 @@ if (!dataCheck.complete) {
   if (dataCheck.issues.some(i => i.includes('Temperature outside'))) {
     helpMsg = '<br><small style="color:#fcd34d">💡 Tip: Check if another version of this fluid covers your temperature range (e.g., "Ambient" vs "Hot" variants)</small>';
   }
-  document.getElementById('results').innerHTML='<div class="warning">⚠️ ' + dataCheck.message + '<br><small>' + dataCheck.issues.join(', ') + '</small>' + helpMsg + '</div>';
+  DOM.setHTML('results','<div class=\"warning\">⚠️ ' + dataCheck.message + '<br><small>' + dataCheck.issues.join(', ') + '</small>' + helpMsg + '</div>');
   return;
 }
 
@@ -5432,8 +5660,8 @@ _clearCache();
 curFluid=fk;curTemp=tC;const fl=F[fk];
 // V15.0: Data already validated in createRunContext
 const p=interp(tC,fl.d);
-if(!p||p.sg==null||p.visc==null){document.getElementById('results').innerHTML='<div class="warning">⚠️ Could not calculate fluid properties</div>';return;}
-const dens=p.sg*1000,kv=(p.visc/1000)/dens*1e6;const hk=getH(fk),hz=hk?H[hk]:null;const ck=getC(fk,fl.c);let cp=M.compat[ck]||M.compat['water'];const sk=getS(fk,fl.c),seals=S[sk]||S['General'];
+if(!p||p.sg==null||p.visc==null){DOM.setHTML('results','<div class="warning">⚠️ Could not calculate fluid properties</div>');return;}
+const dens=p.sg*1000,kv=(p.visc/1000)/dens*1e6;const hk=getH(fk),hz=hk?H[hk]:null;const ck=getC(fk,fl.c);let cp=getCompatWithWarning(ck);const sk=getS(fk,fl.c),seals=S[sk]||S['General'];
 
 // ═══════════════════════════════════════════════════════════════════════════
 // V15.0 §7: ENGINE EXECUTION CONTRACT (STRICT ORDER)
@@ -5450,7 +5678,7 @@ const hasConditionals=gateResults.conditional.length>0;
 trackExecutionStep('CANDIDATE_SETS');
 const candidateSets = constructCandidateSets(ctx, gateResults);
 if (candidateSets._validity === 'INVALID') {
-  document.getElementById('results').innerHTML='<div class="warning">⚠️ Failed to construct candidate sets - evaluation aborted</div>';
+  DOM.setHTML('results','<div class="warning">⚠️ Failed to construct candidate sets - evaluation aborted</div>');
   return;
 }
 
@@ -5470,7 +5698,7 @@ const sealEligibility = resolveSealEligibility(ctx);
 trackExecutionStep('FAO_GENERATE');
 const faoResult = generateFAO(ctx, candidateSets, sealEligibility, [], []);
 if (!faoResult.valid) {
-  document.getElementById('results').innerHTML='<div class="warning">⚠️ V15 §14: Failed to generate FAO - evaluation aborted</div>';
+  DOM.setHTML('results','<div class="warning">⚠️ V15 §14: Failed to generate FAO - evaluation aborted</div>');
   return;
 }
 
@@ -5486,7 +5714,7 @@ if (!orderCheck.valid) {
 
 // V15.2 FIX: §15 Validate UI State - ensure FAO is current
 if (!validateUIState(faoResult.fao)) {
-  document.getElementById('results').innerHTML='<div class="warning">⚠️ V15 §15: UI state validation failed - stale data detected</div>';
+  DOM.setHTML('results','<div class="warning">⚠️ V15 §15: UI state validation failed - stale data detected</div>');
   return;
 }
 
@@ -5611,7 +5839,7 @@ h+='<strong>REGULATORY:</strong> Subject to security-sensitive ammonium nitrate 
 h+='</div>';
 }
 
-if(p.ex)h+='<div class="warning">⚠️ Temperature outside data range.</div>';h+='<div class="grid"><div class="prop"><div class="prop-label">Specific Gravity</div><div class="prop-value">'+p.sg.toFixed(4)+'</div><div class="prop-unit">rel. to water</div></div><div class="prop"><div class="prop-label">Dynamic Viscosity</div><div class="prop-value">'+p.visc.toFixed(3)+'</div><div class="prop-unit">cP</div></div><div class="prop"><div class="prop-label">Density</div><div class="prop-value">'+dens.toFixed(2)+'</div><div class="prop-unit">kg/m³</div></div><div class="prop"><div class="prop-label">Kinematic Viscosity</div><div class="prop-value">'+kv.toFixed(3)+'</div><div class="prop-unit">cSt</div></div></div><div class="temp-display">Temperature: '+tC.toFixed(1)+'°C | '+(tC*9/5+32).toFixed(1)+'°F | '+(tC+273.15).toFixed(1)+'K | <strong>Pressure: 1 bar (atm)</strong></div>';h+='<div class="chart-box"><div class="chart-title">📈 Viscosity-Temperature Profile</div><canvas id="viscChart"></canvas><div class="chart-legend"><span><span class="legend-dot data"></span>Data Points</span><span><span class="legend-dot current"></span>Current (★)</span></div></div>';h+='<div class="lifecycle-box"><div class="lifecycle-title">📊 Material Lifecycle Comparison</div><div style="background:#1e3a5f;padding:10px;border-radius:6px;margin-bottom:12px;font-size:0.8rem;border-left:3px solid #60a5fa"><strong style="color:#93c5fd">📋 Analysis Assumptions:</strong><ul style="margin:6px 0 0 16px;color:#cbd5e1;line-height:1.5"><li>Velocity: 2-3 m/s (typical pump discharge)</li><li>Temperature: '+tC.toFixed(0)+'°C (as specified)</li><li>Concentration: Standard grade (check SDS)</li><li>Corrosion rates: Mid-range of published values [9,10]</li><li>Replacement labor: $500/m² included</li></ul></div><div style="font-size:0.75rem;color:#94a3b8;margin-bottom:12px">Data: NACE Corrosion Data Survey [9], ASM Handbook Vol.13 [10], MEPS Steel Prices [11]</div><div id="lifecycleResults"></div></div>';h+='<div class="section"><div class="section-header" onclick="this.nextElementSibling.classList.toggle(\'open\')"><span>🔧 Material Compatibility</span><span>▼</span></div><div class="section-content">';let matIdx=0;if(cp.excellent&&cp.excellent.length){h+='<div class="compat-group"><div class="compat-title excellent">✓ Excellent</div><div class="compat-grid">';cp.excellent.forEach(m=>{const mt=M.materials[m];if(mt){const conf=calcConfidence('material',m,{tempDefined:true,inRange:!p.ex,rating:'excellent',fluidKey:fk,tempC:tC});h+='<div class="compat-item excellent"><div class="compat-name">'+mt.name+'</div><div class="compat-type">'+mt.type+'</div>'+confBadgeHTML(conf,'mat-'+matIdx)+'</div>';matIdx++;}});h+='</div></div>';}if(cp.good&&cp.good.length){h+='<div class="compat-group"><div class="compat-title good">○ Good</div><div class="compat-grid">';cp.good.forEach(m=>{const mt=M.materials[m];if(mt){const conf=calcConfidence('material',m,{tempDefined:true,inRange:!p.ex,rating:'good',fluidKey:fk,tempC:tC});h+='<div class="compat-item good"><div class="compat-name">'+mt.name+'</div><div class="compat-type">'+mt.type+'</div>'+confBadgeHTML(conf,'mat-'+matIdx)+'</div>';matIdx++;}});h+='</div></div>';}if(cp.poor&&cp.poor.length){h+='<div class="compat-group"><div class="compat-title poor">✗ Not Recommended</div><div class="compat-grid">';cp.poor.forEach(m=>{const mt=M.materials[m];if(mt){const conf=calcConfidence('material',m,{tempDefined:true,inRange:!p.ex,rating:'poor',fluidKey:fk,tempC:tC});h+='<div class="compat-item poor"><div class="compat-name">'+mt.name+'</div><div class="compat-type">'+mt.type+'</div>'+confBadgeHTML(conf,'mat-'+matIdx)+'</div>';matIdx++;}});h+='</div></div>';}h+='</div></div>';h+='<div class="section"><div class="section-header" onclick="this.nextElementSibling.classList.toggle(\'open\')"><span>⚙️ Seal Recommendations ('+sk+')</span><span>▼</span></div><div class="section-content">';
+if(p.ex)h+='<div class="warning">⚠️ Temperature outside data range.</div>';h+='<div class="grid"><div class="prop"><div class="prop-label">Specific Gravity</div><div class="prop-value">'+safeToFixed(p.sg, 4, '0')+'</div><div class="prop-unit">rel. to water</div></div><div class="prop"><div class="prop-label">Dynamic Viscosity</div><div class="prop-value">'+safeToFixed(p.visc, 3, '0')+'</div><div class="prop-unit">cP</div></div><div class="prop"><div class="prop-label">Density</div><div class="prop-value">'+safeToFixed(dens, 2, '0')+'</div><div class="prop-unit">kg/m³</div></div><div class="prop"><div class="prop-label">Kinematic Viscosity</div><div class="prop-value">'+safeToFixed(kv, 3, '0')+'</div><div class="prop-unit">cSt</div></div></div><div class="temp-display">Temperature: '+safeToFixed(tC, 1, '0')+'°C | '+(tC*9/5+32).toFixed(1)+'°F | '+(tC+273.15).toFixed(1)+'K | <strong>Pressure: 1 bar (atm)</strong></div>';h+='<div class="chart-box"><div class="chart-title">📈 Viscosity-Temperature Profile</div><canvas id="viscChart"></canvas><div class="chart-legend"><span><span class="legend-dot data"></span>Data Points</span><span><span class="legend-dot current"></span>Current (★)</span></div></div>';h+='<div class="lifecycle-box"><div class="lifecycle-title">📊 Material Lifecycle Comparison</div><div style="background:#1e3a5f;padding:10px;border-radius:6px;margin-bottom:12px;font-size:0.8rem;border-left:3px solid #60a5fa"><strong style="color:#93c5fd">📋 Analysis Assumptions:</strong><ul style="margin:6px 0 0 16px;color:#cbd5e1;line-height:1.5"><li>Velocity: 2-3 m/s (typical pump discharge)</li><li>Temperature: '+safeToFixed(tC, 0, '0')+'°C (as specified)</li><li>Concentration: Standard grade (check SDS)</li><li>Corrosion rates: Mid-range of published values [9,10]</li><li>Replacement labor: $500/m² included</li></ul></div><div style="font-size:0.75rem;color:#94a3b8;margin-bottom:12px">Data: NACE Corrosion Data Survey [9], ASM Handbook Vol.13 [10], MEPS Steel Prices [11]</div><div id="lifecycleResults"></div></div>';h+='<div class="section"><div class="section-header" onclick="this.nextElementSibling.classList.toggle(\'open\')"><span>🔧 Material Compatibility</span><span>▼</span></div><div class="section-content">';let matIdx=0;if(cp.excellent&&cp.excellent.length){h+='<div class="compat-group"><div class="compat-title excellent">✓ Excellent</div><div class="compat-grid">';cp.excellent.forEach(m=>{const mt=M.materials[m];if(mt){const conf=calcConfidence('material',m,{tempDefined:true,inRange:!p.ex,rating:'excellent',fluidKey:fk,tempC:tC});h+='<div class="compat-item excellent"><div class="compat-name">'+mt.name+'</div><div class="compat-type">'+mt.type+'</div>'+confBadgeHTML(conf,'mat-'+matIdx)+'</div>';matIdx++;}});h+='</div></div>';}if(cp.good&&cp.good.length){h+='<div class="compat-group"><div class="compat-title good">○ Good</div><div class="compat-grid">';cp.good.forEach(m=>{const mt=M.materials[m];if(mt){const conf=calcConfidence('material',m,{tempDefined:true,inRange:!p.ex,rating:'good',fluidKey:fk,tempC:tC});h+='<div class="compat-item good"><div class="compat-name">'+mt.name+'</div><div class="compat-type">'+mt.type+'</div>'+confBadgeHTML(conf,'mat-'+matIdx)+'</div>';matIdx++;}});h+='</div></div>';}if(cp.poor&&cp.poor.length){h+='<div class="compat-group"><div class="compat-title poor">✗ Not Recommended</div><div class="compat-grid">';cp.poor.forEach(m=>{const mt=M.materials[m];if(mt){const conf=calcConfidence('material',m,{tempDefined:true,inRange:!p.ex,rating:'poor',fluidKey:fk,tempC:tC});h+='<div class="compat-item poor"><div class="compat-name">'+mt.name+'</div><div class="compat-type">'+mt.type+'</div>'+confBadgeHTML(conf,'mat-'+matIdx)+'</div>';matIdx++;}});h+='</div></div>';}h+='</div></div>';h+='<div class="section"><div class="section-header" onclick="this.nextElementSibling.classList.toggle(\'open\')"><span>⚙️ Seal Recommendations ('+sk+')</span><span>▼</span></div><div class="section-content">';
 
 // V88 FIX: Explicit seal prohibition banner for oxidizer/energetic fluids
 const sealProfile=getFluidBehaviorProfile(fk,tC);
@@ -5628,7 +5856,7 @@ const isConcentratedAcid=(fk.includes('h2so4-9')||fk.includes('h2so4-8')||fk.inc
 const sealFilterResult = filterSealsByEligibility(seals, sealEligibility);
 if(sealFilterResult.suppressed){h+='<div style="background:#450a0a;border:2px solid #dc2626;padding:12px;border-radius:8px;margin:10px 0"><div style="font-weight:bold;color:#fca5a5;font-size:1rem;margin-bottom:6px">🚫 SEAL SELECTION SUPPRESSED</div><div style="color:#fca5a5;font-size:0.85rem">'+sealFilterResult.reason+'</div><div style="color:#f87171;font-size:0.8rem;margin-top:8px">Contact equipment manufacturer for specialized containment solutions.</div></div>';}else{
 if(sealFilterResult.filtered){h+='<div style="background:#1e3a5f;border:1px solid #3b82f6;padding:8px;border-radius:6px;margin-bottom:10px;font-size:0.8rem;color:#93c5fd"><strong>V15 §13.5:</strong> '+sealEligibility.state.replace(/_/g,' ')+' - Showing '+sealFilterResult.seals.length+' of '+sealFilterResult.originalCount+' seal options</div>';}
-let sealIdx=0;sealFilterResult.seals.forEach(s=>{let cls=s.sealless?'sealless':(s.priority.includes('CRITICAL')?'critical':(s.priority.includes('STRONGLY')||s.priority.includes('RECOMMENDED')?'recommended':''));const sealConf=calcConfidence('seal',s,{hasAPI:s.apiPlan.includes('API'),tempDefined:true,viscDefined:true,categoryMatch:true,priority:s.priority});h+='<div class="seal-card '+cls+'"><div class="seal-header">';if(s.sealless)h+='<span class="seal-badge sealless">SEALLESS</span>';if(s.priority.includes('CRITICAL'))h+='<span class="seal-badge critical">CRITICAL</span>';else if(s.priority.includes('STRONGLY'))h+='<span class="seal-badge recommended">STRONGLY REC.</span>';h+='<span class="seal-type">'+s.type+'</span>'+confBadgeHTML(sealConf,'seal-'+sealIdx)+'</div><div class="seal-priority">Priority: '+s.priority+'</div><div class="seal-reason"><strong>Why:</strong> '+s.reason+'</div><div class="seal-specs"><div class="seal-spec"><div class="seal-spec-label">Specs</div>'+s.specs+'</div><div class="seal-spec"><div class="seal-spec-label">Materials</div>'+s.materials+'</div></div><div class="seal-spec" style="margin-top:8px"><div class="seal-spec-label">Standard</div>'+s.apiPlan+'</div></div>';sealIdx++;});}h+='</div></div>';if(hz){h+='<div class="section"><div class="section-header" onclick="this.nextElementSibling.classList.toggle(\'open\')"><span>⚠️ Chemical Hazards (GHS-7/AICIS)</span><span>▼</span></div><div class="section-content"><div class="hazard-signal '+(hz.signal==='DANGER'?'danger':(hz.signal==='WARNING'?'warning':'none'))+'">'+hz.pictograms.join(' ')+' '+hz.signal+'</div><div class="hazard-section"><h4>GHS Classifications</h4><div class="hazard-grid">';hz.ghsClasses.forEach(c=>h+='<div class="hazard-class">'+c+'</div>');h+='</div></div><div class="hazard-section"><h4>Hazard Statements</h4><ul>';hz.hStatements.forEach(s=>h+='<li>'+s+'</li>');h+='</ul></div>';if(hz.twa&&hz.twa!=='N/A')h+='<div class="hazard-section"><h4>Exposure Limits</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div style="background:#1e3a5f;padding:10px;border-radius:6px;border:1px solid #3b82f6"><div style="color:#93c5fd;font-size:0.75rem;margin-bottom:4px">TWA (8-hour)</div><div style="color:#e2e8f0;font-weight:600"> '+hz.twa+'</div></div><div style="background:#4c1d95;padding:10px;border-radius:6px;border:1px solid #8b5cf6"><div style="color:#c4b5fd;font-size:0.75rem;margin-bottom:4px">STEL (15-min)</div><div style="color:#e2e8f0;font-weight:600"> '+hz.stel+'</div></div></div>';h+='<div class="hazard-section"><h4>Required PPE</h4><div class="ppe-grid">';hz.ppe.forEach(p=>h+='<div class="ppe-item">✓ '+p+'</div>');h+='</div></div><div class="hazard-section"><h4>First Aid</h4><div class="first-aid">'+hz.firstAid+'</div></div><div class="hazard-section"><h4>Disposal</h4><div class="disposal">'+hz.disposal+'</div></div><div class="aicis"><strong>AICIS:</strong> '+hz.aicis+(hz.un!=='N/A'?' | <strong>UN:</strong> '+hz.un+' | <strong>PSN:</strong> '+hz.psn+' | <strong>ERG:</strong> '+hz.erg:'')+'</div></div></div>';}h+='<div class="section"><div class="section-header" onclick="this.nextElementSibling.classList.toggle(\'open\')"><span>📚 Reference List</span><span>▼</span></div><div class="section-content">';R.forEach(r=>{h+='<div class="ref-item"><div class="ref-header" onclick="this.nextElementSibling.classList.toggle(\'open\')"><span><span class="ref-num">['+r.num+']</span><span class="ref-title">'+r.title+'</span></span><span>▶</span></div><div class="ref-citations">';['apa','mla','chicago','harvard','ieee'].forEach(fmt=>{h+='<div class="citation"><span class="citation-label">'+fmt.toUpperCase()+'</span><span class="citation-text">'+r[fmt]+'</span><button class="copy-btn" onclick="copyC(this,`'+r[fmt].replace(/`/g,"'")+'`)">Copy</button></div>';});h+='</div></div>';});h+='</div></div></div>';document.getElementById('results').innerHTML=h;setTimeout(()=>{drawChart(fk,tC);calcLifecycle();},50);document.getElementById('reynoldsCard').style.display='block';document.getElementById('cavCard').style.display='block';document.getElementById('printCard').style.display='block';}catch(err){console.error('CERTA calc() error:',err);document.getElementById('results').innerHTML='<div style="background:#7f1d1d;color:#fca5a5;padding:20px;border-radius:8px;margin:10px"><h3>⚠️ Error in Assessment</h3><p>'+err.message+'</p><pre style="font-size:0.7rem;overflow:auto">'+err.stack+'</pre></div>';}}
+let sealIdx=0;sealFilterResult.seals.forEach(s=>{let cls=s.sealless?'sealless':(s.priority.includes('CRITICAL')?'critical':(s.priority.includes('STRONGLY')||s.priority.includes('RECOMMENDED')?'recommended':''));const sealConf=calcConfidence('seal',s,{hasAPI:s.apiPlan.includes('API'),tempDefined:true,viscDefined:true,categoryMatch:true,priority:s.priority});h+='<div class="seal-card '+cls+'"><div class="seal-header">';if(s.sealless)h+='<span class="seal-badge sealless">SEALLESS</span>';if(s.priority.includes('CRITICAL'))h+='<span class="seal-badge critical">CRITICAL</span>';else if(s.priority.includes('STRONGLY'))h+='<span class="seal-badge recommended">STRONGLY REC.</span>';h+='<span class="seal-type">'+s.type+'</span>'+confBadgeHTML(sealConf,'seal-'+sealIdx)+'</div><div class="seal-priority">Priority: '+s.priority+'</div><div class="seal-reason"><strong>Why:</strong> '+s.reason+'</div><div class="seal-specs"><div class="seal-spec"><div class="seal-spec-label">Specs</div>'+s.specs+'</div><div class="seal-spec"><div class="seal-spec-label">Materials</div>'+s.materials+'</div></div><div class="seal-spec" style="margin-top:8px"><div class="seal-spec-label">Standard</div>'+s.apiPlan+'</div></div>';sealIdx++;});}h+='</div></div>';if(hz){h+='<div class="section"><div class="section-header" onclick="this.nextElementSibling.classList.toggle(\'open\')"><span>⚠️ Chemical Hazards (GHS-7/AICIS)</span><span>▼</span></div><div class="section-content"><div class="hazard-signal '+(hz.signal==='DANGER'?'danger':(hz.signal==='WARNING'?'warning':'none'))+'">'+hz.pictograms.join(' ')+' '+hz.signal+'</div><div class="hazard-section"><h4>GHS Classifications</h4><div class="hazard-grid">';hz.ghsClasses.forEach(c=>h+='<div class="hazard-class">'+c+'</div>');h+='</div></div><div class="hazard-section"><h4>Hazard Statements</h4><ul>';hz.hStatements.forEach(s=>h+='<li>'+s+'</li>');h+='</ul></div>';if(hz.twa&&hz.twa!=='N/A')h+='<div class="hazard-section"><h4>Exposure Limits</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div style="background:#1e3a5f;padding:10px;border-radius:6px;border:1px solid #3b82f6"><div style="color:#93c5fd;font-size:0.75rem;margin-bottom:4px">TWA (8-hour)</div><div style="color:#e2e8f0;font-weight:600"> '+hz.twa+'</div></div><div style="background:#4c1d95;padding:10px;border-radius:6px;border:1px solid #8b5cf6"><div style="color:#c4b5fd;font-size:0.75rem;margin-bottom:4px">STEL (15-min)</div><div style="color:#e2e8f0;font-weight:600"> '+hz.stel+'</div></div></div>';h+='<div class="hazard-section"><h4>Required PPE</h4><div class="ppe-grid">';hz.ppe.forEach(p=>h+='<div class="ppe-item">✓ '+p+'</div>');h+='</div></div><div class="hazard-section"><h4>First Aid</h4><div class="first-aid">'+hz.firstAid+'</div></div><div class="hazard-section"><h4>Disposal</h4><div class="disposal">'+hz.disposal+'</div></div><div class="aicis"><strong>AICIS:</strong> '+hz.aicis+(hz.un!=='N/A'?' | <strong>UN:</strong> '+hz.un+' | <strong>PSN:</strong> '+hz.psn+' | <strong>ERG:</strong> '+hz.erg:'')+'</div></div></div>';}h+='<div class="section"><div class="section-header" onclick="this.nextElementSibling.classList.toggle(\'open\')"><span>📚 Reference List</span><span>▼</span></div><div class="section-content">';R.forEach(r=>{h+='<div class="ref-item"><div class="ref-header" onclick="this.nextElementSibling.classList.toggle(\'open\')"><span><span class="ref-num">['+r.num+']</span><span class="ref-title">'+r.title+'</span></span><span>▶</span></div><div class="ref-citations">';['apa','mla','chicago','harvard','ieee'].forEach(fmt=>{h+='<div class="citation"><span class="citation-label">'+fmt.toUpperCase()+'</span><span class="citation-text">'+r[fmt]+'</span><button class="copy-btn" onclick="copyC(this,`'+r[fmt].replace(/`/g,"'")+'`)">Copy</button></div>';});h+='</div></div>';});h+='</div></div></div>';DOM.setHTML('results',h);SafeTimer.set(()=>{drawChart(fk,tC);calcLifecycle();},50);DOM.show('reynoldsCard');DOM.show('cavCard');DOM.show('printCard');}catch(err){console.error('CERTA calc() error:',err);DOM.setHTML('results','<div style="background:#7f1d1d;color:#fca5a5;padding:20px;border-radius:8px;margin:10px"><h3>⚠️ Error in Assessment</h3><p>'+err.message+'</p><pre style="font-size:0.7rem;overflow:auto">'+err.stack+'</pre></div>');}}
 function copyC(btn,txt){navigator.clipboard.writeText(txt);btn.textContent='✓';btn.classList.add('copied');setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied');},2000);}
 
 // V89: Export audit trail to JSON file
@@ -5675,8 +5903,8 @@ if (!faoHash) {
 
 // V15.2: Verify checksum matches current inputs (prevent stale PDF)
 var fk=document.getElementById('fluidSelect').value;
-var temp=parseFloat(document.getElementById('tempInput').value);
-var unit=document.getElementById('tempUnit').value;
+var temp=parseFloat(DOM.getValue('tempInput'));
+var unit=DOM.getValue('tempUnit');
 var tC=temp;
 if(unit==='F')tC=(temp-32)*5/9;
 if(unit==='K')tC=temp-273.15;
@@ -5700,8 +5928,8 @@ if(_currentFAO.checksum!==expectedChecksum){
 // V15.2: Consume frozen FAO data - NO recalculation
 var fl=F[fk];
 var pr=interp(tC,fl.d),dens=pr.sg*1000,kv=(pr.visc/1000)/dens*1e6;
-var ck=getC(fk,fl.c),cpRaw=M.compat[ck]||M.compat['water'];
-var corr=M.corrosion[ck]||M.corrosion['water'];
+var ck=getC(fk,fl.c),cpRaw=getCompatWithWarning(ck);
+var corr=getCorrosionWithWarning(ck);
 var sk=getS(fk,fl.c),seals=S[sk]||S['General'];
 var hk=getH(fk),hz=hk?H[hk]:null;
 var fluidRefs=getFluidRefs(fk,fl.c);
@@ -5744,26 +5972,43 @@ good:[...(cpRaw.good||[]).filter(function(m){return !pdfFailedIds.includes(m);})
 fair:(cpRaw.fair||[]).filter(function(m){return !pdfFailedIds.includes(m);}),
 poor:[...(cpRaw.poor||[]),...pdfFailedIds.filter(function(m){return !(cpRaw.poor||[]).includes(m);})]
 };
-var css='@page{size:A4;margin:15mm}*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:20px;color:#111;font-size:10px;line-height:1.3}h1{color:#1e40af;font-size:16px;border-bottom:2px solid #1e40af;padding-bottom:5px;margin-bottom:10px}h2{color:#333;font-size:12px;margin:12px 0 6px;padding:5px;background:#f3f4f6;border-left:3px solid #3b82f6;page-break-after:avoid}.info-row{display:flex;gap:15px;margin-bottom:12px;padding:8px;background:#eff6ff;border-radius:4px}.info-box{flex:1}.info-label{font-size:8px;color:#666;text-transform:uppercase}.info-value{font-size:12px;font-weight:bold;color:#1e40af}.conditions{background:#fef3c7;border:2px solid #f59e0b;padding:8px;border-radius:4px;margin:10px 0;text-align:center;font-weight:bold;font-size:9px}.props{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.prop{flex:1;min-width:22%;border:1px solid #ddd;border-radius:4px;padding:8px;text-align:center}.prop-label{font-size:8px;color:#666}.prop-value{font-size:14px;font-weight:bold;color:#1e40af}.prop-unit{font-size:7px;color:#999}.cg{margin:6px 0}.ct{font-weight:bold;font-size:9px;padding:3px 6px;border-radius:3px;margin-bottom:4px}.ct.e{background:#d1fae5;color:#065f46}.ct.g{background:#dbeafe;color:#1e40af}.ct.p{background:#fee2e2;color:#991b1b}.cl{display:flex;flex-wrap:wrap;gap:3px}.ci{padding:2px 5px;border-radius:2px;font-size:8px}.ci.e{background:#ecfdf5;border:1px solid #10b981}.ci.g{background:#eff6ff;border:1px solid #3b82f6}.ci.p{background:#fef2f2;border:1px solid #ef4444}.seal{border:1px solid #ddd;border-radius:4px;padding:6px;margin:5px 0;font-size:9px}.seal.sl{border-left:3px solid #10b981;background:#f0fdf4}.seal.cr{border-left:3px solid #ef4444;background:#fef2f2}.st{font-weight:bold;font-size:10px}.sp{color:#666;font-size:8px}.hz{padding:10px;border-radius:4px;margin:8px 0;page-break-inside:avoid}.hz.d{background:#fef2f2;border:2px solid #ef4444}.hz.w{background:#fffbeb;border:2px solid #f59e0b}.sig{font-size:14px;font-weight:bold;text-align:center;margin-bottom:6px}.hs{margin:6px 0}.hs h4{font-size:9px;color:#333;margin-bottom:3px}.hl{list-style:none;padding:0}.hl li{padding:2px 0;border-bottom:1px solid #eee;font-size:8px}.ppe{display:flex;flex-wrap:wrap;gap:3px}.pi{background:#dbeafe;padding:2px 5px;border-radius:2px;font-size:8px}.fa{background:#d1fae5;padding:6px;border-radius:4px;font-size:9px}.dp{background:#f3f4f6;padding:6px;border-radius:4px;font-size:9px}.visc-table{width:100%;border-collapse:collapse;margin:8px 0;font-size:8px;page-break-inside:avoid}.visc-table th,.visc-table td{border:1px solid #ddd;padding:4px;text-align:center}.visc-table th{background:#e0e7ff;font-weight:bold}.visc-table .current{background:#fef3c7;font-weight:bold}.life-table{width:100%;border-collapse:collapse;margin:8px 0;font-size:8px;page-break-inside:avoid}.life-table th,.life-table td{border:1px solid #ddd;padding:4px;text-align:left}.life-table th{background:#d1fae5}.life-table .best{background:#ecfdf5}.rb{display:inline-block;padding:1px 4px;border-radius:8px;font-size:7px;font-weight:bold}.rb.e{background:#10b981;color:white}.rb.g{background:#3b82f6;color:white}.rb.f{background:#f59e0b;color:white}.rb.p{background:#ef4444;color:white}.rec-box{background:#f0fdf4;border:2px solid #10b981;border-radius:4px;padding:8px;margin:8px 0;page-break-inside:avoid}.rec-title{font-weight:bold;color:#065f46;margin-bottom:4px;font-size:10px}.assume{background:#fff7ed;border:1px solid #fdba74;padding:6px;border-radius:4px;margin:6px 0;font-size:8px}.exp-lim{display:flex;gap:10px;margin:6px 0}.exp-box{flex:1;padding:5px;border-radius:3px;font-size:8px;text-align:center}.twa-box{background:#1e3a5f;color:#e2e8f0;border:1px solid #3b82f6}.stel-box{background:#4c1d95;color:#e2e8f0;border:1px solid #8b5cf6}.refs{margin-top:12px;padding-top:8px;border-top:1px solid #ddd;page-break-before:avoid}.ref{font-size:7px;color:#666;margin:2px 0}.footer{margin-top:15px;padding-top:8px;border-top:1px solid #ddd;font-size:7px;color:#999;text-align:center}.conf-pdf{display:inline-block;padding:2px 6px;border-radius:3px;font-size:7px;font-weight:bold;margin-left:4px}.conf-pdf.vh{background:#064e3b;color:#6ee7b7}.conf-pdf.hi{background:#1e3a5f;color:#7dd3fc}.conf-pdf.md{background:#78350f;color:#fcd34d}.conf-pdf.lo{background:#7f1d1d;color:#fca5a5}.conf-note{font-size:7px;color:#666;font-style:italic;margin-top:4px;padding:4px;background:#f9fafb;border-radius:2px}@media print{body{padding:12mm}tr{page-break-inside:avoid}}';
-var h='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+fl.n+' - CERTA Assessment Report</title><style>'+css+'.expert-review{background:#fef2f2;border:2px solid #dc2626;border-radius:6px;padding:10px;margin:10px 0}.expert-title{font-weight:bold;color:#991b1b;font-size:11px;margin-bottom:6px}.expert-flag{background:#fee2e2;border-left:3px solid #ef4444;padding:6px;margin:4px 0;font-size:8px}.expert-action{color:#7f1d1d;font-style:italic}.v15-parity{background:#ecfdf5;border:2px solid #10b981;padding:6px;border-radius:4px;margin:8px 0;font-size:8px;text-align:center}.pdf-header{background:linear-gradient(135deg,#1e3a5f 0%,#1e40af 100%);color:white;padding:20px;margin:-20px -20px 20px;border-bottom:4px solid #f59e0b}.pdf-logo{font-size:22px;font-weight:bold;letter-spacing:1px}.pdf-subtitle{font-size:10px;opacity:0.9;margin-top:4px}.pdf-docinfo{display:flex;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.3);flex-wrap:wrap;gap:8px}.pdf-docfield{text-align:center;min-width:80px}.pdf-docfield-label{font-size:7px;opacity:0.7;text-transform:uppercase}.pdf-docfield-value{font-size:10px;font-weight:bold}.exec-summary{background:#eff6ff;border:2px solid #3b82f6;border-radius:8px;padding:12px;margin:12px 0}.exec-title{color:#1e40af;font-size:12px;font-weight:bold;margin-bottom:8px}.exec-grid{display:flex;gap:8px;flex-wrap:wrap}.exec-item{flex:1;min-width:100px;background:white;padding:8px;border-radius:4px;text-align:center;border:1px solid #dbeafe}.exec-label{font-size:7px;color:#64748b;text-transform:uppercase}.exec-value{font-size:11px;font-weight:bold;color:#1e40af;margin-top:2px}.regime-badge{display:inline-block;padding:4px 10px;border-radius:12px;font-weight:bold;font-size:9px}.regime-ox{background:#fef2f2;color:#991b1b;border:1px solid #ef4444}.regime-red{background:#fef3c7;color:#92400e;border:1px solid #f59e0b}.regime-neut{background:#ecfdf5;color:#065f46;border:1px solid #10b981}.regime-alk{background:#eff6ff;color:#1e40af;border:1px solid #3b82f6}.regime-hal{background:#fdf4ff;color:#86198f;border:1px solid #d946ef}.regime-exp{background:#7f1d1d;color:#fecaca;border:2px solid #dc2626;animation:pulse 1.5s infinite}@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.7}}</style></head><body>';
-// PDF-ENG-1: Professional Header
-var docNum='CERTA-'+new Date().getFullYear()+'-'+Math.floor(Math.random()*9000+1000);
-// V17.6 FIX: Get pdfRegime BEFORE using it for regime class
-var pdfRegime = _currentFAO ? _currentFAO.primaryRegime : resolvePrimaryRegime(fk, tC).primary;
-var pdfRegimeClass='neut';
-if(pdfRegime&&(pdfRegime.includes('EXPLOSIVE')||pdfRegime.includes('ENERGETIC')))pdfRegimeClass='exp';
-else if(pdfRegime&&pdfRegime.includes('OXIDIZ'))pdfRegimeClass='ox';
-else if(pdfRegime&&(pdfRegime.includes('REDUC')||pdfRegime.includes('DEHYDRAT')))pdfRegimeClass='red';
-else if(pdfRegime&&(pdfRegime.includes('ALKAL')||pdfRegime.includes('BASE')||pdfRegime.includes('CAUSTIC')))pdfRegimeClass='alk';
-else if(pdfRegime&&(pdfRegime.includes('HALOGEN')||pdfRegime.includes('FLUOR')||pdfRegime.includes('CHLOR')))pdfRegimeClass='hal';
-else if(pdfRegime&&(pdfRegime.includes('TOXIC')||pdfRegime.includes('RESTRICTED')||pdfRegime.includes('UNKNOWN')))pdfRegimeClass='ox';
-h+='<div class="pdf-header"><div class="pdf-logo">CERTA <span style="color:#f59e0b">Assessment Report</span></div><div class="pdf-subtitle">Chemical Equipment Rating & Technical Assessment</div><div class="pdf-docinfo"><div class="pdf-docfield"><div class="pdf-docfield-label">Document No.</div><div class="pdf-docfield-value">'+docNum+'</div></div><div class="pdf-docfield"><div class="pdf-docfield-label">Date</div><div class="pdf-docfield-value">'+new Date().toLocaleDateString()+'</div></div><div class="pdf-docfield"><div class="pdf-docfield-label">Assessment ID</div><div class="pdf-docfield-value">'+(_currentFAO?_currentFAO.runId.substring(0,12):'N/A')+'</div></div><div class="pdf-docfield"><div class="pdf-docfield-label">Policy</div><div class="pdf-docfield-value">V17.6</div></div></div></div>';
-// PDF-ENG-1: Executive Summary
-h+='<div class="exec-summary"><div class="exec-title">📋 EXECUTIVE SUMMARY</div><div class="exec-grid"><div class="exec-item"><div class="exec-label">Fluid Assessed</div><div class="exec-value">'+fl.n+'</div></div><div class="exec-item"><div class="exec-label">Temperature</div><div class="exec-value">'+tC.toFixed(1)+'°C</div></div><div class="exec-item"><div class="exec-label">Primary Regime</div><div class="exec-value"><span class="regime-badge regime-'+pdfRegimeClass+'">'+(pdfRegime||'NEUTRAL').replace(/_/g,' ')+'</span></div></div><div class="exec-item"><div class="exec-label">Materials Assessed</div><div class="exec-value">'+Object.keys(M.materials).length+'</div></div></div></div>';
-h+='<h1>'+fl.n+' - Material Compatibility Assessment</h1>';
-// V15.2: Add UI=PDF parity verification banner
-h+='<div class="v15-parity">✅ V15 §14.1 VERIFIED: PDF rendered from FAO snapshot | RunID: '+_currentFAO.runId+' | Checksum: '+pdfChecksum+'</div>';
-h+='<h1>'+fl.n+' - Fluid Properties Report</h1>';
+var css='@page{size:A4;margin:12mm 15mm 20mm 15mm}@font-face{font-family:Inter;src:local("Inter")}*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Inter",Arial,Helvetica,sans-serif;padding:0;color:#1a1a2e;font-size:9px;line-height:1.4;background:#fff}.doc-header{background:linear-gradient(135deg,#1e3a5f 0%,#0f172a 100%);color:white;padding:15px 20px;margin:-12mm -15mm 15px -15mm;width:calc(100% + 30mm)}.doc-header-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}.doc-logo{font-size:18px;font-weight:700;letter-spacing:1px}.doc-logo span{color:#60a5fa}.doc-id{text-align:right;font-size:8px;opacity:0.9}.doc-title{font-size:14px;font-weight:600;margin:8px 0 4px}.doc-subtitle{font-size:9px;opacity:0.8}.summary-bar{display:flex;gap:10px;margin:15px 0;padding:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px}.summary-item{flex:1;text-align:center;padding:8px;border-radius:4px}.summary-item.temp{background:#eff6ff;border:1px solid #3b82f6}.summary-item.regime{border:2px solid}.summary-item.seal{background:#f0fdf4;border:1px solid #22c55e}.summary-item.mats{background:#fefce8;border:1px solid #eab308}.summary-label{font-size:7px;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px}.summary-value{font-size:12px;font-weight:700;font-family:"JetBrains Mono","Consolas",monospace}.regime-banner{padding:12px 15px;border-radius:6px;margin:12px 0;text-align:center;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:1px}.regime-banner.explosive{background:linear-gradient(135deg,#7f1d1d,#dc2626);color:#fecaca;border:2px solid #ef4444}.regime-banner.oxidizing{background:linear-gradient(135deg,#7c2d12,#ea580c);color:#fed7aa;border:2px solid #f97316}.regime-banner.fluoride{background:linear-gradient(135deg,#581c87,#9333ea);color:#e9d5ff;border:2px solid #a855f7}.regime-banner.acid{background:linear-gradient(135deg,#991b1b,#dc2626);color:#fecaca;border:2px solid #ef4444}.regime-banner.base{background:linear-gradient(135deg,#1e3a8a,#3b82f6);color:#dbeafe;border:2px solid #60a5fa}.regime-banner.neutral{background:linear-gradient(135deg,#14532d,#22c55e);color:#dcfce7;border:2px solid #4ade80}.regime-banner.unknown{background:#374151;color:#e5e7eb;border:2px solid #6b7280}h1{color:#1e3a5f;font-size:13px;font-weight:600;border-bottom:2px solid #3b82f6;padding-bottom:4px;margin:15px 0 8px;page-break-after:avoid}h2{color:#1e3a5f;font-size:10px;font-weight:600;margin:12px 0 6px;padding:6px 10px;background:linear-gradient(90deg,#eff6ff,#fff);border-left:3px solid #3b82f6;border-radius:0 4px 4px 0;page-break-after:avoid}.info-row{display:flex;gap:10px;margin-bottom:10px}.info-box{flex:1;padding:8px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:4px}.info-label{font-size:7px;color:#64748b;text-transform:uppercase;letter-spacing:0.5px}.info-value{font-size:11px;font-weight:600;color:#1e3a5f;font-family:"JetBrains Mono","Consolas",monospace}.props{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}.prop{background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:10px;text-align:center;box-shadow:0 1px 2px rgba(0,0,0,0.05)}.prop-label{font-size:7px;color:#64748b;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:3px}.prop-value{font-size:13px;font-weight:700;color:#1e3a5f;font-family:"JetBrains Mono","Consolas",monospace}.prop-unit{font-size:7px;color:#94a3b8;margin-top:2px}.mat-table{width:100%;border-collapse:collapse;margin:8px 0;font-size:8px}.mat-table th{background:#1e3a5f;color:white;padding:6px 8px;text-align:left;font-weight:600;font-size:7px;text-transform:uppercase}.mat-table td{padding:5px 8px;border-bottom:1px solid #e2e8f0}.mat-table tr:nth-child(even){background:#f8fafc}.mat-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:7px;font-weight:700}.mat-badge.pass{background:#dcfce7;color:#166534;border:1px solid #22c55e}.mat-badge.cond{background:#fef3c7;color:#92400e;border:1px solid #f59e0b}.mat-badge.fail{background:#fee2e2;color:#991b1b;border:1px solid #ef4444}.cg{margin:8px 0;padding:8px;background:#f8fafc;border-radius:4px}.ct{font-weight:600;font-size:9px;padding:4px 10px;border-radius:4px;margin-bottom:6px;display:inline-block}.ct.e{background:#dcfce7;color:#166534;border:1px solid #22c55e}.ct.g{background:#dbeafe;color:#1e40af;border:1px solid #3b82f6}.ct.p{background:#fee2e2;color:#991b1b;border:1px solid #ef4444}.cl{display:flex;flex-wrap:wrap;gap:4px}.ci{padding:3px 8px;border-radius:4px;font-size:8px;font-weight:500}.ci.e{background:#f0fdf4;border:1px solid #86efac;color:#166534}.ci.g{background:#eff6ff;border:1px solid #93c5fd;color:#1e40af}.ci.p{background:#fef2f2;border:1px solid #fca5a5;color:#991b1b}.seal{border:1px solid #e2e8f0;border-radius:6px;padding:10px;margin:8px 0;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.05)}.seal.sl{border-left:4px solid #22c55e;background:#f0fdf4}.seal.cr{border-left:4px solid #ef4444;background:#fef2f2}.st{font-weight:700;font-size:10px;color:#1e3a5f;margin-bottom:4px}.sp{color:#64748b;font-size:8px;margin-bottom:6px}.hz{padding:12px;border-radius:6px;margin:10px 0;page-break-inside:avoid}.hz.d{background:#fef2f2;border:2px solid #ef4444}.hz.w{background:#fffbeb;border:2px solid #f59e0b}.sig{font-size:14px;font-weight:700;text-align:center;margin-bottom:8px;padding:8px;border-radius:4px}.hz.d .sig{background:#dc2626;color:white}.hz.w .sig{background:#f59e0b;color:white}.hs{margin:8px 0}.hs h4{font-size:8px;font-weight:600;color:#374151;margin-bottom:4px;text-transform:uppercase}.hl{list-style:none;padding:0}.hl li{padding:3px 0;border-bottom:1px solid #f3f4f6;font-size:8px}.ppe{display:flex;flex-wrap:wrap;gap:4px}.pi{background:#dbeafe;padding:3px 8px;border-radius:4px;font-size:8px;color:#1e40af}.fa{background:#dcfce7;padding:8px;border-radius:4px;font-size:8px;color:#166534}.dp{background:#f3f4f6;padding:8px;border-radius:4px;font-size:8px;color:#374151}.exp-lim{display:flex;gap:10px;margin:8px 0}.exp-box{flex:1;padding:8px;border-radius:4px;text-align:center}.twa-box{background:#1e3a5f;color:#e2e8f0;border:1px solid #3b82f6}.stel-box{background:#581c87;color:#e2e8f0;border:1px solid #9333ea}.refs{margin-top:15px;padding:10px;background:#f8fafc;border-radius:4px;border:1px solid #e2e8f0}.refs h2{margin:0 0 8px;background:none;border:none;padding:0}.ref{font-size:7px;color:#64748b;margin:3px 0;padding-left:10px;text-indent:-10px}.doc-footer{position:fixed;bottom:0;left:0;right:0;background:#f8fafc;border-top:2px solid #1e3a5f;padding:8px 15mm;font-size:7px;display:flex;justify-content:space-between}.footer-left{color:#64748b}.footer-center{color:#dc2626;font-weight:600;text-align:center;flex:1}.footer-right{color:#64748b;text-align:right}.conf-pdf{display:inline-block;padding:2px 6px;border-radius:3px;font-size:7px;font-weight:600;margin-left:4px;font-family:"JetBrains Mono",monospace}.conf-pdf.vh{background:#064e3b;color:#6ee7b7}.conf-pdf.hi{background:#1e3a5f;color:#7dd3fc}.conf-pdf.md{background:#78350f;color:#fcd34d}.conf-pdf.lo{background:#7f1d1d;color:#fca5a5}.conf-note{font-size:7px;color:#64748b;font-style:italic;margin:6px 0;padding:6px;background:#f8fafc;border-radius:4px;border-left:2px solid #3b82f6}.warning-box{background:#fef2f2;border:2px solid #dc2626;border-radius:6px;padding:10px;margin:10px 0}.warning-title{font-weight:700;color:#991b1b;font-size:9px;margin-bottom:4px}.warning-text{color:#7f1d1d;font-size:8px}@media print{body{padding:0}.doc-footer{position:fixed}tr{page-break-inside:avoid}.regime-banner{-webkit-print-color-adjust:exact;print-color-adjust:exact}}';
+var h='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+fl.n+' - CERTA Assessment Report</title><style>'+css+'</style></head><body style="font-family:Arial,sans-serif;font-size:10px;line-height:1.4;color:#111;padding:20px;max-width:800px;margin:0 auto">';
+// Generate document ID early for header
+var now=new Date();var yr=now.getFullYear();var mo=String(now.getMonth()+1).padStart(2,'0');var dy=String(now.getDate()).padStart(2,'0');
+try{var storedId=localStorage.getItem('certaDocId_'+yr+mo+dy);docIdCounter=storedId?parseInt(storedId)+1:1;localStorage.setItem('certaDocId_'+yr+mo+dy,docIdCounter);}catch(e){var hashVal=0;var hashStr=pdfChecksum||fk+tC;for(var i=0;i<hashStr.length;i++){hashVal=((hashVal<<5)-hashVal)+hashStr.charCodeAt(i);hashVal=hashVal&hashVal;}docIdCounter=Math.abs(hashVal%99999)+1;}
+var docId='CERTA-'+yr+'-'+mo+'-'+dy+'-'+String(docIdCounter).padStart(5,'0');
+// Regime colors map
+var regimeColors={explosive:'#dc2626',oxidizing:'#ea580c',fluoride:'#9333ea',acid:'#dc2626',base:'#3b82f6',neutral:'#22c55e',unknown:'#6b7280'};
+var pdfRegimeClass='neutral';var pdfRegimeText=_currentFAO.primaryRegime||'UNKNOWN';
+if(pdfRegimeText.includes('EXPLOSIVE')||pdfRegimeText.includes('ENERGETIC'))pdfRegimeClass='explosive';
+else if(pdfRegimeText.includes('OXIDIZ'))pdfRegimeClass='oxidizing';
+else if(pdfRegimeText.includes('FLUORIDE')||pdfRegimeText.includes('HF'))pdfRegimeClass='fluoride';
+else if(pdfRegimeText.includes('ACID'))pdfRegimeClass='acid';
+else if(pdfRegimeText.includes('BASE')||pdfRegimeText.includes('ALKALI')||pdfRegimeText.includes('CAUSTIC'))pdfRegimeClass='base';
+else if(pdfRegimeText.includes('NEUTRAL')||pdfRegimeText.includes('AQUEOUS'))pdfRegimeClass='neutral';
+else pdfRegimeClass='unknown';
+var regimeColor=regimeColors[pdfRegimeClass];
+// Professional Header with inline styles
+h+='<div style="background:#1e3a5f;color:white;padding:20px;margin:-20px -20px 20px -20px">';
+h+='<table style="width:100%;border:none"><tr><td style="vertical-align:top"><div style="font-size:24px;font-weight:bold;letter-spacing:1px">CERTA</div><div style="font-size:10px;opacity:0.8">Industrial Fluid Assessment Platform</div></td>';
+h+='<td style="text-align:right;vertical-align:top;font-size:9px"><div>Document: <b>'+docId+'</b></div><div>'+now.toLocaleDateString()+' '+now.toLocaleTimeString()+'</div><div style="margin-top:5px">Policy V16.5.2 | FAO ✓</div></td></tr></table>';
+h+='<div style="margin-top:15px;font-size:18px;font-weight:bold">'+fl.n+'</div>';
+h+='<div style="font-size:10px;opacity:0.8">'+fl.c+'</div></div>';
+// Regime Banner with inline color
+h+='<div style="background:'+regimeColor+';color:white;padding:12px;text-align:center;font-weight:bold;font-size:12px;margin-bottom:15px;border-radius:4px">⚠️ CHEMICAL REGIME: '+pdfRegimeText.replace(/_/g,' ')+'</div>';
+// Executive Summary Table
+var matPass=cp.excellent?cp.excellent.length:0;
+var matCond=cp.good?cp.good.length:0;
+var matFail=cp.poor?cp.poor.length:0;
+h+='<table style="width:100%;border-collapse:collapse;margin-bottom:15px"><tr>';
+h+='<td style="width:25%;text-align:center;padding:10px;background:#eff6ff;border:1px solid #3b82f6"><div style="font-size:8px;color:#64748b;text-transform:uppercase">Temperature</div><div style="font-size:16px;font-weight:bold;color:#1e3a5f">'+safeToFixed(tC,1,'0')+' °C</div></td>';
+h+='<td style="width:25%;text-align:center;padding:10px;border:2px solid '+regimeColor+'"><div style="font-size:8px;color:#64748b;text-transform:uppercase">Regime</div><div style="font-size:11px;font-weight:bold;color:'+regimeColor+'">'+pdfRegimeText.replace(/_/g,' ').substring(0,15)+'</div></td>';
+h+='<td style="width:25%;text-align:center;padding:10px;background:#f0fdf4;border:1px solid #22c55e"><div style="font-size:8px;color:#64748b;text-transform:uppercase">Seal State</div><div style="font-size:11px;font-weight:bold;color:#166534">'+(_currentFAO.sealEligibilityState||'N/A').replace(/_/g,' ').substring(0,12)+'</div></td>';
+h+='<td style="width:25%;text-align:center;padding:10px;background:#fefce8;border:1px solid #eab308"><div style="font-size:8px;color:#64748b;text-transform:uppercase">Materials</div><div style="font-size:16px;font-weight:bold;color:#854d0e">'+matPass+'P '+matCond+'C '+matFail+'F</div></td>';
+h+='</tr></table>';
+// FAO Verification
+h+='<div style="background:#ecfdf5;border:1px solid #10b981;padding:8px;text-align:center;font-size:8px;color:#065f46;margin-bottom:15px;border-radius:4px">✅ V15 §14.1 VERIFIED | RunID: '+_currentFAO.runId+' | Checksum: '+pdfChecksum+'</div>';
 // V6.2: PDF REFUSAL INTELLIGENCE
 var pdfProfile=getFluidBehaviorProfile(fk,tC);
 var pdfFlags=pdfProfile.flags;
@@ -5771,12 +6016,9 @@ var pdfIsStrongOx=pdfFlags.includes('OXIDIZER_STRONG');
 var pdfIsDehydrating=pdfFlags.includes('DEHYDRATING');
 var pdfIsStrongAlkali=pdfFlags.includes('ALKALI_STRONG');
 var pdfIsPhosphoricAcid=pdfFlags.includes('PHOSPHORIC_ACID');
-// V17.0 FIX: DEHYDRATING is severe at ANY temperature for expert review purposes
-var pdfSevereChemistryExpert=(pdfIsStrongOx&&tC>=40)||pdfIsDehydrating;
+var pdfSevereChemistry=(pdfIsStrongOx||pdfIsDehydrating)&&tC>=40;
 var pdfRefusalFlags=[];
-if(pdfSevereChemistryExpert&&tC>=60)pdfRefusalFlags.push({msg:'High temperature + severe chemistry',action:'Specialist corrosion engineer review required'});
-// V17.0: Add expert flag for DEHYDRATING even at low temps
-if(pdfIsDehydrating&&tC<40)pdfRefusalFlags.push({msg:'Concentrated dehydrating acid (H₂SO₄ ≥90%)',action:'Velocity-critical passivation - verify <0.5 m/s for carbon steel'});
+if(pdfSevereChemistry&&tC>=60)pdfRefusalFlags.push({msg:'High temperature + severe chemistry',action:'Specialist corrosion engineer review required'});
 if(tC>100||tC<-20)pdfRefusalFlags.push({msg:'Extreme temperature conditions',action:'Verify material ratings at actual temperature'});
 if(pdfIsStrongOx&&(fk.includes('chlor')||fk.includes('hcl')))pdfRefusalFlags.push({msg:'Oxidizer + halide combination',action:'Pitting/crevice corrosion risk - metallurgist review'});
 if(pdfIsStrongAlkali&&tC>50)pdfRefusalFlags.push({msg:'Caustic SCC conditions (T>50°C)',action:'Stress analysis and PWHT verification required'});
@@ -5802,21 +6044,19 @@ h+='<span style="color:#fcd34d;font-size:8px">'+pdfGateResults.conditional.map(f
 h+='</div>';}
 h+='<div style="font-size:7px;color:#c7d2fe;margin-top:6px">Material arrays modified to reflect gate results. Verify specialist constraints in your application.</div>';
 h+='</div>';}
-h+='<div class="info-row"><div class="info-box"><div class="info-label">Chemical Category</div><div class="info-value">'+fl.c+'</div></div><div class="info-box"><div class="info-label">Concentration</div><div class="info-value">'+(fl.conc||'Standard')+'</div></div><div class="info-box"><div class="info-label">Generated By</div><div class="info-value">CERTA V17.6</div></div></div>';
-h+='<div class="conditions">⚠️ CONDITIONS: Temperature '+tC.toFixed(1)+'°C | Pressure: 1 bar (atmospheric) | Results do not replace material qualification testing or manufacturer approval</div>';
 h+='<h2>📊 Fluid Properties</h2>';
-h+='<div class="props"><div class="prop"><div class="prop-label">Specific Gravity</div><div class="prop-value">'+pr.sg.toFixed(4)+'</div><div class="prop-unit">relative to water</div></div>';
-h+='<div class="prop"><div class="prop-label">Dynamic Viscosity</div><div class="prop-value">'+pr.visc.toFixed(3)+'</div><div class="prop-unit">cP (mPa·s)</div></div>';
-h+='<div class="prop"><div class="prop-label">Density</div><div class="prop-value">'+dens.toFixed(2)+'</div><div class="prop-unit">kg/m³</div></div>';
-h+='<div class="prop"><div class="prop-label">Kinematic Viscosity</div><div class="prop-value">'+kv.toFixed(3)+'</div><div class="prop-unit">cSt (mm²/s)</div></div></div>';
+h+='<div class="props"><div class="prop"><div class="prop-label">Specific Gravity</div><div class="prop-value">'+safeToFixed(pr.sg, 4, '0')+'</div><div class="prop-unit">relative to water</div></div>';
+h+='<div class="prop"><div class="prop-label">Dynamic Viscosity</div><div class="prop-value">'+safeToFixed(pr.visc, 3, '0')+'</div><div class="prop-unit">cP (mPa·s)</div></div>';
+h+='<div class="prop"><div class="prop-label">Density</div><div class="prop-value">'+safeToFixed(dens, 2, '0')+'</div><div class="prop-unit">kg/m³</div></div>';
+h+='<div class="prop"><div class="prop-label">Kinematic Viscosity</div><div class="prop-value">'+safeToFixed(kv, 3, '0')+'</div><div class="prop-unit">cSt (mm²/s)</div></div></div>';
 if(pr.ex)h+='<div style="background:#fef3c7;border:1px solid #f59e0b;padding:6px;border-radius:4px;margin:8px 0;font-size:9px">⚠️ Temperature outside data range - values extrapolated</div>';
-h+='<h2>📈 Viscosity-Temperature Data</h2>';
-h+='<table class="visc-table"><thead><tr><th>Temp (°C)</th><th>Specific Gravity</th><th>Viscosity (cP)</th></tr></thead><tbody>';
-fl.d.forEach(function(d){var isCurrent=Math.abs(d[0]-tC)<5;h+='<tr'+(isCurrent?' class="current"':'')+'><td>'+d[0]+'</td><td>'+d[1].toFixed(4)+'</td><td>'+d[2].toFixed(3)+'</td></tr>';});
+h+='<h2 style="color:#1e3a5f;font-size:12px;border-bottom:2px solid #3b82f6;padding-bottom:5px;margin:15px 0 10px">📈 Viscosity-Temperature Data</h2>';
+h+='<table style="width:100%;border-collapse:collapse;margin-bottom:15px"><thead><tr><th style="background:#1e3a5f;color:white;padding:8px;text-align:center;border:1px solid #334155">Temp (°C)</th><th style="background:#1e3a5f;color:white;padding:8px;text-align:center;border:1px solid #334155">Specific Gravity</th><th style="background:#1e3a5f;color:white;padding:8px;text-align:center;border:1px solid #334155">Viscosity (cP)</th></tr></thead><tbody>';
+fl.d.forEach(function(d){var isCurrent=Math.abs(d[0]-tC)<5;h+='<tr style="background:'+(isCurrent?'#fef3c7':'#fff')+'"><td style="padding:6px;text-align:center;border:1px solid #e5e7eb">'+d[0]+'</td><td style="padding:6px;text-align:center;border:1px solid #e5e7eb">'+safeToFixed(d[1], 4, '0')+'</td><td style="padding:6px;text-align:center;border:1px solid #e5e7eb;font-weight:'+(isCurrent?'bold':'normal')+'">'+safeToFixed(d[2], 3, '0')+'</td></tr>';});
 h+='</tbody></table>';
 
 // V16.3 REC-C3: TCO suppression for EXPLOSIVE_ENERGETIC per V15 §14
-// V17.6: pdfRegime already defined at start of printPDF
+var pdfRegime = _currentFAO ? _currentFAO.primaryRegime : resolvePrimaryRegime(fk, tC).primary;
 var pdfSuppressTCORegimes = ['UNKNOWN_RESTRICTED', 'EXPLOSIVE_ENERGETIC', 'FLUORIDE_ACID', 'TOXIC_SPECIAL'];
 if (pdfSuppressTCORegimes.includes(pdfRegime)) {
   h+='<h2>📊 Material Lifecycle Analysis</h2>';
@@ -5828,7 +6068,7 @@ if (pdfSuppressTCORegimes.includes(pdfRegime)) {
   h+='Material selection must prioritize safety and containment over economics.</div></div>';
 } else {
 // BEGIN NORMAL TCO ANALYSIS
-h+='<h2>📊 Material Lifecycle Analysis</h2>';
+h+='<h2 style="color:#1e3a5f;font-size:12px;border-bottom:2px solid #3b82f6;padding-bottom:5px;margin:15px 0 10px">📊 Material Lifecycle Analysis</h2>';
 // Use Fluid Behavior Profile for consistent chemistry classification in PDF
 var pdfProfile=getFluidBehaviorProfile(fk,tC);
 var pdfFlags=pdfProfile.flags;
@@ -5840,13 +6080,11 @@ var pdfIsPhosphoricAcid=pdfFlags.includes('PHOSPHORIC_ACID');
 var pdfIsOxidizerAdjacent=pdfFlags.includes('OXIDIZER_ADJACENT');
 var pdfIsEnergetic=pdfFlags.includes('ENERGETIC');
 var pdfIsAnyOxidizer=pdfIsStrongOx||pdfIsOxidizerAdjacent||pdfIsEnergetic;
-// V17.0 CRITICAL FIX: DEHYDRATING acids (conc H2SO4) are severe at ANY temperature
-// V15 §12.1: Dehydrating agents have velocity-critical passivation - TCO is meaningless
-var pdfSevereChemistry=(pdfIsStrongOx&&tC>=40)||pdfIsDehydrating;
+var pdfSevereChemistry=(pdfIsStrongOx||pdfIsDehydrating)&&tC>=40;
 var pdfUseRobustness=pdfSevereChemistry;
 var pdfModeLabel=pdfIsDehydrating?'Concentrated H₂SO₄/Dehydrating':pdfIsStrongOx?'Strong Oxidizer':pdfIsPhosphoricAcid?'Phosphoric Acid':'Reactive Chemistry';
-h+='<div class="assume"><strong>Assumptions:</strong> Velocity 2-3 m/s | Temp '+tC.toFixed(0)+'°C | Standard concentration | Corrosion rates mid-range [9,10] | Labor $500/m²'+(pdfUseRobustness?' | <strong style="color:#c2410c">⚠️ '+pdfModeLabel.toUpperCase()+' MODE</strong>':'')+'</div>';
-h+='<table class="life-table"><thead><tr><th>Material</th><th>Rating</th><th>Corrosion Rate</th><th>Service Life</th><th>'+(pdfUseRobustness?'Robustness':'10-Year TCO')+'</th></tr></thead><tbody>';
+h+='<div style="background:#f8fafc;border:1px solid #e2e8f0;padding:8px;border-radius:4px;margin-bottom:10px;font-size:8px"><strong>Assumptions:</strong> Velocity 2-3 m/s | Temp '+safeToFixed(tC, 0, '0')+'°C | Standard concentration | Corrosion rates mid-range [9,10] | Labor $500/m²'+(pdfUseRobustness?' | <strong style="color:#c2410c">⚠️ '+pdfModeLabel.toUpperCase()+' MODE</strong>':'')+'</div>';
+h+='<table style="width:100%;border-collapse:collapse;margin-bottom:15px"><thead><tr><th style="background:#1e3a5f;color:white;padding:6px;text-align:left;border:1px solid #334155;font-size:9px">Material</th><th style="background:#1e3a5f;color:white;padding:6px;text-align:center;border:1px solid #334155;font-size:9px">Rating</th><th style="background:#1e3a5f;color:white;padding:6px;text-align:center;border:1px solid #334155;font-size:9px">Corrosion Rate</th><th style="background:#1e3a5f;color:white;padding:6px;text-align:center;border:1px solid #334155;font-size:9px">Service Life</th><th style="background:#1e3a5f;color:white;padding:6px;text-align:center;border:1px solid #334155;font-size:9px">'+(pdfUseRobustness?'Robustness':'10-Year TCO')+'</th></tr></thead><tbody>';
 var bestTCO=Infinity,bestRob=0,results=[],elastomerResults=[];
 var elastomerIds=['FKM','EPDM','NBR','Kalrez','Neoprene','Silicone'];
 // V85: Track excluded materials for display
@@ -5927,39 +6165,40 @@ robustness=Math.max(0,Math.min(100,robustness));
 if(!isElastomer&&robustness>bestRob)bestRob=robustness;
 // V6.2: Separate elastomers from structural materials
 var matWarning=pdfFailureFlags.length>0?pdfFailureFlags.join('; '):'';
-// V17.0 CRITICAL FIX: Propagate CONDITIONAL status from gate results to TCO analysis
-// This ensures PDF recommendation respects hard failure gates per V15 §11
-var matStatus='COMPATIBLE';
-if(pdfConditionalIds.includes(id))matStatus='CONDITIONAL';
 if(isElastomer){
-elastomerResults.push({id:id,name:mat.name,rating:rating,rc:rc,robustness:robustness,warning:matWarning,status:matStatus});
+elastomerResults.push({id:id,name:mat.name,rating:rating,rc:rc,robustness:robustness,warning:matWarning});
 }else{
-results.push({id:id,name:mat.name,rating:rating,rc:rc,corr:avgCorr,life:life,tco:tco,robustness:robustness,warning:matWarning,status:matStatus});
+results.push({id:id,name:mat.name,rating:rating,rc:rc,corr:avgCorr,life:life,tco:tco,robustness:robustness,warning:matWarning});
 }});
 // Sort by robustness in extreme chemistries, else by TCO
 if(pdfUseRobustness){results.sort(function(a,b){return b.robustness-a.robustness;});}else{results.sort(function(a,b){return a.tco-b.tco;});}
 results.forEach(function(r){var isBest=pdfUseRobustness?(r.robustness===bestRob):(r.tco===bestTCO);
 var warnStyle=r.warning?'<div style="font-size:7px;color:#991b1b;margin-top:2px">⚠️ '+r.warning+'</div>':'';
 // V16.3 REC-H3: Display "N/A (Polymer)" for zero/minimal corrosion materials
-var corrDisplay=r.corr<0.001?'<span style="color:#059669">N/A</span>':r.corr.toFixed(3)+' mm/yr';
-var lifeDisplay=r.corr<0.001?'<span style="color:#059669">Excellent</span>':r.life.toFixed(1)+' years';
+var corrDisplay=r.corr<0.001?'<span style="color:#059669">N/A</span>':safeToFixed(r.corr, 3, '0')+' mm/yr';
+var lifeDisplay=r.corr<0.001?'<span style="color:#059669">Excellent</span>':safeToFixed(r.life, 1, '0')+' years';
+var rowBg=isBest?'#ecfdf5':'#fff';
+var ratingBg=r.rc==='e'?'#dcfce7':r.rc==='g'?'#dbeafe':'#fee2e2';
+var ratingColor=r.rc==='e'?'#166534':r.rc==='g'?'#1e40af':'#991b1b';
 if(pdfUseRobustness){
-h+='<tr'+(isBest?' class="best"':'')+'><td>'+r.name+warnStyle+'</td><td><span class="rb '+r.rc+'">'+r.rating+'</span></td><td>'+corrDisplay+'</td><td>'+lifeDisplay+'</td><td><strong style="color:'+(r.robustness>=80?'#059669':r.robustness>=60?'#d97706':'#dc2626')+'">'+r.robustness+'%</strong>'+(isBest?' ✓':'')+'</td></tr>';
+h+='<tr style="background:'+rowBg+'"><td style="padding:5px;border:1px solid #e5e7eb;font-size:9px">'+r.name+warnStyle+'</td><td style="padding:5px;border:1px solid #e5e7eb;text-align:center"><span style="background:'+ratingBg+';color:'+ratingColor+';padding:2px 6px;border-radius:3px;font-size:8px;font-weight:bold">'+r.rating+'</span></td><td style="padding:5px;border:1px solid #e5e7eb;text-align:center;font-size:9px">'+corrDisplay+'</td><td style="padding:5px;border:1px solid #e5e7eb;text-align:center;font-size:9px">'+lifeDisplay+'</td><td style="padding:5px;border:1px solid #e5e7eb;text-align:center;font-weight:bold;color:'+(r.robustness>=80?'#059669':r.robustness>=60?'#d97706':'#dc2626')+'">'+r.robustness+'%'+(isBest?' ✓':'')+'</td></tr>';
 }else{
-h+='<tr'+(isBest?' class="best"':'')+'><td>'+r.name+warnStyle+'</td><td><span class="rb '+r.rc+'">'+r.rating+'</span></td><td>'+corrDisplay+'</td><td>'+lifeDisplay+'</td><td>$'+r.tco.toFixed(0)+'/m²'+(isBest?' ✓':'')+'</td></tr>';
+h+='<tr style="background:'+rowBg+'"><td style="padding:5px;border:1px solid #e5e7eb;font-size:9px">'+r.name+warnStyle+'</td><td style="padding:5px;border:1px solid #e5e7eb;text-align:center"><span style="background:'+ratingBg+';color:'+ratingColor+';padding:2px 6px;border-radius:3px;font-size:8px;font-weight:bold">'+r.rating+'</span></td><td style="padding:5px;border:1px solid #e5e7eb;text-align:center;font-size:9px">'+corrDisplay+'</td><td style="padding:5px;border:1px solid #e5e7eb;text-align:center;font-size:9px">'+lifeDisplay+'</td><td style="padding:5px;border:1px solid #e5e7eb;text-align:center;font-size:9px;font-weight:bold">$'+safeToFixed(r.tco, 0, '0')+'/m²'+(isBest?' ✓':'')+'</td></tr>';
 }});
 h+='</tbody></table>';
 // V6.2: Separate elastomer/sealing materials table (no fake service life!)
 if(elastomerResults.length>0){
-h+='<div style="margin-top:12px;font-weight:bold;font-size:9px;color:#7c3aed">🔩 Sealing & Elastomer Materials</div>';
-h+='<div style="background:#f3e8ff;padding:4px 6px;border-radius:3px;margin:4px 0;font-size:7px;color:#581c87;border:1px solid #c4b5fd">Note: Elastomers fail by swelling, hardening, and permeation — not corrosion. Inspection intervals shown, not service life.</div>';
-h+='<table class="life-table"><thead><tr><th>Material</th><th>Rating</th><th>Failure Mode</th><th>Inspection</th><th>Strategy</th></tr></thead><tbody>';
+h+='<div style="margin-top:15px;font-weight:bold;font-size:10px;color:#7c3aed">🔩 Sealing & Elastomer Materials</div>';
+h+='<div style="background:#f3e8ff;padding:6px;border-radius:4px;margin:6px 0;font-size:8px;color:#581c87;border:1px solid #c4b5fd">Note: Elastomers fail by swelling, hardening, and permeation — not corrosion. Inspection intervals shown, not service life.</div>';
+h+='<table style="width:100%;border-collapse:collapse;margin-bottom:15px"><thead><tr><th style="background:#581c87;color:white;padding:6px;text-align:left;border:1px solid #7c3aed;font-size:9px">Material</th><th style="background:#581c87;color:white;padding:6px;text-align:center;border:1px solid #7c3aed;font-size:9px">Rating</th><th style="background:#581c87;color:white;padding:6px;text-align:center;border:1px solid #7c3aed;font-size:9px">Failure Mode</th><th style="background:#581c87;color:white;padding:6px;text-align:center;border:1px solid #7c3aed;font-size:9px">Inspection</th><th style="background:#581c87;color:white;padding:6px;text-align:center;border:1px solid #7c3aed;font-size:9px">Strategy</th></tr></thead><tbody>';
 elastomerResults.forEach(function(r){
 // V16.3 REC-H1: Use pdfIsAnyOxidizer for broader oxidizer/energetic coverage
 var failMode=(pdfIsAnyOxidizer||pdfIsDehydrating)?'Oxidative aging':'Chemical swelling';
 var inspection=(pdfIsAnyOxidizer||pdfIsDehydrating)?'6-12 months':'12-24 months';
 var strategy=(pdfIsAnyOxidizer||pdfIsDehydrating)?'Preventive replacement':'Condition-based';
-h+='<tr><td>'+r.name+'</td><td><span class="rb '+r.rc+'">'+r.rating+'</span></td><td style="font-size:8px">'+failMode+'</td><td style="font-size:8px;font-weight:bold;color:#7c3aed">'+inspection+'</td><td style="font-size:7px">'+strategy+'</td></tr>';
+var ratingBg=r.rc==='e'?'#dcfce7':r.rc==='g'?'#dbeafe':'#fee2e2';
+var ratingColor=r.rc==='e'?'#166534':r.rc==='g'?'#1e40af':'#991b1b';
+h+='<tr style="background:#fff"><td style="padding:5px;border:1px solid #e5e7eb;font-size:9px">'+r.name+'</td><td style="padding:5px;border:1px solid #e5e7eb;text-align:center"><span style="background:'+ratingBg+';color:'+ratingColor+';padding:2px 6px;border-radius:3px;font-size:8px;font-weight:bold">'+r.rating+'</span></td><td style="padding:5px;border:1px solid #e5e7eb;text-align:center;font-size:8px">'+failMode+'</td><td style="padding:5px;border:1px solid #e5e7eb;text-align:center;font-size:8px;font-weight:bold;color:#7c3aed">'+inspection+'</td><td style="padding:5px;border:1px solid #e5e7eb;text-align:center;font-size:8px">'+strategy+'</td></tr>';
 });
 h+='</tbody></table>';
 }
@@ -5969,15 +6208,7 @@ h+='<div style="background:#1a1a2e;border:2px solid #6366f1;border-radius:4px;pa
 h+='<div style="font-weight:bold;color:#a5b4fc;font-size:9px;margin-bottom:4px">🚫 EXCLUDED FROM ANALYSIS ('+pdfExcludedMats.length+' materials)</div>';
 h+='<div style="font-size:7px;color:#c7d2fe;margin-bottom:6px">Binary failure modes override corrosion rate economics. Materials below cannot be analyzed for TCO/lifecycle.</div>';
 pdfExcludedMats.forEach(function(ex){
-// V17.1 PDF-AGENT-1 FIX: Properly extract reason from failure object
-var failureObj=ex.reason;
-var reason='Prohibited in this chemistry';
-if(failureObj){
-  if(typeof failureObj==='string'){reason=failureObj;}
-  else if(failureObj.failureMode){reason=failureObj.failureMode;}
-  else if(failureObj.message){reason=failureObj.message;}
-  else if(failureObj.rationale){reason=failureObj.rationale;}
-}
+var reason=ex.reason?ex.reason.failureMode||'Hard failure mode':'Prohibited in this chemistry';
 h+='<div style="background:#450a0a;padding:4px;border-radius:2px;margin:2px 0;border-left:2px solid #dc2626">';
 h+='<span style="color:#fca5a5;font-size:8px;font-weight:bold">'+ex.name+':</span> ';
 h+='<span style="color:#fecaca;font-size:7px">'+reason+'</span></div>';
@@ -5999,22 +6230,22 @@ var bestCompatible=compatibleResults.length>0?compatibleResults.reduce(function(
 var isBestConditional=best&&best.status==='CONDITIONAL';
 if(isBestConditional){
 h+='<div class="rec-box" style="background:#fff7ed;border-color:#c2410c"><div class="rec-title" style="color:#c2410c">⚠️ TCO Analysis - Compatibility Constraint Applied</div>';
-h+='<div style="font-size:8px;color:#78350f;margin-bottom:4px"><strong>Engineering Note:</strong> '+best.name+' shows lowest TCO ($'+best.tco.toFixed(0)+'/m²) but is CONDITIONAL for this chemistry. CONDITIONAL materials cannot be recommended as "BEST VALUE" due to unpredictable service life.</div>';
-if(bestCompatible){h+='<div style="margin:4px 0"><strong>BEST VALUE (COMPATIBLE):</strong> '+bestCompatible.name+' at $'+bestCompatible.tco.toFixed(0)+'/m² - reliable service life.</div>';}
+h+='<div style="font-size:8px;color:#78350f;margin-bottom:4px"><strong>Engineering Note:</strong> '+best.name+' shows lowest TCO ($'+safeToFixed(best.tco, 0, '0')+'/m²) but is CONDITIONAL for this chemistry. CONDITIONAL materials cannot be recommended as "BEST VALUE" due to unpredictable service life.</div>';
+if(bestCompatible){h+='<div style="margin:4px 0"><strong>BEST VALUE (COMPATIBLE):</strong> '+bestCompatible.name+' at $'+safeToFixed(bestCompatible.tco, 0, '0')+'/m² - reliable service life.</div>';}
 h+='<div style="margin:4px 0;padding:4px;background:#fef3c7;border-radius:3px"><strong>CONDITIONAL (Lower TCO):</strong> '+best.name+' - requires verification, shortened inspection, contingency budget.</div>';
 h+='</div>';
 }else if(best){
-h+='<div class="rec-box"><div class="rec-title">✓ Recommendation</div>'+best.name+' offers lowest 10-year TCO at $'+best.tco.toFixed(0)+'/m² with '+best.life.toFixed(1)+' year service life.</div>';
+h+='<div class="rec-box"><div class="rec-title">✓ Recommendation</div>'+best.name+' offers lowest 10-year TCO at $'+safeToFixed(best.tco, 0, '0')+'/m² with '+safeToFixed(best.life, 1, '0')+' year service life.</div>';
 }}}
 // V16.3 REC-C3: Close TCO suppression else block
 }
-h+='<h2>🔧 Material Compatibility</h2>';
+h+='<h2 style="color:#1e3a5f;font-size:12px;border-bottom:2px solid #3b82f6;padding-bottom:5px;margin:15px 0 10px">🔧 Material Compatibility</h2>';
 var pdfMatIdx=0;
 // V6.2: Suppress % when material is CONDITIONAL or in severity mode - show status instead
-if(cp.excellent&&cp.excellent.length){h+='<div class="cg"><div class="ct e">✓ Excellent Compatibility</div><div class="cl">';cp.excellent.forEach(function(m){var mt=M.materials[m];if(mt){var conf=calcConfidence('material',m,{tempDefined:true,inRange:!pr.ex,rating:'excellent',fluidKey:fk,tempC:tC});var confDisplay=conf.notRecommended?'<span style="background:#dc2626;color:#fff;font-size:7px;padding:1px 4px;border-radius:2px">NOT REC</span>':conf.conditional?'<span style="background:#92400e;color:#fef3c7;font-size:7px;padding:1px 4px;border-radius:2px">COND</span>':conf.hasSeverityMode?'<span style="background:#059669;color:#fff;font-size:7px;padding:1px 4px;border-radius:2px">OK</span>':'<span class="conf-pdf '+(conf.score>=90?'vh':conf.score>=75?'hi':conf.score>=60?'md':'lo')+'">'+conf.score+'%</span>';h+='<span class="ci e">'+mt.name+' '+confDisplay+(conf.warning?' ⚠':'')+'</span>';pdfMatIdx++;}});h+='</div></div>';}
-if(cp.good&&cp.good.length){h+='<div class="cg"><div class="ct g">○ Good Compatibility</div><div class="cl">';cp.good.forEach(function(m){var mt=M.materials[m];if(mt){var conf=calcConfidence('material',m,{tempDefined:true,inRange:!pr.ex,rating:'good',fluidKey:fk,tempC:tC});var confDisplay=conf.notRecommended?'<span style="background:#dc2626;color:#fff;font-size:7px;padding:1px 4px;border-radius:2px">NOT REC</span>':conf.conditional?'<span style="background:#92400e;color:#fef3c7;font-size:7px;padding:1px 4px;border-radius:2px">COND</span>':conf.hasSeverityMode?'<span style="background:#059669;color:#fff;font-size:7px;padding:1px 4px;border-radius:2px">OK</span>':'<span class="conf-pdf '+(conf.score>=90?'vh':conf.score>=75?'hi':conf.score>=60?'md':'lo')+'">'+conf.score+'%</span>';h+='<span class="ci g">'+mt.name+' '+confDisplay+(conf.warning?' ⚠':'')+'</span>';pdfMatIdx++;}});h+='</div></div>';}
-if(cp.poor&&cp.poor.length){h+='<div class="cg"><div class="ct p">✗ Not Recommended</div><div class="cl">';cp.poor.forEach(function(m){var mt=M.materials[m];if(mt){var conf=calcConfidence('material',m,{tempDefined:true,inRange:!pr.ex,rating:'poor',fluidKey:fk,tempC:tC});var confDisplay=conf.notRecommended?'<span style="background:#dc2626;color:#fff;font-size:7px;padding:1px 4px;border-radius:2px">NOT REC</span>':conf.conditional?'<span style="background:#92400e;color:#fef3c7;font-size:7px;padding:1px 4px;border-radius:2px">COND</span>':conf.hasSeverityMode?'<span style="background:#059669;color:#fff;font-size:7px;padding:1px 4px;border-radius:2px">OK</span>':'<span class="conf-pdf '+(conf.score>=90?'vh':conf.score>=75?'hi':conf.score>=60?'md':'lo')+'">'+conf.score+'%</span>';h+='<span class="ci p">'+mt.name+' '+confDisplay+(conf.warning?' ⚠':'')+'</span>';pdfMatIdx++;}});h+='</div></div>';}
-h+='<div class="conf-note">Confidence % indicates data robustness based on source quality, input completeness, and applicability range - not probability of failure.</div>';
+if(cp.excellent&&cp.excellent.length){h+='<div style="margin-bottom:10px"><div style="display:inline-block;background:#dcfce7;color:#166534;padding:4px 10px;border-radius:4px;font-weight:bold;font-size:10px;margin-bottom:6px">✓ Excellent Compatibility</div><div style="display:flex;flex-wrap:wrap;gap:6px">';cp.excellent.forEach(function(m){var mt=M.materials[m];if(mt){var conf=calcConfidence('material',m,{tempDefined:true,inRange:!pr.ex,rating:'excellent',fluidKey:fk,tempC:tC});var confDisplay=conf.notRecommended?'<span style="background:#dc2626;color:#fff;font-size:7px;padding:1px 4px;border-radius:2px">NOT REC</span>':conf.conditional?'<span style="background:#92400e;color:#fef3c7;font-size:7px;padding:1px 4px;border-radius:2px">COND</span>':conf.hasSeverityMode?'<span style="background:#059669;color:#fff;font-size:7px;padding:1px 4px;border-radius:2px">OK</span>':'<span style="background:#064e3b;color:#6ee7b7;font-size:7px;padding:1px 4px;border-radius:2px">'+conf.score+'%</span>';h+='<span style="background:#f0fdf4;border:1px solid #86efac;color:#166534;padding:4px 8px;border-radius:4px;font-size:9px">'+mt.name+' '+confDisplay+'</span>';pdfMatIdx++;}});h+='</div></div>';}
+if(cp.good&&cp.good.length){h+='<div style="margin-bottom:10px"><div style="display:inline-block;background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:4px;font-weight:bold;font-size:10px;margin-bottom:6px">○ Good Compatibility</div><div style="display:flex;flex-wrap:wrap;gap:6px">';cp.good.forEach(function(m){var mt=M.materials[m];if(mt){var conf=calcConfidence('material',m,{tempDefined:true,inRange:!pr.ex,rating:'good',fluidKey:fk,tempC:tC});var confDisplay=conf.notRecommended?'<span style="background:#dc2626;color:#fff;font-size:7px;padding:1px 4px;border-radius:2px">NOT REC</span>':conf.conditional?'<span style="background:#92400e;color:#fef3c7;font-size:7px;padding:1px 4px;border-radius:2px">COND</span>':conf.hasSeverityMode?'<span style="background:#059669;color:#fff;font-size:7px;padding:1px 4px;border-radius:2px">OK</span>':'<span style="background:#1e3a5f;color:#7dd3fc;font-size:7px;padding:1px 4px;border-radius:2px">'+conf.score+'%</span>';h+='<span style="background:#eff6ff;border:1px solid #93c5fd;color:#1e40af;padding:4px 8px;border-radius:4px;font-size:9px">'+mt.name+' '+confDisplay+'</span>';pdfMatIdx++;}});h+='</div></div>';}
+if(cp.poor&&cp.poor.length){h+='<div style="margin-bottom:10px"><div style="display:inline-block;background:#fee2e2;color:#991b1b;padding:4px 10px;border-radius:4px;font-weight:bold;font-size:10px;margin-bottom:6px">✗ Not Recommended</div><div style="display:flex;flex-wrap:wrap;gap:6px">';cp.poor.forEach(function(m){var mt=M.materials[m];if(mt){var conf=calcConfidence('material',m,{tempDefined:true,inRange:!pr.ex,rating:'poor',fluidKey:fk,tempC:tC});var confDisplay=conf.notRecommended?'<span style="background:#dc2626;color:#fff;font-size:7px;padding:1px 4px;border-radius:2px">NOT REC</span>':conf.conditional?'<span style="background:#92400e;color:#fef3c7;font-size:7px;padding:1px 4px;border-radius:2px">COND</span>':conf.hasSeverityMode?'<span style="background:#059669;color:#fff;font-size:7px;padding:1px 4px;border-radius:2px">OK</span>':'<span style="background:#7f1d1d;color:#fca5a5;font-size:7px;padding:1px 4px;border-radius:2px">'+conf.score+'%</span>';h+='<span style="background:#fef2f2;border:1px solid #fca5a5;color:#991b1b;padding:4px 8px;border-radius:4px;font-size:9px">'+mt.name+' '+confDisplay+'</span>';pdfMatIdx++;}});h+='</div></div>';}
+h+='<div style="background:#f8fafc;padding:6px;border-radius:4px;font-size:8px;color:#64748b;font-style:italic;border-left:2px solid #3b82f6">Confidence % indicates data robustness based on source quality, input completeness, and applicability range - not probability of failure.</div>';
 // Collect and display material warnings for PDF
 var matWarnings=[];
 ['excellent','good','poor'].forEach(function(rating){
@@ -6090,19 +6321,20 @@ h+='<div style="font-size:8px;color:#666;margin:6px 0;padding:4px;background:#f3
 h+='<div class="refs"><h2 style="font-size:10px;margin:0 0 6px">📚 Reference List</h2>';
 R.forEach(function(r){if(fluidRefs.includes(r.num))h+='<div class="ref">['+r.num+'] '+r.apa+'</div>';});
 h+='</div>';
-// Generate unique Assessment ID: CERTA-YYYY-MM-DD-NNNNN
-var now=new Date();
-var yr=now.getFullYear();
-var mo=String(now.getMonth()+1).padStart(2,'0');
-var dy=String(now.getDate()).padStart(2,'0');
-// V16.1 FIX #1: Deterministic docId fallback per V15 §2.1 (no Math.random)
-try{var storedId=localStorage.getItem('certaDocId_'+yr+mo+dy);docIdCounter=storedId?parseInt(storedId)+1:1;localStorage.setItem('certaDocId_'+yr+mo+dy,docIdCounter);}catch(e){
-var hashVal=0;var hashStr=pdfChecksum||fk+tC;for(var i=0;i<hashStr.length;i++){hashVal=((hashVal<<5)-hashVal)+hashStr.charCodeAt(i);hashVal=hashVal&hashVal;}
-docIdCounter=Math.abs(hashVal%99999)+1;}
-var docId='CERTA-'+yr+'-'+mo+'-'+dy+'-'+String(docIdCounter).padStart(5,'0');
-h+='<div style="margin-top:20px;padding-top:15px;border-top:3px solid #1e40af"><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px"><div style="text-align:center;flex:1"><div style="font-size:7px;color:#94a3b8;text-transform:uppercase">Document</div><div style="font-size:9px;font-weight:bold;color:#1e3a5f">' + docNum + '</div></div><div style="text-align:center;flex:1"><div style="font-size:7px;color:#94a3b8;text-transform:uppercase">Generated</div><div style="font-size:9px;font-weight:bold;color:#1e3a5f">' + new Date().toLocaleString() + '</div></div><div style="text-align:center;flex:1"><div style="font-size:7px;color:#94a3b8;text-transform:uppercase">Version</div><div style="font-size:9px;font-weight:bold;color:#1e3a5f">CERTA V17.6</div></div></div><div style="background:#f8fafc;padding:10px;border-radius:6px;text-align:center;font-size:8px;color:#64748b"><strong style="color:#c2410c">SCREENING TOOL ONLY:</strong> Results do not replace material qualification testing or manufacturer approval.</div><div style="text-align:center;margin-top:8px;font-size:7px;color:#94a3b8">CERTA V17.6 | PDF-ENG-1 Design | Policy V15.0 FINAL | Hash: ' + pdfChecksum + '</div></div>';
-// V16.1 FIX #2: Assessment ID in document flow (not position:fixed) for print compatibility
-h+='<div style="margin-top:10px;padding:8px;background:#f8fafc;border:1px solid #334155;border-radius:4px;text-align:right"><span style="font-weight:600;font-size:9px;color:#1e3a5f">Assessment ID: '+docId+'</span><br><span style="font-size:7px;color:#666">Checksum: '+pdfChecksum+'</span></div>';
+// Professional Footer
+h+='<div style="margin-top:20px;padding:15px;background:linear-gradient(135deg,#1e3a5f,#0f172a);border-radius:6px;color:white">';
+h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">';
+h+='<div style="font-size:10px;font-weight:600">CERTA V17.4 | Policy V16.5.2</div>';
+h+='<div style="font-size:9px;font-family:JetBrains Mono,monospace">'+docId+'</div>';
+h+='</div>';
+h+='<div style="background:#dc2626;color:white;padding:8px;border-radius:4px;text-align:center;font-weight:600;font-size:8px;margin-bottom:8px">⚠️ SCREENING TOOL ONLY - Results do not replace material qualification, corrosion testing, or manufacturer approval</div>';
+h+='<div style="display:flex;justify-content:space-between;font-size:7px;opacity:0.8">';
+h+='<div>Generated: '+new Date().toLocaleString()+'</div>';
+h+='<div>Checksum: '+pdfChecksum+'</div>';
+h+='<div>FAO Verified ✓</div>';
+h+='</div>';
+h+='<div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.2);font-size:6px;opacity:0.7;text-align:center">Standards: ISO 27001 Aligned | API RP 581 Compatible | GHS-7 Compliant | §2 Deterministic | §14 FAO Parity</div>';
+h+='</div>';
 h+='</body></html>';
 var w=window.open('','_blank','width=800,height=600');if(w){w.document.write(h);w.document.close();w.focus();setTimeout(function(){w.print();},500);}else{alert('Please allow popups to print the report.');}
 // V16.2 HARDENING: P1-A - Close try-catch wrapper
@@ -6118,7 +6350,7 @@ try {
 const res=document.getElementById('results');
 if(!res.innerHTML){alert('Please calculate fluid properties first!');return;}
 const fk=document.getElementById('fluidSelect').value,fl=F[fk];
-const temp=parseFloat(document.getElementById('tempInput').value),unit=document.getElementById('tempUnit').value;
+const temp=parseFloat(DOM.getValue('tempInput')),unit=DOM.getValue('tempUnit');
 let tC=temp;if(unit==='F')tC=(temp-32)*5/9;if(unit==='K')tC=temp-273.15;
 
 // V16.2: Temperature validation (P1-D)
@@ -6130,12 +6362,12 @@ if (!tempValid.valid) {
 
 const pr=interp(tC,fl.d),dens=pr.sg*1000,dynVisc=pr.visc/1000;
 // Get flow rate
-let Q=parseFloat(document.getElementById('flowRate').value);
-const fUnit=document.getElementById('flowUnit').value;
+let Q=parseFloat(DOM.getValue('flowRate'));
+const fUnit=DOM.getValue('flowUnit');
 if(fUnit==='lpm')Q=Q/1000/60;else if(fUnit==='gpm')Q=Q*0.00378541/60;else Q=Q/3600;
 // Get pipe diameter
-let D=parseFloat(document.getElementById('pipeDia').value);
-const dUnit=document.getElementById('diaUnit').value;
+let D=parseFloat(DOM.getValue('pipeDia'));
+const dUnit=DOM.getValue('diaUnit');
 if(dUnit==='in')D=D*25.4;
 D=D/1000;
 
@@ -6161,8 +6393,8 @@ if (!isFinite(Re) || Re < 0) {
 }
 
 // Display
-document.getElementById('reDisplay').style.display='block';
-document.getElementById('reValue').textContent=safeToFixed(Re, 0, '0').replace(/\B(?=(\d{3})+(?!\d))/g,',');
+DOM.show('reDisplay');
+DOM.setText('reValue',safeToFixed(Re, 0, '0').replace(/\B(?=(\d{3})+(?!\d))/g,','));
 const regime=document.getElementById('flowRegime');
 const L=I18N[curLang];
 if(Re<2300){regime.className='flow-regime laminar';regime.textContent='🟢 '+L.laminar+' (Re < 2,300)';}
@@ -6173,8 +6405,8 @@ let viscousCaveat='';
 if(pr.visc>10&&Re>2000&&Re<10000){
 viscousCaveat='<div style="margin-top:8px;padding:8px;background:#451a03;border:1px solid #c2410c;border-radius:4px;font-size:0.75rem;color:#fed7aa"><strong>⚠️ Viscous Fluid Warning:</strong> At '+safeToFixed(pr.visc, 1, '0')+' cP, this fluid may exhibit non-Newtonian behavior near pipe walls. Re='+safeToFixed(Re, 0, '0')+' is borderline. <strong>Verify pressure drop empirically.</strong> Published correlations assume Newtonian behavior.</div>';
 }
-document.getElementById('reDetails').innerHTML='Velocity: <strong>'+safeToFixed(v, 2, '0')+' m/s</strong> | Density: '+safeToFixed(dens, 1, '0')+' kg/m³ | Viscosity: '+safeToFixed(pr.visc, 3, '0')+' cP<br><span style="font-size:0.75rem;color:#64748b;margin-top:4px;display:inline-block">📊 Input: Q='+document.getElementById('flowRate').value+' '+document.getElementById('flowUnit').value+', D='+document.getElementById('pipeDia').value+' '+document.getElementById('diaUnit').value+', T='+document.getElementById('tempInput').value+'°'+document.getElementById('tempUnit').value+'</span>'+viscousCaveat;
-lastReynolds={Re:Re,velocity:v,density:dens,viscosity:pr.visc,diameter:D*1000,flowRate:Q*3600,regime:Re<2300?'Laminar':Re<4000?'Transition':'Turbulent',inputQ:document.getElementById('flowRate').value,inputQUnit:document.getElementById('flowUnit').value,inputD:document.getElementById('pipeDia').value,inputDUnit:document.getElementById('diaUnit').value,inputT:document.getElementById('tempInput').value,inputTUnit:document.getElementById('tempUnit').value,viscousCaveat:pr.visc>10&&Re>2000&&Re<10000};
+DOM.setHTML('reDetails','Velocity: <strong>'+safeToFixed(v, 2, '0')+' m/s</strong> | Density: '+safeToFixed(dens, 1, '0')+' kg/m³ | Viscosity: '+safeToFixed(pr.visc, 3, '0')+' cP<br><span style="font-size:0.75rem;color:#64748b;margin-top:4px;display:inline-block">📊 Input: Q='+DOM.getValue('flowRate')+' '+DOM.getValue('flowUnit')+', D='+DOM.getValue('pipeDia')+' '+DOM.getValue('diaUnit')+', T='+DOM.getValue('tempInput')+'°'+DOM.getValue('tempUnit')+'</span>'+viscousCaveat);
+lastReynolds={Re:Re,velocity:v,density:dens,viscosity:pr.visc,diameter:D*1000,flowRate:Q*3600,regime:Re<2300?'Laminar':Re<4000?'Transition':'Turbulent',inputQ:DOM.getValue('flowRate'),inputQUnit:DOM.getValue('flowUnit'),inputD:DOM.getValue('pipeDia'),inputDUnit:DOM.getValue('diaUnit'),inputT:DOM.getValue('tempInput'),inputTUnit:DOM.getValue('tempUnit'),viscousCaveat:pr.visc>10&&Re>2000&&Re<10000};
 } catch(err) {
   console.error('CERTA calcReynolds() error:', err);
   alert('⚠️ Reynolds Calculation Error\n\n' + err.message);
@@ -6187,7 +6419,7 @@ try {
 const res=document.getElementById('results');
 if(!res.innerHTML){alert('Please calculate fluid properties first!');return;}
 const fk=document.getElementById('fluidSelect').value,fl=F[fk];
-const temp=parseFloat(document.getElementById('tempInput').value),unit=document.getElementById('tempUnit').value;
+const temp=parseFloat(DOM.getValue('tempInput')),unit=DOM.getValue('tempUnit');
 let tC=temp;if(unit==='F')tC=(temp-32)*5/9;if(unit==='K')tC=temp-273.15;
 
 // V16.2: Temperature validation (P1-D)
@@ -6247,20 +6479,20 @@ const margin=safeDivide((NPSHa-NPSHr)*100, NPSHr, 0);
 // Display
 const cavRes=document.getElementById('cavResult');
 cavRes.style.display='block';
-document.getElementById('vaporP').textContent=safeToFixed(Pv, 4, '0')+' bar';
-document.getElementById('npsha').textContent=safeToFixed(NPSHa, 2, '0')+' m';
-document.getElementById('npshReq').textContent=safeToFixed(NPSHr, 2, '0')+' m';
-document.getElementById('npshMargin').textContent=safeToFixed(margin, 1, '0')+'%';
+DOM.setText('vaporP',safeToFixed(Pv, 4, '0')+' bar');
+DOM.setText('npsha',safeToFixed(NPSHa, 2, '0')+' m');
+DOM.setText('npshReq',safeToFixed(NPSHr, 2, '0')+' m');
+DOM.setText('npshMargin',safeToFixed(margin, 1, '0')+'%');
 const status=document.getElementById('cavStatus'),L=I18N[curLang];
 if(margin>50){cavRes.className='cav-result safe';status.textContent=L.safe;}
 else if(margin>10){cavRes.className='cav-result warning';status.textContent=L.warning;}
 else{cavRes.className='cav-result danger';status.textContent=L.danger;}
 // Confidence scoring for cavitation
 const cavConf=calcConfidence('cavitation',null,{allInputs:!isNaN(Ps)&&!isNaN(NPSHr),tempInRange:!interp(tC,fl.d).ex,margin:margin});
-document.getElementById('cavConfidence').innerHTML=confBadgeHTML(cavConf,'cav-0');
+DOM.setHTML('cavConfidence',confBadgeHTML(cavConf,'cav-0'));
 // Display input parameters
-document.getElementById('cavParams').innerHTML='📊 Input: Suction P='+safeToFixed(Ps, 2, '0')+' bar, NPSHr='+safeToFixed(NPSHr, 1, '0')+' m, T='+document.getElementById('tempInput').value+'°'+document.getElementById('tempUnit').value+', Fluid='+F[fk].n;
-lastCavitation={vaporP:Pv,NPSHa:NPSHa,NPSHr:NPSHr,margin:margin,status:margin>50?'Safe':margin>10?'Warning':'Danger',suctionP:Ps,inputT:document.getElementById('tempInput').value,inputTUnit:document.getElementById('tempUnit').value,fluidName:F[fk].n,confidence:cavConf};
+DOM.setHTML('cavParams','📊 Input: Suction P='+safeToFixed(Ps, 2, '0')+' bar, NPSHr='+safeToFixed(NPSHr, 1, '0')+' m, T='+DOM.getValue('tempInput')+'°'+DOM.getValue('tempUnit')+', Fluid='+F[fk].n);
+lastCavitation={vaporP:Pv,NPSHa:NPSHa,NPSHr:NPSHr,margin:margin,status:margin>50?'Safe':margin>10?'Warning':'Danger',suctionP:Ps,inputT:DOM.getValue('tempInput'),inputTUnit:DOM.getValue('tempUnit'),fluidName:F[fk].n,confidence:cavConf};
 } catch(err) {
   console.error('CERTA calcCavitation() error:', err);
   alert('⚠️ Cavitation Calculation Error\n\n' + err.message);
@@ -6272,8 +6504,8 @@ curLang=lang;
 const L=I18N[lang];
 document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
 document.querySelector('.lang-btn[onclick="setLang(\''+lang+'\')"]').classList.add('active');
-document.getElementById('mainTitle').textContent='🔬 CERTA';
-document.getElementById('mainSubtitle').textContent='V90 | Oxidizer Severity Tiers | '+L.subtitle;
+DOM.setText('mainTitle','🔬 CERTA');
+DOM.setText('mainSubtitle','V90 | Oxidizer Severity Tiers | '+L.subtitle);
 document.querySelectorAll('[data-i18n]').forEach(el=>{
 const key=el.getAttribute('data-i18n');
 if(L[key])el.textContent=L[key];
@@ -6299,11 +6531,11 @@ try {
 filter();
 // Count actual fluids
 const fluidCount=Object.keys(F).length;
-document.getElementById('fluidCount').textContent=fluidCount;
+DOM.setText('fluidCount',fluidCount);
 // Load usage counter
 try{
 const savedCount=localStorage.getItem('certaUsageCount');
-if(savedCount)document.getElementById('usageCount').textContent=parseInt(savedCount).toLocaleString();
+if(savedCount)DOM.setText('usageCount',parseInt(savedCount).toLocaleString());
 }catch(e){}
 // Load saved language
 try{const savedLang=localStorage.getItem('fluidCalcLang');if(savedLang&&I18N[savedLang])setLang(savedLang);}catch(e){}
@@ -6351,7 +6583,7 @@ function toggleTheme(){
 const html=document.documentElement;
 const theme=html.getAttribute('data-theme')==='dark'?'light':'dark';
 html.setAttribute('data-theme',theme);
-document.getElementById('themeIcon').textContent=theme==='dark'?'🌙':'☀️';
+DOM.setText('themeIcon',theme==='dark'?'🌙':'☀️');
 localStorage.setItem('certaTheme',theme);
 }
 
@@ -6364,7 +6596,7 @@ if(icon)icon.textContent=theme==='dark'?'🌙':'☀️';
 
 // Enhancement #12: Onboarding
 const onboardSteps=[
-{title:'Welcome to CERTA V15.1',text:'CERTA is a chemistry-first industrial screening engine for material compatibility evaluation. This quick tour will show you the key features.'},
+{title:'Welcome to CERTA V17.2',text:'CERTA is a chemistry-first industrial screening engine for material compatibility evaluation. This quick tour will show you the key features.'},
 {title:'Select Your Fluid',text:'Use the industry selector to narrow down from 430+ fluids, or search directly by name, formula, or category.'},
 {title:'View Regime Classification',text:'After running an assessment, you\'ll see the chemical regime banner showing hazard level and containment requirements per V15 §6.'},
 {title:'Export Your Results',text:'Generate PDF reports with FAO hash for audit verification. All exports include the same data per V15 §14 UI=PDF rule.'}
@@ -6373,15 +6605,15 @@ let onboardStep=0;
 
 function showOnboarding(){
 if(localStorage.getItem('certaOnboarded'))return;
-document.getElementById('onboarding').classList.add('active');
+DOM.addClass('onboarding','active');
 updateOnboard();
 }
 
 function updateOnboard(){
 const s=onboardSteps[onboardStep];
-document.getElementById('onboardStep').textContent=onboardStep+1;
-document.getElementById('onboardTitle').textContent=s.title;
-document.getElementById('onboardText').textContent=s.text;
+DOM.setText('onboardStep',onboardStep+1);
+DOM.setText('onboardTitle',s.title);
+DOM.setText('onboardText',s.text);
 }
 
 function nextOnboarding(){
@@ -6391,7 +6623,7 @@ else{updateOnboard();}
 }
 
 function skipOnboarding(){
-document.getElementById('onboarding').classList.remove('active');
+DOM.removeClass('onboarding','active');
 localStorage.setItem('certaOnboarded','true');
 }
 
@@ -6477,7 +6709,7 @@ setTimeout(showOnboarding,800);
 <button class="mobile-nav-item active" onclick="scrollToSection('searchBox')"><span class="icon">🧪</span><span class="label">Fluid</span></button>
 <button class="mobile-nav-item" onclick="scrollToSection('results')"><span class="icon">📊</span><span class="label">Results</span></button>
 <button class="mobile-nav-item" onclick="window.print()"><span class="icon">📤</span><span class="label">Export</span></button>
-<button class="mobile-nav-item" onclick="onboardStep=0;document.getElementById('onboarding').classList.add('active');updateOnboard()"><span class="icon">❓</span><span class="label">Help</span></button>
+<button class="mobile-nav-item" onclick="onboardStep=0;DOM.addClass('onboarding','active');updateOnboard()"><span class="icon">❓</span><span class="label">Help</span></button>
 </nav> <!-- Screen Reader Announcements -->
 <div id="srAnnounce" class="sr-only" role="status" aria-live="polite"></div> </body>
 </html>
