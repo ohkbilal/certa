@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CERTA V17.4 - Industrial Fluid Assessment Platform | Policy V16.5.2 | 430+ Fluids</title>
+<title>CERTA V17.7 - Industrial Fluid Assessment Platform | Policy V16.8 | 430+ Fluids</title>
 <!-- UI-ENG-1 §29.7: Professional Typography -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -501,9 +501,75 @@ input[type="number"]:focus{outline:none;border-color:var(--accent)}
 
 /* V15.2: Quick Access Panel CSS removed - feature disabled per RULEBOOK V3 §8 */
 /* V15.2: quick-item CSS removed - feature disabled */
+
+/* V17.6 F2-001: Disclaimer Modal - Parliament Session 13 Mandate */
+.disclaimer-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px}
+.disclaimer-modal{background:linear-gradient(135deg,#1e293b 0%,#0f172a 100%);border:2px solid #dc2626;border-radius:16px;max-width:600px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 25px 50px rgba(0,0,0,0.5)}
+.disclaimer-header{background:linear-gradient(135deg,#7f1d1d 0%,#991b1b 100%);padding:20px;text-align:center;border-radius:14px 14px 0 0}
+.disclaimer-header h2{color:#fef2f2;font-size:1.5rem;margin:0}
+.disclaimer-header .icon{font-size:3rem;margin-bottom:10px}
+.disclaimer-body{padding:24px}
+.disclaimer-section{margin-bottom:20px}
+.disclaimer-section h3{color:#f87171;font-size:1rem;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.disclaimer-section p,.disclaimer-section li{color:#e2e8f0;font-size:0.9rem;line-height:1.6}
+.disclaimer-section ul{margin:10px 0;padding-left:20px}
+.disclaimer-section li{margin:6px 0}
+.disclaimer-checkbox{display:flex;align-items:flex-start;gap:12px;padding:16px;background:#450a0a;border:1px solid #dc2626;border-radius:8px;margin:20px 0;cursor:pointer}
+.disclaimer-checkbox input{width:20px;height:20px;margin-top:2px;cursor:pointer}
+.disclaimer-checkbox label{color:#fecaca;font-size:0.9rem;cursor:pointer;font-weight:500}
+.disclaimer-btn{width:100%;padding:16px;font-size:1.1rem;font-weight:700;border:none;border-radius:8px;cursor:pointer;transition:all 0.2s}
+.disclaimer-btn:disabled{background:#475569;color:#94a3b8;cursor:not-allowed}
+.disclaimer-btn:not(:disabled){background:linear-gradient(135deg,#059669 0%,#10b981 100%);color:white}
+.disclaimer-btn:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(16,185,129,0.3)}
+
+/* V17.6: Results Warning Banner */
+.results-warning-banner{background:linear-gradient(135deg,#7f1d1d 0%,#991b1b 100%);border:2px solid #dc2626;border-radius:12px;padding:16px;margin-bottom:20px;text-align:center}
+.results-warning-banner .icon{font-size:2rem;margin-bottom:8px}
+.results-warning-banner .title{color:#fef2f2;font-size:1.1rem;font-weight:700;margin-bottom:6px}
+.results-warning-banner .text{color:#fecaca;font-size:0.85rem;line-height:1.5}
+
+/* V17.6 B1-001: Value Proposition Banner */
+.value-prop-banner{background:linear-gradient(135deg,#1e40af 0%,#3b82f6 100%);border-radius:12px;padding:16px;margin:15px 0;text-align:center}
+.value-prop-banner .headline{color:white;font-size:1rem;font-weight:700;margin-bottom:6px}
+.value-prop-banner .subtext{color:#bfdbfe;font-size:0.8rem}
 </style>
 </head>
 <body>
+<!-- V17.6 F2-001: Mandatory Disclaimer Modal - Parliament Session 13 -->
+<div class="disclaimer-overlay" id="disclaimerOverlay" style="display:none">
+<div class="disclaimer-modal">
+<div class="disclaimer-header">
+<div class="icon">⚠️</div>
+<h2>IMPORTANT: Screening Tool Disclaimer</h2>
+</div>
+<div class="disclaimer-body">
+<div class="disclaimer-section">
+<h3>⛔ THIS IS NOT A CERTIFICATION TOOL</h3>
+<p>CERTA provides <strong>screening guidance only</strong>. Results are for preliminary assessment and do not constitute engineering certification, safety approval, or manufacturer endorsement.</p>
+</div>
+<div class="disclaimer-section">
+<h3>🔬 PROFESSIONAL VERIFICATION REQUIRED</h3>
+<p>Before implementing any material selection based on CERTA results, you must:</p>
+<ul>
+<li>Consult with qualified corrosion engineers or materials specialists</li>
+<li>Conduct actual corrosion testing under your specific conditions</li>
+<li>Obtain manufacturer approval for your application</li>
+<li>Comply with all applicable codes, standards, and regulations</li>
+</ul>
+</div>
+<div class="disclaimer-section">
+<h3>⚖️ LIMITATION OF LIABILITY</h3>
+<p>CERTA and its operators accept no liability for equipment failures, safety incidents, or any damages arising from use of this tool. Users assume all risks associated with material selection decisions.</p>
+</div>
+<div class="disclaimer-checkbox">
+<input type="checkbox" id="disclaimerCheck" onchange="updateDisclaimerBtn()">
+<label for="disclaimerCheck">I understand that CERTA is a screening tool only, results require professional verification, and I accept full responsibility for any decisions made using this information.</label>
+</div>
+<button class="disclaimer-btn" id="disclaimerAccept" disabled onclick="acceptDisclaimer()">I Understand and Accept</button>
+</div>
+</div>
+</div>
+
 <!-- Onboarding Overlay -->
 <div class="onboarding" id="onboarding">
 <div class="onboarding-card">
@@ -519,12 +585,17 @@ input[type="number"]:focus{outline:none;border-color:var(--accent)}
 <div class="header" style="position:relative">
 <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme"><span id="themeIcon">🌙</span></button>
 <h1 id="mainTitle">🔬 CERTA</h1>
-<p id="mainSubtitle">V17.4 | Policy V16.5.2 | Professional Engineering Interface | 430+ Fluids</p>
+<p id="mainSubtitle">V17.7 | Policy V16.8 | Professional Engineering Interface</p>
+<!-- V17.6 B1-001: Value Proposition - Parliament Session 13 -->
+<div class="value-prop-banner">
+<div class="headline">⏱️ Save 4-6 Hours Per Material Selection Decision</div>
+<div class="subtext">Consolidate 16+ data sources • Audit-ready PDF documentation • Standardize team decisions</div>
+</div>
 <div class="policy-badges">
-<span class="pbadge pbadge-green">✓ V16.5.2</span>
+<span class="pbadge pbadge-green">✓ V16.8</span>
 <span class="pbadge pbadge-purple">UI-ENG-1</span>
 <span class="pbadge pbadge-cyan">FAO</span>
-<span class="pbadge pbadge-gray">API Ready</span>
+<span class="pbadge pbadge-gray">430+ Fluids</span>
 </div>
 <div class="usage-counter" style="margin:10px 0;padding:8px 16px;background:rgba(0,0,0,0.2);border-radius:20px;display:inline-block">
 <span style="color:#94a3b8;font-size:0.85rem">📊 Calculations: </span>
@@ -535,6 +606,7 @@ input[type="number"]:focus{outline:none;border-color:var(--accent)}
 <button class="lang-btn" onclick="setLang('es')">🇪🇸 ES</button>
 <button class="lang-btn" onclick="setLang('zh')">🇨🇳 中文</button>
 <button class="lang-btn" onclick="setLang('de')">🇩🇪 DE</button>
+<button class="lang-btn" onclick="setLang('ar')">🇸🇦 عربي</button>
 </div>
 </div>
 <!-- V16.1: Simple dropdown - one fluid at a time, scrollable list when clicked -->
@@ -2291,10 +2363,11 @@ const VP={
 };
 // i18n Multi-Language System (#22)
 const I18N={
-en:{title:'Industrial Fluid Properties Calculator',subtitle:'Mining • Chemicals • Explosives • Fertilizers • Feed • Pulp/Paper • Wastewater • Pharma',search:'Search Fluids',selectFluid:'Select Fluid',available:'available',temp:'Temperature',calculate:'Calculate Properties',printPdf:'Print / Save PDF',reynolds:'Reynolds Number & Flow Regime',flowRate:'Flow Rate',pipeDia:'Pipe Diameter',calcRe:'Calculate Reynolds Number',laminar:'LAMINAR FLOW',transition:'TRANSITIONAL FLOW',turbulent:'TURBULENT FLOW',cavitation:'Cavitation Risk Assessment',suctionP:'Suction Pressure (bar abs)',npshr:'Pump NPSH Required (m)',calcCav:'Assess Cavitation Risk',safe:'✓ SAFE - No Cavitation Risk',warning:'⚠ WARNING - Marginal',danger:'✗ DANGER - Cavitation Likely',sgLabel:'Specific Gravity',viscLabel:'Dynamic Viscosity',densLabel:'Density',kvLabel:'Kinematic Viscosity',matCompat:'Material Compatibility',sealRec:'Seal Recommendations',hazards:'Chemical Hazards'},
-es:{title:'Calculadora de Propiedades de Fluidos',subtitle:'Minería • Petróleo • Tratamiento de Aguas • Alimentos • Farmacéutica • Baterías',calcs:'Cálculos',search:'Buscar Fluidos',selectFluid:'Seleccionar Fluido',available:'disponibles',temp:'Temperatura',calculate:'Calcular Propiedades',exportCsv:'Exportar CSV',printPdf:'Imprimir / Guardar PDF',reynolds:'Número de Reynolds y Régimen de Flujo',flowRate:'Caudal',pipeDia:'Diámetro de Tubería',calcRe:'Calcular Reynolds',laminar:'FLUJO LAMINAR',transition:'FLUJO TRANSICIONAL',turbulent:'FLUJO TURBULENTO',cavitation:'Evaluación de Riesgo de Cavitación',suctionP:'Presión de Succión (bar abs)',npshr:'NPSH Requerido (m)',calcCav:'Evaluar Cavitación',safe:'✓ SEGURO - Sin Riesgo',warning:'⚠ ADVERTENCIA - Marginal',danger:'✗ PELIGRO - Cavitación Probable',sgLabel:'Gravedad Específica',viscLabel:'Viscosidad Dinámica',densLabel:'Densidad',kvLabel:'Viscosidad Cinemática',matCompat:'Compatibilidad de Materiales',sealRec:'Recomendaciones de Sellos',hazards:'Peligros Químicos'},
-zh:{title:'工业流体特性计算器',subtitle:'采矿 • 石油天然气 • 污水处理 • 食品 • 制药 • 电池',calcs:'计算次数',search:'搜索流体',selectFluid:'选择流体',available:'可用',temp:'温度',calculate:'计算特性',exportCsv:'导出CSV',printPdf:'打印/保存PDF',reynolds:'雷诺数与流态',flowRate:'流量',pipeDia:'管道直径',calcRe:'计算雷诺数',laminar:'层流',transition:'过渡流',turbulent:'湍流',cavitation:'汽蚀风险评估',suctionP:'吸入压力 (bar)',npshr:'泵所需NPSH (m)',calcCav:'评估汽蚀风险',safe:'✓ 安全 - 无汽蚀风险',warning:'⚠ 警告 - 临界',danger:'✗ 危险 - 可能汽蚀',sgLabel:'比重',viscLabel:'动力粘度',densLabel:'密度',kvLabel:'运动粘度',matCompat:'材料兼容性',sealRec:'密封推荐',hazards:'化学危害'},
-de:{title:'Industrieller Flüssigkeitsrechner',subtitle:'Bergbau • Öl & Gas • Abwasser • Lebensmittel • Pharma • Batterie',calcs:'Berechnungen',search:'Flüssigkeiten suchen',selectFluid:'Flüssigkeit auswählen',available:'verfügbar',temp:'Temperatur',calculate:'Eigenschaften berechnen',exportCsv:'CSV exportieren',printPdf:'Drucken / PDF speichern',reynolds:'Reynolds-Zahl & Strömungsregime',flowRate:'Volumenstrom',pipeDia:'Rohrdurchmesser',calcRe:'Reynolds berechnen',laminar:'LAMINARE STRÖMUNG',transition:'ÜBERGANGSSTRÖMUNG',turbulent:'TURBULENTE STRÖMUNG',cavitation:'Kavitationsrisiko-Bewertung',suctionP:'Saugdruck (bar abs)',npshr:'Pumpe NPSH erforderlich (m)',calcCav:'Kavitation bewerten',safe:'✓ SICHER - Kein Risiko',warning:'⚠ WARNUNG - Grenzwertig',danger:'✗ GEFAHR - Kavitation wahrscheinlich',sgLabel:'Spezifisches Gewicht',viscLabel:'Dynamische Viskosität',densLabel:'Dichte',kvLabel:'Kinematische Viskosität',matCompat:'Materialverträglichkeit',sealRec:'Dichtungsempfehlungen',hazards:'Chemische Gefahren'}
+en:{title:'Industrial Fluid Properties Calculator',subtitle:'Mining • Chemicals • Explosives • Fertilizers • Feed • Pulp/Paper • Wastewater • Pharma',search:'Search Fluids',selectFluid:'Select Fluid',available:'available',temp:'Temperature',calculate:'Run Assessment',printPdf:'Print / Save PDF',reynolds:'Reynolds Number & Flow Regime',flowRate:'Flow Rate',pipeDia:'Pipe Diameter',calcRe:'Calculate Reynolds Number',laminar:'LAMINAR FLOW',transition:'TRANSITIONAL FLOW',turbulent:'TURBULENT FLOW',cavitation:'Cavitation Risk Assessment',suctionP:'Suction Pressure (bar abs)',npshr:'Pump NPSH Required (m)',calcCav:'Assess Cavitation Risk',safe:'✓ SAFE - No Cavitation Risk',warning:'⚠ WARNING - Marginal',danger:'✗ DANGER - Cavitation Likely',sgLabel:'Specific Gravity',viscLabel:'Dynamic Viscosity',densLabel:'Density',kvLabel:'Kinematic Viscosity',matCompat:'Material Compatibility',sealRec:'Seal Recommendations',hazards:'Chemical Hazards',fluidProps:'Fluid Properties',viscTemp:'Viscosity-Temperature Data',lifecycle:'Material Lifecycle Analysis',excellent:'Excellent Compatibility',good:'Good Compatibility',notRec:'Not Recommended',assumptions:'Assumptions',material:'Material',rating:'Rating',corrRate:'Corrosion Rate',serviceLife:'Service Life',tco:'10-Year TCO',recommendation:'Recommendation',references:'Reference List',assessmentId:'Assessment ID',tempC:'Temp (°C)',regime:'Regime',sealState:'Seal State',materials:'Materials'},
+es:{title:'Calculadora de Propiedades de Fluidos',subtitle:'Minería • Petróleo • Tratamiento de Aguas • Alimentos • Farmacéutica • Baterías',search:'Buscar Fluidos',selectFluid:'Seleccionar Fluido',available:'disponibles',temp:'Temperatura',calculate:'Ejecutar Evaluación',printPdf:'Imprimir / Guardar PDF',reynolds:'Número de Reynolds y Régimen de Flujo',flowRate:'Caudal',pipeDia:'Diámetro de Tubería',calcRe:'Calcular Reynolds',laminar:'FLUJO LAMINAR',transition:'FLUJO TRANSICIONAL',turbulent:'FLUJO TURBULENTO',cavitation:'Evaluación de Riesgo de Cavitación',suctionP:'Presión de Succión (bar abs)',npshr:'NPSH Requerido (m)',calcCav:'Evaluar Cavitación',safe:'✓ SEGURO - Sin Riesgo',warning:'⚠ ADVERTENCIA - Marginal',danger:'✗ PELIGRO - Cavitación Probable',sgLabel:'Gravedad Específica',viscLabel:'Viscosidad Dinámica',densLabel:'Densidad',kvLabel:'Viscosidad Cinemática',matCompat:'Compatibilidad de Materiales',sealRec:'Recomendaciones de Sellos',hazards:'Peligros Químicos',fluidProps:'Propiedades del Fluido',viscTemp:'Datos Viscosidad-Temperatura',lifecycle:'Análisis de Ciclo de Vida',excellent:'Excelente Compatibilidad',good:'Buena Compatibilidad',notRec:'No Recomendado',assumptions:'Supuestos',material:'Material',rating:'Clasificación',corrRate:'Tasa de Corrosión',serviceLife:'Vida Útil',tco:'TCO 10 Años',recommendation:'Recomendación',references:'Referencias',assessmentId:'ID de Evaluación',tempC:'Temp (°C)',regime:'Régimen',sealState:'Estado de Sello',materials:'Materiales'},
+zh:{title:'工业流体特性计算器',subtitle:'采矿 • 石油天然气 • 污水处理 • 食品 • 制药 • 电池',search:'搜索流体',selectFluid:'选择流体',available:'可用',temp:'温度',calculate:'运行评估',printPdf:'打印/保存PDF',reynolds:'雷诺数与流态',flowRate:'流量',pipeDia:'管道直径',calcRe:'计算雷诺数',laminar:'层流',transition:'过渡流',turbulent:'湍流',cavitation:'汽蚀风险评估',suctionP:'吸入压力 (bar)',npshr:'泵所需NPSH (m)',calcCav:'评估汽蚀风险',safe:'✓ 安全 - 无汽蚀风险',warning:'⚠ 警告 - 临界',danger:'✗ 危险 - 可能汽蚀',sgLabel:'比重',viscLabel:'动力粘度',densLabel:'密度',kvLabel:'运动粘度',matCompat:'材料兼容性',sealRec:'密封推荐',hazards:'化学危害',fluidProps:'流体特性',viscTemp:'粘度-温度数据',lifecycle:'材料生命周期分析',excellent:'优秀兼容性',good:'良好兼容性',notRec:'不推荐',assumptions:'假设条件',material:'材料',rating:'评级',corrRate:'腐蚀率',serviceLife:'使用寿命',tco:'10年总成本',recommendation:'推荐',references:'参考文献',assessmentId:'评估编号',tempC:'温度(°C)',regime:'化学环境',sealState:'密封状态',materials:'材料'},
+de:{title:'Industrieller Flüssigkeitsrechner',subtitle:'Bergbau • Öl & Gas • Abwasser • Lebensmittel • Pharma • Batterie',search:'Flüssigkeiten suchen',selectFluid:'Flüssigkeit auswählen',available:'verfügbar',temp:'Temperatur',calculate:'Bewertung starten',printPdf:'Drucken / PDF speichern',reynolds:'Reynolds-Zahl & Strömungsregime',flowRate:'Volumenstrom',pipeDia:'Rohrdurchmesser',calcRe:'Reynolds berechnen',laminar:'LAMINARE STRÖMUNG',transition:'ÜBERGANGSSTRÖMUNG',turbulent:'TURBULENTE STRÖMUNG',cavitation:'Kavitationsrisiko-Bewertung',suctionP:'Saugdruck (bar abs)',npshr:'Pumpe NPSH erforderlich (m)',calcCav:'Kavitation bewerten',safe:'✓ SICHER - Kein Risiko',warning:'⚠ WARNUNG - Grenzwertig',danger:'✗ GEFAHR - Kavitation wahrscheinlich',sgLabel:'Spezifisches Gewicht',viscLabel:'Dynamische Viskosität',densLabel:'Dichte',kvLabel:'Kinematische Viskosität',matCompat:'Materialverträglichkeit',sealRec:'Dichtungsempfehlungen',hazards:'Chemische Gefahren',fluidProps:'Fluideigenschaften',viscTemp:'Viskosität-Temperatur-Daten',lifecycle:'Material-Lebenszyklusanalyse',excellent:'Ausgezeichnete Verträglichkeit',good:'Gute Verträglichkeit',notRec:'Nicht empfohlen',assumptions:'Annahmen',material:'Material',rating:'Bewertung',corrRate:'Korrosionsrate',serviceLife:'Lebensdauer',tco:'10-Jahres-TCO',recommendation:'Empfehlung',references:'Referenzen',assessmentId:'Bewertungs-ID',tempC:'Temp (°C)',regime:'Regime',sealState:'Dichtungszustand',materials:'Materialien'},
+ar:{title:'حاسبة خصائص السوائل الصناعية',subtitle:'التعدين • الكيماويات • المتفجرات • الأسمدة • الأعلاف • الورق • المياه • الأدوية',search:'بحث السوائل',selectFluid:'اختر السائل',available:'متاح',temp:'درجة الحرارة',calculate:'تشغيل التقييم',printPdf:'طباعة / حفظ PDF',reynolds:'رقم رينولدز ونظام التدفق',flowRate:'معدل التدفق',pipeDia:'قطر الأنبوب',calcRe:'حساب رينولدز',laminar:'تدفق صفائحي',transition:'تدفق انتقالي',turbulent:'تدفق مضطرب',cavitation:'تقييم مخاطر التكهف',suctionP:'ضغط السحب (بار)',npshr:'NPSH المطلوب (م)',calcCav:'تقييم التكهف',safe:'✓ آمن - لا يوجد خطر',warning:'⚠ تحذير - حدي',danger:'✗ خطر - تكهف محتمل',sgLabel:'الثقل النوعي',viscLabel:'اللزوجة الديناميكية',densLabel:'الكثافة',kvLabel:'اللزوجة الحركية',matCompat:'توافق المواد',sealRec:'توصيات الحشوات',hazards:'المخاطر الكيميائية',fluidProps:'خصائص السائل',viscTemp:'بيانات اللزوجة-الحرارة',lifecycle:'تحليل دورة حياة المواد',excellent:'توافق ممتاز',good:'توافق جيد',notRec:'غير موصى به',assumptions:'الافتراضات',material:'المادة',rating:'التصنيف',corrRate:'معدل التآكل',serviceLife:'العمر الافتراضي',tco:'التكلفة الإجمالية 10 سنوات',recommendation:'التوصية',references:'المراجع',assessmentId:'رقم التقييم',tempC:'الحرارة (°C)',regime:'النظام الكيميائي',sealState:'حالة الحشو',materials:'المواد'}
 };
 let curLang='en';
 // API Structure (#21) - Data export format
@@ -2342,22 +2415,57 @@ const H={
 'hf':{name:'Hydrofluoric Acid',psn:'HYDROFLUORIC ACID',signal:'DANGER',pictograms:['☠️','💀','⚠️'],ghsClasses:['Acute Toxicity 1 (dermal)','Acute Toxicity 2 (inhalation)','Skin Corrosion 1A'],hStatements:['H300/310/330: Fatal if swallowed, skin contact, or inhaled','H314: Causes severe skin burns and eye damage'],ppe:['Neoprene or butyl rubber gloves (NOT latex)','Full face shield','Chemical splash suit','SCBA for concentrated HF','Emergency shower and eyewash MANDATORY'],firstAid:'IMMEDIATELY flush with water 15+ min. Apply 2.5% CALCIUM GLUCONATE GEL to affected skin. Seek IMMEDIATE medical attention - systemic fluoride poisoning can be fatal even from small skin exposure. Monitor cardiac function (hypocalcemia risk).',disposal:'Neutralize with calcium hydroxide (NOT sodium hydroxide). Fluoride hazardous waste - licensed disposal only.',aicis:'Assessed - Acute Toxicity 1/2, Corrosive',un:'1790',erg:'157',twa:'0.5 ppm (ceiling)',stel:'2 ppm (15 min)',specialWarnings:['DELAYED SYMPTOMS: Burns may not be immediately painful - tissue destruction continues subcutaneously','SYSTEMIC TOXICITY: Fluoride ions bind calcium causing hypocalcemia, cardiac arrhythmia, death','ANTIDOTE: Calcium gluconate gel (2.5%) must be available wherever HF is used','INCOMPATIBLE: Glass, concrete, many metals - use HDPE, PP, PTFE, or Hastelloy-C']},
 'oleum':{name:'Oleum (Fuming Sulfuric Acid)',psn:'OLEUM / FUMING SULFURIC ACID',signal:'DANGER',pictograms:['☠️','🔥','💨'],ghsClasses:['Skin Corrosion 1A','Serious Eye Damage 1','STOT SE 1','Acute Toxicity 2 (inhalation)'],hStatements:['H314: Causes severe skin burns and eye damage','H330: Fatal if inhaled','H335: May cause respiratory irritation'],ppe:['Acid-resistant full body suit','Full face SCBA','Double gloves (butyl + neoprene)','Emergency shower MANDATORY'],firstAid:'EVACUATE area if fuming. Do NOT use water directly on concentrated spills (violent reaction). For skin contact: brush off excess, then flush copiously. Immediate medical attention.',disposal:'Dilute SLOWLY into large excess of ice water. Neutralize. Extremely hazardous waste.',aicis:'Assessed - Corrosive, Toxic',un:'1831',erg:'137',twa:'0.1 mg/m³ (SO₃)',stel:'N/A',specialWarnings:['FUMING: Releases SO₃ fumes on contact with air - respiratory hazard','WATER REACTIVE: Violent exothermic reaction with water - adds water TO acid slowly','DEHYDRATING: Chars organic materials on contact','TEMPERATURE: Freezes at 10-35°C depending on SO₃ content - handling procedures critical']}
 };
+
+// ═══════════════════════════════════════════════════════════════════════════
+// V17.7 EXPANSION: BITUMEN & HEAVY OIL - Parliament Session 14
+// ═══════════════════════════════════════════════════════════════════════════
+const F_BITUMEN={
+'bitumen-pen-40-50':{n:'Bitumen Penetration 40/50',c:'Bitumen - Road Grade',d:[[120,1.015,8500],[140,1.005,1850],[160,0.995,520],[180,0.985,185]]},
+'bitumen-pen-60-70':{n:'Bitumen Penetration 60/70',c:'Bitumen - Road Grade',d:[[110,1.018,12500],[130,1.008,2850],[150,0.998,780],[170,0.988,245]]},
+'bitumen-pen-80-100':{n:'Bitumen Penetration 80/100',c:'Bitumen - Road Grade',d:[[100,1.020,18500],[120,1.010,3850],[140,1.000,980],[160,0.990,295]]},
+'bitumen-pen-160-220':{n:'Bitumen Penetration 160/220',c:'Bitumen - Soft Grade',d:[[80,1.022,28500],[100,1.012,5850],[120,1.002,1380],[140,0.992,395]]},
+'bitumen-emulsion-crs':{n:'Bitumen Emulsion CRS-2',c:'Bitumen - Emulsion',d:[[25,1.015,125],[40,1.008,65],[55,1.001,38],[70,0.994,22]]},
+'bitumen-emulsion-css':{n:'Bitumen Emulsion CSS-1',c:'Bitumen - Emulsion',d:[[25,1.012,85],[40,1.005,48],[55,0.998,28],[70,0.991,17]]},
+'cutback-mc-70':{n:'Cutback Bitumen MC-70',c:'Bitumen - Cutback',d:[[25,0.985,185],[40,0.975,95],[55,0.965,52],[70,0.955,32]]},
+'cutback-mc-250':{n:'Cutback Bitumen MC-250',c:'Bitumen - Cutback',d:[[40,0.988,425],[55,0.978,185],[70,0.968,92],[85,0.958,52]]},
+'polymer-modified-bitumen':{n:'Polymer Modified Bitumen (PMB)',c:'Bitumen - Modified',d:[[140,1.008,3500],[160,0.998,850],[180,0.988,285],[200,0.978,125]]},
+'crumb-rubber-bitumen':{n:'Crumb Rubber Modified Bitumen',c:'Bitumen - Modified',d:[[150,1.012,4500],[170,1.002,1050],[190,0.992,345],[210,0.982,145]]},
+'dilbit':{n:'Diluted Bitumen (Dilbit)',c:'Petroleum - Heavy',d:[[20,0.945,285],[40,0.932,125],[60,0.919,62],[80,0.906,35]]},
+'synbit':{n:'Synthetic Bitumen (Synbit)',c:'Petroleum - Heavy',d:[[20,0.928,185],[40,0.915,92],[60,0.902,48],[80,0.889,28]]},
+'heavy-crude-api-10':{n:'Heavy Crude Oil (API 10)',c:'Petroleum - Heavy',d:[[20,0.998,4500],[40,0.985,1250],[60,0.972,425],[80,0.959,185]]},
+'heavy-crude-api-15':{n:'Heavy Crude Oil (API 15)',c:'Petroleum - Heavy',d:[[20,0.968,1850],[40,0.955,625],[60,0.942,245],[80,0.929,115]]},
+'extra-heavy-crude':{n:'Extra Heavy Crude (API <10)',c:'Petroleum - Heavy',d:[[40,1.008,8500],[60,0.995,2450],[80,0.982,850],[100,0.969,345]]},
+'tar-sand-bitumen':{n:'Tar Sand Bitumen Extract',c:'Bitumen - Extraction',d:[[80,1.025,125000],[100,1.012,28500],[120,0.999,6850],[140,0.986,1950]]},
+'asphalt-cement-ac20':{n:'Asphalt Cement AC-20',c:'Bitumen - Road Grade',d:[[120,1.015,9500],[140,1.005,2150],[160,0.995,585],[180,0.985,195]]},
+'asphalt-cement-ac10':{n:'Asphalt Cement AC-10',c:'Bitumen - Road Grade',d:[[100,1.018,15500],[120,1.008,3650],[140,0.998,885],[160,0.988,275]]},
+'vacuum-residue':{n:'Vacuum Residue',c:'Petroleum - Refinery',d:[[150,1.025,18500],[180,1.008,3850],[210,0.991,980],[240,0.974,325]]},
+'atmospheric-residue':{n:'Atmospheric Residue',c:'Petroleum - Refinery',d:[[100,0.985,2850],[130,0.968,725],[160,0.951,235],[190,0.934,95]]}
+};
+// Merge bitumen fluids into main F object
+Object.assign(F,F_BITUMEN);
+
 const M={
 // V6.2: 4-AXIS MATERIAL CLASSIFICATION SYSTEM
 // Axis A: Chemical Resistance | Axis B: Mechanical Stability | Axis C: Degradation Mode | Axis D: Time/Stress Sensitivity
 materialProps:{
 '316SS':{chemRes:'EXCELLENT',mechStab:'HIGH',failMode:'Pitting/SCC',timeSens:'Stress-activated',maxTemp:400,amphoteric:false},
 '304SS':{chemRes:'GOOD',mechStab:'HIGH',failMode:'Pitting/SCC',timeSens:'Stress-activated',maxTemp:400,amphoteric:false},
+'Duplex-SS':{chemRes:'EXCELLENT',mechStab:'VERY HIGH',failMode:'Pitting/SCC',timeSens:'Stress-activated',maxTemp:300,amphoteric:false},
 'Hastelloy-C':{chemRes:'EXCELLENT',mechStab:'HIGH',failMode:'Pitting',timeSens:'Time-independent',maxTemp:500,amphoteric:false},
+'Inconel-625':{chemRes:'EXCELLENT',mechStab:'VERY HIGH',failMode:'Pitting',timeSens:'Time-independent',maxTemp:650,amphoteric:false},
+'Monel-400':{chemRes:'EXCELLENT',mechStab:'HIGH',failMode:'SCC in HF',timeSens:'Stress-activated',maxTemp:450,amphoteric:false},
 'Titanium':{chemRes:'EXCELLENT',mechStab:'HIGH',failMode:'Hydrogen embrittlement',timeSens:'Transient-sensitive',maxTemp:300,amphoteric:false,alkaliSensitive:true},
 'Carbon-Steel':{chemRes:'LIMITED',mechStab:'HIGH',failMode:'General corrosion/SCC',timeSens:'Stress-activated',maxTemp:400,amphoteric:false,sccInCaustic:true},
 'Aluminum':{chemRes:'LIMITED',mechStab:'MEDIUM',failMode:'Pitting/dissolution',timeSens:'Time-independent',maxTemp:150,amphoteric:true},
+'Bronze':{chemRes:'GOOD',mechStab:'HIGH',failMode:'Dezincification',timeSens:'Time-independent',maxTemp:250,amphoteric:false},
 'PTFE':{chemRes:'EXCELLENT',mechStab:'CONDITIONAL',failMode:'Creep/permeation',timeSens:'Time-dependent',maxTemp:260,amphoteric:false},
+'PEEK':{chemRes:'EXCELLENT',mechStab:'HIGH',failMode:'Stress cracking',timeSens:'Time-dependent',maxTemp:250,amphoteric:false},
 'PVDF':{chemRes:'EXCELLENT',mechStab:'CONDITIONAL',failMode:'Creep/permeation',timeSens:'Time-dependent',maxTemp:140,amphoteric:false},
 'PP':{chemRes:'GOOD',mechStab:'LIMITED',failMode:'Stress cracking/softening',timeSens:'Time-dependent',maxTemp:90,amphoteric:false},
 'PVC':{chemRes:'LIMITED',mechStab:'LIMITED',failMode:'Plasticizer extraction/embrittlement',timeSens:'Time-dependent',maxTemp:60,amphoteric:false},
 'CPVC':{chemRes:'GOOD',mechStab:'LIMITED',failMode:'Stress cracking',timeSens:'Time-dependent',maxTemp:90,amphoteric:false},
 'HDPE':{chemRes:'GOOD',mechStab:'LIMITED',failMode:'Stress cracking/creep',timeSens:'Time-dependent',maxTemp:80,amphoteric:false},
+'UHMWPE':{chemRes:'EXCELLENT',mechStab:'HIGH',failMode:'Creep under load',timeSens:'Time-dependent',maxTemp:80,amphoteric:false},
 'FKM':{chemRes:'EXCELLENT',mechStab:'LIMITED',failMode:'Swelling/hardening',timeSens:'Time-dependent',maxTemp:200,isElastomer:true},
 'EPDM':{chemRes:'GOOD',mechStab:'LIMITED',failMode:'Swelling/extraction',timeSens:'Time-dependent',maxTemp:150,isElastomer:true},
 'NBR':{chemRes:'LIMITED',mechStab:'LIMITED',failMode:'Swelling/hardening',timeSens:'Time-dependent',maxTemp:100,isElastomer:true},
@@ -2393,46 +2501,48 @@ failureKnowledge:[
 {material:'316SS',fluidClass:'HALOGENATED',failMode:'Pitting/crevice corrosion',trigger:['Chlorides>50ppm','Temp>50C'],severity:'Localized attack'},
 {material:'304SS',fluidClass:'HALOGENATED',failMode:'SCC',trigger:['Chlorides','Temp>50C'],severity:'Sudden failure'}
 ],
-materials:{'316SS':{name:'316 Stainless Steel',type:'Metal'},'304SS':{name:'304 Stainless Steel',type:'Metal'},'Hastelloy-C':{name:'Hastelloy C-276',type:'Metal'},'Titanium':{name:'Titanium',type:'Metal'},'Carbon-Steel':{name:'Carbon Steel',type:'Metal'},'Aluminum':{name:'Aluminum',type:'Metal'},'PTFE':{name:'PTFE (Teflon)',type:'Plastic'},'PVDF':{name:'PVDF (Kynar)',type:'Plastic'},'PP':{name:'Polypropylene',type:'Plastic'},'PVC':{name:'PVC',type:'Plastic'},'CPVC':{name:'CPVC',type:'Plastic'},'HDPE':{name:'HDPE',type:'Plastic'},'FKM':{name:'Viton (FKM)',type:'Elastomer'},'EPDM':{name:'EPDM',type:'Elastomer'},'NBR':{name:'Nitrile (Buna-N)',type:'Elastomer'},'Kalrez':{name:'Kalrez (FFKM)',type:'Elastomer'}},
+materials:{'316SS':{name:'316 Stainless Steel',type:'Metal'},'304SS':{name:'304 Stainless Steel',type:'Metal'},'Duplex-SS':{name:'Duplex SS 2205',type:'Metal'},'Hastelloy-C':{name:'Hastelloy C-276',type:'Metal'},'Inconel-625':{name:'Inconel 625',type:'Metal'},'Monel-400':{name:'Monel 400',type:'Metal'},'Titanium':{name:'Titanium',type:'Metal'},'Carbon-Steel':{name:'Carbon Steel',type:'Metal'},'Aluminum':{name:'Aluminum',type:'Metal'},'Bronze':{name:'Aluminum Bronze',type:'Metal'},'PTFE':{name:'PTFE (Teflon)',type:'Plastic'},'PEEK':{name:'PEEK',type:'Plastic'},'PVDF':{name:'PVDF (Kynar)',type:'Plastic'},'PP':{name:'Polypropylene',type:'Plastic'},'PVC':{name:'PVC',type:'Plastic'},'CPVC':{name:'CPVC',type:'Plastic'},'HDPE':{name:'HDPE',type:'Plastic'},'UHMWPE':{name:'UHMWPE',type:'Plastic'},'FKM':{name:'Viton (FKM)',type:'Elastomer'},'EPDM':{name:'EPDM',type:'Elastomer'},'NBR':{name:'Nitrile (Buna-N)',type:'Elastomer'},'Kalrez':{name:'Kalrez (FFKM)',type:'Elastomer'}},
 compat:{
-'water':{excellent:['316SS','304SS','PTFE','PVDF','PP','PVC','EPDM','FKM'],good:['Carbon-Steel','Aluminum','NBR','HDPE'],poor:[]},
-'sulfuric-dilute':{excellent:['PTFE','PVDF','Hastelloy-C'],good:['316SS','PP','FKM','Kalrez'],poor:['304SS','Carbon-Steel','Aluminum','NBR','EPDM']},
-'sulfuric-conc':{excellent:['PTFE','Kalrez'],good:['Carbon-Steel','FKM','PVDF'],poor:['316SS','304SS','Aluminum','Titanium','PP','NBR','EPDM','Hastelloy-C']},
-'hydrochloric':{excellent:['PTFE','PVDF','Hastelloy-C','Titanium','Kalrez'],good:['PP','FKM','CPVC'],poor:['316SS','304SS','Carbon-Steel','Aluminum','NBR','EPDM']},
-'nitric':{excellent:['PTFE','Titanium','316SS'],good:['304SS','PVDF','FKM','Kalrez'],poor:['Carbon-Steel','Hastelloy-C','Aluminum','NBR','EPDM']},
-'phosphoric':{excellent:['PTFE','Hastelloy-C','316SS','Titanium'],good:['PVDF','PP','FKM','Kalrez','CPVC'],poor:['Carbon-Steel','Aluminum','NBR']},
-'caustic':{excellent:['PTFE','PVDF','316SS','Carbon-Steel'],good:['304SS','Hastelloy-C','PP','EPDM','FKM'],poor:['Aluminum','Titanium','PVC']},
-'ammonia':{excellent:['316SS','304SS','PTFE','PVDF'],good:['Carbon-Steel','PP','EPDM','FKM'],poor:['Aluminum','NBR','PVC']},
-'cyanide':{excellent:['316SS','PTFE','PVDF','Hastelloy-C'],good:['304SS','PP','FKM','EPDM'],poor:['Aluminum','NBR','Carbon-Steel']},
-'petroleum':{excellent:['316SS','304SS','Carbon-Steel','Aluminum','NBR','FKM'],good:['PTFE','PP'],poor:['EPDM','PVC']},
-'aromatic':{excellent:['316SS','304SS','PTFE','FKM','Kalrez'],good:['Hastelloy-C','PVDF'],poor:['NBR','EPDM','PP','PVC','HDPE']},
-'alcohol':{excellent:['316SS','304SS','PTFE','PVDF','PP','EPDM','FKM'],good:['Aluminum','PVC','NBR'],poor:[]},
-'chlorinated':{excellent:['PTFE','FKM','Kalrez','Hastelloy-C'],good:['316SS','304SS','PVDF'],poor:['NBR','EPDM','PP','PVC','Aluminum','HDPE']},
-'slurry':{excellent:['316SS','Hastelloy-C','PTFE','HDPE'],good:['304SS','PVDF','PP','FKM'],poor:[]},
-'oxidizer':{excellent:['PTFE','PVDF','316SS','Titanium'],good:['304SS','PP','FKM'],poor:['Carbon-Steel','Aluminum','Hastelloy-C','NBR','EPDM']},
-'food':{excellent:['316SS','304SS','PTFE','PVDF','PP','EPDM','FKM'],good:['HDPE','NBR'],poor:[]},
-'glycol':{excellent:['316SS','304SS','PTFE','PVDF','PP','EPDM','FKM'],good:['Carbon-Steel','Aluminum','NBR'],poor:[]}},
+'water':{excellent:['316SS','304SS','Duplex-SS','PTFE','PVDF','PP','PVC','EPDM','FKM','PEEK','UHMWPE'],good:['Carbon-Steel','Aluminum','NBR','HDPE','Bronze','Inconel-625','Monel-400'],poor:[]},
+'sulfuric-dilute':{excellent:['PTFE','PVDF','Hastelloy-C','Duplex-SS'],good:['316SS','PP','FKM','Kalrez','PEEK'],poor:['304SS','Carbon-Steel','Aluminum','NBR','EPDM','Bronze']},
+'sulfuric-conc':{excellent:['PTFE','Kalrez'],good:['Carbon-Steel','FKM','PVDF'],poor:['316SS','304SS','Aluminum','Titanium','PP','NBR','EPDM','Hastelloy-C','Duplex-SS','Bronze']},
+'hydrochloric':{excellent:['PTFE','PVDF','Hastelloy-C','Titanium','Kalrez','Monel-400'],good:['PP','FKM','CPVC','PEEK'],poor:['316SS','304SS','Carbon-Steel','Aluminum','NBR','EPDM','Duplex-SS','Bronze']},
+'nitric':{excellent:['PTFE','Titanium','316SS','Duplex-SS'],good:['304SS','PVDF','FKM','Kalrez','Inconel-625'],poor:['Carbon-Steel','Hastelloy-C','Aluminum','NBR','EPDM','Monel-400','Bronze']},
+'phosphoric':{excellent:['PTFE','Hastelloy-C','316SS','Titanium','Duplex-SS','Inconel-625'],good:['PVDF','PP','FKM','Kalrez','CPVC','PEEK'],poor:['Carbon-Steel','Aluminum','NBR','Bronze']},
+'caustic':{excellent:['PTFE','PVDF','316SS','Carbon-Steel','Duplex-SS','Inconel-625','Monel-400'],good:['304SS','Hastelloy-C','PP','EPDM','FKM'],poor:['Aluminum','Titanium','PVC','Bronze']},
+'ammonia':{excellent:['316SS','304SS','PTFE','PVDF','Duplex-SS','Inconel-625'],good:['Carbon-Steel','PP','EPDM','FKM'],poor:['Aluminum','NBR','PVC','Bronze','Monel-400']},
+'cyanide':{excellent:['316SS','PTFE','PVDF','Hastelloy-C','Duplex-SS'],good:['304SS','PP','FKM','EPDM','Inconel-625'],poor:['Aluminum','NBR','Carbon-Steel','Bronze']},
+'petroleum':{excellent:['316SS','304SS','Carbon-Steel','Aluminum','NBR','FKM','Duplex-SS','Bronze'],good:['PTFE','PP','PEEK','UHMWPE'],poor:['EPDM','PVC']},
+'aromatic':{excellent:['316SS','304SS','PTFE','FKM','Kalrez','Duplex-SS','Inconel-625'],good:['Hastelloy-C','PVDF','PEEK'],poor:['NBR','EPDM','PP','PVC','HDPE','UHMWPE']},
+'alcohol':{excellent:['316SS','304SS','PTFE','PVDF','PP','EPDM','FKM','Duplex-SS','PEEK'],good:['Aluminum','PVC','NBR','Bronze'],poor:[]},
+'chlorinated':{excellent:['PTFE','FKM','Kalrez','Hastelloy-C','Inconel-625'],good:['316SS','304SS','PVDF','Duplex-SS'],poor:['NBR','EPDM','PP','PVC','Aluminum','HDPE','Bronze']},
+'slurry':{excellent:['316SS','Hastelloy-C','PTFE','HDPE','Duplex-SS','UHMWPE'],good:['304SS','PVDF','PP','FKM','Bronze'],poor:[]},
+'oxidizer':{excellent:['PTFE','PVDF','316SS','Titanium','Duplex-SS'],good:['304SS','PP','FKM','Inconel-625'],poor:['Carbon-Steel','Aluminum','Hastelloy-C','NBR','EPDM','Bronze','Monel-400']},
+'food':{excellent:['316SS','304SS','PTFE','PVDF','PP','EPDM','FKM','PEEK'],good:['HDPE','NBR','UHMWPE'],poor:[]},
+'glycol':{excellent:['316SS','304SS','PTFE','PVDF','PP','EPDM','FKM','Duplex-SS','PEEK'],good:['Carbon-Steel','Aluminum','NBR','Bronze'],poor:[]},
+'bitumen':{excellent:['316SS','304SS','Carbon-Steel','PTFE','PEEK','FKM','Kalrez'],good:['Duplex-SS','PVDF','NBR','Bronze','UHMWPE'],poor:['EPDM','PVC','PP','Aluminum']}},
 corrosion:{
-'water':{'316SS':[.001,.01],'304SS':[.005,.02],'Hastelloy-C':[.0005,.002],'Titanium':[.0001,.001],'Carbon-Steel':[.05,.15],'Aluminum':[.01,.05],'PTFE':[0,0],'PVDF':[0,0],'PP':[0,0],'PVC':[0,0],'CPVC':[0,0],'HDPE':[0,0],'FKM':[0,0],'EPDM':[0,0],'NBR':[0,.01],'Kalrez':[0,0]},
-'sulfuric-dilute':{'316SS':[.05,.15],'304SS':[.2,.8],'Hastelloy-C':[.01,.05],'Titanium':[.05,.2],'Carbon-Steel':[1,5],'Aluminum':[.5,2],'PTFE':[0,0],'PVDF':[0,.01],'PP':[.01,.05],'PVC':[.1,.5],'CPVC':[.05,.2],'HDPE':[.05,.2],'FKM':[0,.01],'EPDM':[.5,2],'NBR':[.5,2],'Kalrez':[0,0]},
-'sulfuric-conc':{'316SS':[.1,.5],'304SS':[.5,2],'Hastelloy-C':[.5,2],'Titanium':[1,5],'Carbon-Steel':[.1,.5],'Aluminum':[2,10],'PTFE':[0,0],'PVDF':[.01,.05],'PP':[.5,2],'PVC':[1,5],'CPVC':[.5,2],'HDPE':[1,5],'FKM':[.02,.1],'EPDM':[2,10],'NBR':[2,10],'Kalrez':[0,.01]},
-'hydrochloric':{'316SS':[.5,2],'304SS':[1,5],'Hastelloy-C':[.02,.1],'Titanium':[.01,.05],'Carbon-Steel':[5,20],'Aluminum':[5,20],'PTFE':[0,0],'PVDF':[0,.01],'PP':[.01,.05],'PVC':[.05,.2],'CPVC':[.02,.1],'HDPE':[.02,.1],'FKM':[.01,.05],'EPDM':[1,5],'NBR':[1,5],'Kalrez':[0,.01]},
-'nitric':{'316SS':[.01,.05],'304SS':[.02,.1],'Hastelloy-C':[.1,.5],'Titanium':[.001,.01],'Carbon-Steel':[2,10],'Aluminum':[.01,.05],'PTFE':[0,0],'PVDF':[0,.01],'PP':[.05,.2],'PVC':[.1,.5],'CPVC':[.05,.2],'HDPE':[.1,.5],'FKM':[.01,.05],'EPDM':[.5,2],'NBR':[.5,2],'Kalrez':[0,.01]},
-'phosphoric':{'316SS':[.02,.1],'304SS':[.05,.2],'Hastelloy-C':[.01,.05],'Titanium':[.01,.05],'Carbon-Steel':[1,5],'Aluminum':[.5,2],'PTFE':[0,0],'PVDF':[0,.01],'PP':[.02,.1],'PVC':[.05,.2],'CPVC':[.02,.1],'HDPE':[.05,.2],'FKM':[.01,.05],'EPDM':[.2,1],'NBR':[.2,1],'Kalrez':[0,.01]},
-'caustic':{'316SS':[.01,.05],'304SS':[.02,.1],'Hastelloy-C':[.005,.02],'Titanium':[.5,2],'Carbon-Steel':[.05,.2],'Aluminum':[1,5],'PTFE':[0,0],'PVDF':[0,.01],'PP':[.01,.05],'PVC':[.05,.2],'CPVC':[.02,.1],'HDPE':[.02,.1],'FKM':[.01,.05],'EPDM':[0,.02],'NBR':[.05,.2],'Kalrez':[0,.01]},
-'ammonia':{'316SS':[.01,.05],'304SS':[.02,.1],'Hastelloy-C':[.005,.02],'Titanium':[.01,.05],'Carbon-Steel':[.1,.5],'Aluminum':[.05,.2],'PTFE':[0,0],'PVDF':[0,.01],'PP':[.01,.05],'PVC':[.05,.2],'CPVC':[.02,.1],'HDPE':[.02,.1],'FKM':[.02,.1],'EPDM':[0,.02],'NBR':[.1,.5],'Kalrez':[0,.01]},
-'cyanide':{'316SS':[.01,.05],'304SS':[.02,.1],'Hastelloy-C':[.005,.02],'Titanium':[.01,.05],'Carbon-Steel':[.1,.5],'Aluminum':[.2,1],'PTFE':[0,0],'PVDF':[0,.01],'PP':[.01,.05],'PVC':[.02,.1],'CPVC':[.01,.05],'HDPE':[.02,.1],'FKM':[0,.02],'EPDM':[.02,.1],'NBR':[.1,.5],'Kalrez':[0,.01]},
-'petroleum':{'316SS':[.001,.01],'304SS':[.002,.02],'Hastelloy-C':[.0005,.005],'Titanium':[.001,.01],'Carbon-Steel':[.01,.05],'Aluminum':[.005,.02],'PTFE':[0,0],'PVDF':[.01,.05],'PP':[.1,.5],'PVC':[.2,1],'CPVC':[.1,.5],'HDPE':[.1,.5],'FKM':[0,.01],'EPDM':[.2,1],'NBR':[0,.02],'Kalrez':[0,0]},
-'aromatic':{'316SS':[.001,.01],'304SS':[.002,.02],'Hastelloy-C':[.0005,.005],'Titanium':[.001,.01],'Carbon-Steel':[.01,.05],'Aluminum':[.01,.05],'PTFE':[0,0],'PVDF':[.02,.1],'PP':[.5,2],'PVC':[1,5],'CPVC':[.5,2],'HDPE':[.5,2],'FKM':[0,.02],'EPDM':[1,5],'NBR':[.5,2],'Kalrez':[0,.01]},
-'alcohol':{'316SS':[.001,.01],'304SS':[.002,.02],'Hastelloy-C':[.0005,.005],'Titanium':[.001,.01],'Carbon-Steel':[.02,.1],'Aluminum':[.01,.05],'PTFE':[0,0],'PVDF':[0,0],'PP':[0,.02],'PVC':[.05,.2],'CPVC':[.02,.1],'HDPE':[.02,.1],'FKM':[0,.02],'EPDM':[0,.02],'NBR':[.05,.2],'Kalrez':[0,0]},
-'chlorinated':{'316SS':[.02,.1],'304SS':[.05,.2],'Hastelloy-C':[.01,.05],'Titanium':[.02,.1],'Carbon-Steel':[.5,2],'Aluminum':[.5,2],'PTFE':[0,0],'PVDF':[0,.02],'PP':[.5,2],'PVC':[.5,2],'CPVC':[.2,1],'HDPE':[.5,2],'FKM':[0,.02],'EPDM':[1,5],'NBR':[.5,2],'Kalrez':[0,.01]},
-'slurry':{'316SS':[.1,.5],'304SS':[.2,1],'Hastelloy-C':[.05,.2],'Titanium':[.05,.2],'Carbon-Steel':[.5,2],'Aluminum':[.3,1],'PTFE':[.05,.2],'PVDF':[.05,.2],'PP':[.1,.5],'PVC':[.2,1],'CPVC':[.1,.5],'HDPE':[.05,.2],'FKM':[.05,.2],'EPDM':[.1,.5],'NBR':[.1,.5],'Kalrez':[.02,.1]},
-'oxidizer':{'316SS':[.02,.1],'304SS':[.05,.2],'Hastelloy-C':[.01,.05],'Titanium':[.005,.02],'Carbon-Steel':[.5,2],'Aluminum':[.02,.1],'PTFE':[0,0],'PVDF':[0,.01],'PP':[.1,.5],'PVC':[.2,1],'CPVC':[.1,.5],'HDPE':[.1,.5],'FKM':[.02,.1],'EPDM':[.2,1],'NBR':[.2,1],'Kalrez':[0,.01]},
-'food':{'316SS':[.001,.005],'304SS':[.002,.01],'Hastelloy-C':[.0005,.002],'Titanium':[.0005,.002],'Carbon-Steel':[.02,.1],'Aluminum':[.01,.05],'PTFE':[0,0],'PVDF':[0,0],'PP':[0,.01],'PVC':[0,.02],'CPVC':[0,.01],'HDPE':[0,.01],'FKM':[0,.01],'EPDM':[0,.01],'NBR':[0,.02],'Kalrez':[0,0]},
-'glycol':{'316SS':[.001,.01],'304SS':[.002,.02],'Hastelloy-C':[.0005,.005],'Titanium':[.001,.01],'Carbon-Steel':[.02,.1],'Aluminum':[.01,.05],'PTFE':[0,0],'PVDF':[0,0],'PP':[0,.02],'PVC':[.02,.1],'CPVC':[.01,.05],'HDPE':[.01,.05],'FKM':[0,.01],'EPDM':[0,.02],'NBR':[.02,.1],'Kalrez':[0,0]}
+'water':{'316SS':[.001,.01],'304SS':[.005,.02],'Duplex-SS':[.0005,.005],'Hastelloy-C':[.0005,.002],'Inconel-625':[.0005,.002],'Monel-400':[.001,.005],'Titanium':[.0001,.001],'Carbon-Steel':[.05,.15],'Aluminum':[.01,.05],'Bronze':[.005,.02],'PTFE':[0,0],'PEEK':[0,0],'PVDF':[0,0],'PP':[0,0],'PVC':[0,0],'CPVC':[0,0],'HDPE':[0,0],'UHMWPE':[0,0],'FKM':[0,0],'EPDM':[0,0],'NBR':[0,.01],'Kalrez':[0,0]},
+'sulfuric-dilute':{'316SS':[.05,.15],'304SS':[.2,.8],'Duplex-SS':[.02,.08],'Hastelloy-C':[.01,.05],'Inconel-625':[.02,.08],'Monel-400':[.5,2],'Titanium':[.05,.2],'Carbon-Steel':[1,5],'Aluminum':[.5,2],'Bronze':[.2,1],'PTFE':[0,0],'PEEK':[0,.01],'PVDF':[0,.01],'PP':[.01,.05],'PVC':[.1,.5],'CPVC':[.05,.2],'HDPE':[.05,.2],'UHMWPE':[.02,.1],'FKM':[0,.01],'EPDM':[.5,2],'NBR':[.5,2],'Kalrez':[0,0]},
+'sulfuric-conc':{'316SS':[.1,.5],'304SS':[.5,2],'Duplex-SS':[.1,.4],'Hastelloy-C':[.5,2],'Inconel-625':[.3,1],'Monel-400':[1,5],'Titanium':[1,5],'Carbon-Steel':[.1,.5],'Aluminum':[2,10],'Bronze':[1,5],'PTFE':[0,0],'PEEK':[0,.02],'PVDF':[.01,.05],'PP':[.5,2],'PVC':[1,5],'CPVC':[.5,2],'HDPE':[1,5],'UHMWPE':[.5,2],'FKM':[.02,.1],'EPDM':[2,10],'NBR':[2,10],'Kalrez':[0,.01]},
+'hydrochloric':{'316SS':[.5,2],'304SS':[1,5],'Duplex-SS':[.2,1],'Hastelloy-C':[.02,.1],'Inconel-625':[.05,.2],'Monel-400':[.01,.05],'Titanium':[.01,.05],'Carbon-Steel':[5,20],'Aluminum':[5,20],'Bronze':[.5,2],'PTFE':[0,0],'PEEK':[0,.01],'PVDF':[0,.01],'PP':[.01,.05],'PVC':[.05,.2],'CPVC':[.02,.1],'HDPE':[.02,.1],'UHMWPE':[.01,.05],'FKM':[.01,.05],'EPDM':[1,5],'NBR':[1,5],'Kalrez':[0,.01]},
+'nitric':{'316SS':[.01,.05],'304SS':[.02,.1],'Duplex-SS':[.01,.04],'Hastelloy-C':[.1,.5],'Inconel-625':[.02,.1],'Monel-400':[.5,2],'Titanium':[.001,.01],'Carbon-Steel':[2,10],'Aluminum':[.01,.05],'Bronze':[.5,2],'PTFE':[0,0],'PEEK':[0,.01],'PVDF':[0,.01],'PP':[.05,.2],'PVC':[.1,.5],'CPVC':[.05,.2],'HDPE':[.1,.5],'UHMWPE':[.05,.2],'FKM':[.01,.05],'EPDM':[.5,2],'NBR':[.5,2],'Kalrez':[0,.01]},
+'phosphoric':{'316SS':[.02,.1],'304SS':[.05,.2],'Duplex-SS':[.01,.05],'Hastelloy-C':[.01,.05],'Inconel-625':[.01,.05],'Monel-400':[.02,.1],'Titanium':[.01,.05],'Carbon-Steel':[1,5],'Aluminum':[.5,2],'Bronze':[.1,.5],'PTFE':[0,0],'PEEK':[0,.01],'PVDF':[0,.01],'PP':[.02,.1],'PVC':[.05,.2],'CPVC':[.02,.1],'HDPE':[.05,.2],'UHMWPE':[.02,.1],'FKM':[.01,.05],'EPDM':[.2,1],'NBR':[.2,1],'Kalrez':[0,.01]},
+'caustic':{'316SS':[.01,.05],'304SS':[.02,.1],'Duplex-SS':[.01,.04],'Hastelloy-C':[.005,.02],'Inconel-625':[.005,.02],'Monel-400':[.005,.02],'Titanium':[.5,2],'Carbon-Steel':[.05,.2],'Aluminum':[1,5],'Bronze':[.02,.1],'PTFE':[0,0],'PEEK':[0,.01],'PVDF':[0,.01],'PP':[.01,.05],'PVC':[.05,.2],'CPVC':[.02,.1],'HDPE':[.02,.1],'UHMWPE':[.01,.05],'FKM':[.01,.05],'EPDM':[0,.02],'NBR':[.05,.2],'Kalrez':[0,.01]},
+'ammonia':{'316SS':[.01,.05],'304SS':[.02,.1],'Duplex-SS':[.01,.04],'Hastelloy-C':[.005,.02],'Inconel-625':[.005,.02],'Monel-400':[.5,2],'Titanium':[.01,.05],'Carbon-Steel':[.1,.5],'Aluminum':[.05,.2],'Bronze':[.5,2],'PTFE':[0,0],'PEEK':[0,.01],'PVDF':[0,.01],'PP':[.01,.05],'PVC':[.05,.2],'CPVC':[.02,.1],'HDPE':[.02,.1],'UHMWPE':[.01,.05],'FKM':[.02,.1],'EPDM':[0,.02],'NBR':[.1,.5],'Kalrez':[0,.01]},
+'cyanide':{'316SS':[.01,.05],'304SS':[.02,.1],'Duplex-SS':[.01,.04],'Hastelloy-C':[.005,.02],'Inconel-625':[.005,.02],'Monel-400':[.01,.05],'Titanium':[.01,.05],'Carbon-Steel':[.1,.5],'Aluminum':[.2,1],'Bronze':[.05,.2],'PTFE':[0,0],'PEEK':[0,.01],'PVDF':[0,.01],'PP':[.01,.05],'PVC':[.02,.1],'CPVC':[.01,.05],'HDPE':[.02,.1],'UHMWPE':[.01,.05],'FKM':[0,.02],'EPDM':[.02,.1],'NBR':[.1,.5],'Kalrez':[0,.01]},
+'petroleum':{'316SS':[.001,.01],'304SS':[.002,.02],'Duplex-SS':[.001,.008],'Hastelloy-C':[.0005,.005],'Inconel-625':[.0005,.005],'Monel-400':[.001,.01],'Titanium':[.001,.01],'Carbon-Steel':[.01,.05],'Aluminum':[.005,.02],'Bronze':[.002,.01],'PTFE':[0,0],'PEEK':[0,0],'PVDF':[.01,.05],'PP':[.1,.5],'PVC':[.2,1],'CPVC':[.1,.5],'HDPE':[.1,.5],'UHMWPE':[.05,.2],'FKM':[0,.01],'EPDM':[.2,1],'NBR':[0,.02],'Kalrez':[0,0]},
+'aromatic':{'316SS':[.001,.01],'304SS':[.002,.02],'Duplex-SS':[.001,.008],'Hastelloy-C':[.0005,.005],'Inconel-625':[.0005,.005],'Monel-400':[.001,.01],'Titanium':[.001,.01],'Carbon-Steel':[.01,.05],'Aluminum':[.01,.05],'Bronze':[.005,.02],'PTFE':[0,0],'PEEK':[0,.01],'PVDF':[.02,.1],'PP':[.5,2],'PVC':[1,5],'CPVC':[.5,2],'HDPE':[.5,2],'UHMWPE':[.2,1],'FKM':[0,.02],'EPDM':[1,5],'NBR':[.5,2],'Kalrez':[0,.01]},
+'alcohol':{'316SS':[.001,.01],'304SS':[.002,.02],'Duplex-SS':[.001,.008],'Hastelloy-C':[.0005,.005],'Inconel-625':[.0005,.005],'Monel-400':[.001,.01],'Titanium':[.001,.01],'Carbon-Steel':[.02,.1],'Aluminum':[.01,.05],'Bronze':[.005,.02],'PTFE':[0,0],'PEEK':[0,0],'PVDF':[0,0],'PP':[0,.02],'PVC':[.05,.2],'CPVC':[.02,.1],'HDPE':[.02,.1],'UHMWPE':[.01,.05],'FKM':[0,.02],'EPDM':[0,.02],'NBR':[.05,.2],'Kalrez':[0,0]},
+'chlorinated':{'316SS':[.02,.1],'304SS':[.05,.2],'Duplex-SS':[.01,.05],'Hastelloy-C':[.01,.05],'Inconel-625':[.01,.05],'Monel-400':[.02,.1],'Titanium':[.02,.1],'Carbon-Steel':[.5,2],'Aluminum':[.5,2],'Bronze':[.1,.5],'PTFE':[0,0],'PEEK':[0,.01],'PVDF':[0,.02],'PP':[.5,2],'PVC':[.5,2],'CPVC':[.2,1],'HDPE':[.5,2],'UHMWPE':[.2,1],'FKM':[0,.02],'EPDM':[1,5],'NBR':[.5,2],'Kalrez':[0,.01]},
+'slurry':{'316SS':[.1,.5],'304SS':[.2,1],'Duplex-SS':[.08,.3],'Hastelloy-C':[.05,.2],'Inconel-625':[.05,.2],'Monel-400':[.1,.5],'Titanium':[.05,.2],'Carbon-Steel':[.5,2],'Aluminum':[.3,1],'Bronze':[.1,.5],'PTFE':[.05,.2],'PEEK':[.02,.1],'PVDF':[.05,.2],'PP':[.1,.5],'PVC':[.2,1],'CPVC':[.1,.5],'HDPE':[.05,.2],'UHMWPE':[.02,.1],'FKM':[.05,.2],'EPDM':[.1,.5],'NBR':[.1,.5],'Kalrez':[.02,.1]},
+'oxidizer':{'316SS':[.02,.1],'304SS':[.05,.2],'Duplex-SS':[.02,.08],'Hastelloy-C':[.01,.05],'Inconel-625':[.01,.05],'Monel-400':[.5,2],'Titanium':[.005,.02],'Carbon-Steel':[.5,2],'Aluminum':[.02,.1],'Bronze':[.1,.5],'PTFE':[0,0],'PEEK':[0,.01],'PVDF':[0,.01],'PP':[.1,.5],'PVC':[.2,1],'CPVC':[.1,.5],'HDPE':[.1,.5],'UHMWPE':[.05,.2],'FKM':[.02,.1],'EPDM':[.2,1],'NBR':[.2,1],'Kalrez':[0,.01]},
+'food':{'316SS':[.001,.005],'304SS':[.002,.01],'Duplex-SS':[.001,.004],'Hastelloy-C':[.0005,.002],'Inconel-625':[.0005,.002],'Monel-400':[.001,.005],'Titanium':[.0005,.002],'Carbon-Steel':[.02,.1],'Aluminum':[.01,.05],'Bronze':[.005,.02],'PTFE':[0,0],'PEEK':[0,0],'PVDF':[0,0],'PP':[0,.01],'PVC':[0,.02],'CPVC':[0,.01],'HDPE':[0,.01],'UHMWPE':[0,.005],'FKM':[0,.01],'EPDM':[0,.01],'NBR':[0,.02],'Kalrez':[0,0]},
+'glycol':{'316SS':[.001,.01],'304SS':[.002,.02],'Duplex-SS':[.001,.008],'Hastelloy-C':[.0005,.005],'Inconel-625':[.0005,.005],'Monel-400':[.001,.01],'Titanium':[.001,.01],'Carbon-Steel':[.02,.1],'Aluminum':[.01,.05],'Bronze':[.005,.02],'PTFE':[0,0],'PEEK':[0,0],'PVDF':[0,0],'PP':[0,.02],'PVC':[.02,.1],'CPVC':[.01,.05],'HDPE':[.01,.05],'UHMWPE':[.005,.02],'FKM':[0,.01],'EPDM':[0,.02],'NBR':[.02,.1],'Kalrez':[0,0]},
+'bitumen':{'316SS':[.001,.01],'304SS':[.002,.02],'Duplex-SS':[.001,.008],'Hastelloy-C':[.0005,.005],'Inconel-625':[.0005,.005],'Monel-400':[.001,.01],'Titanium':[.001,.01],'Carbon-Steel':[.01,.05],'Aluminum':[.1,.5],'Bronze':[.005,.02],'PTFE':[0,0],'PEEK':[0,0],'PVDF':[.01,.05],'PP':[.2,1],'PVC':[.5,2],'CPVC':[.2,1],'HDPE':[.1,.5],'UHMWPE':[.02,.1],'FKM':[0,.01],'EPDM':[.5,2],'NBR':[0,.02],'Kalrez':[0,0]}
 },
 costs:{
-'316SS':{price:4.50,wall:3.0},'304SS':{price:3.60,wall:3.0},'Hastelloy-C':{price:85,wall:2.5},'Titanium':{price:95,wall:2.0},'Carbon-Steel':{price:1.20,wall:4.0},'Aluminum':{price:3.00,wall:3.0},'PTFE':{price:28,wall:3.0},'PVDF':{price:22,wall:3.0},'PP':{price:3.50,wall:4.0},'PVC':{price:2.50,wall:4.0},'CPVC':{price:4.00,wall:4.0},'HDPE':{price:2.80,wall:4.0},'FKM':{price:18,wall:2.0},'EPDM':{price:8.00,wall:2.0},'NBR':{price:6.00,wall:2.0},'Kalrez':{price:350,wall:1.5}
+'316SS':{price:4.50,wall:3.0},'304SS':{price:3.60,wall:3.0},'Duplex-SS':{price:8.50,wall:2.5},'Hastelloy-C':{price:85,wall:2.5},'Inconel-625':{price:75,wall:2.5},'Monel-400':{price:45,wall:2.5},'Titanium':{price:95,wall:2.0},'Carbon-Steel':{price:1.20,wall:4.0},'Aluminum':{price:3.00,wall:3.0},'Bronze':{price:12,wall:3.0},'PTFE':{price:28,wall:3.0},'PEEK':{price:120,wall:2.5},'PVDF':{price:22,wall:3.0},'PP':{price:3.50,wall:4.0},'PVC':{price:2.50,wall:4.0},'CPVC':{price:4.00,wall:4.0},'HDPE':{price:2.80,wall:4.0},'UHMWPE':{price:8.50,wall:4.0},'FKM':{price:18,wall:2.0},'EPDM':{price:8.00,wall:2.0},'NBR':{price:6.00,wall:2.0},'Kalrez':{price:350,wall:1.5}
 }
 };
 
@@ -2611,6 +2721,48 @@ const MAT_FAILURE_MODES={
     passivationWindow:'Stable Al2O3 film in pH 4-8.5 and dilute oxidizers',
     hardLimit:'NEVER use above 40% HNO3 or in any strong base'
   },
+  'Duplex-SS':{
+    type:'metal',class:'duplex_stainless',
+    failureModes:{
+      'pitting':{triggers:['chloride>200ppm','oxidizer+chloride'],tempThreshold:50,severity:'localized',timeframe:'months'},
+      'crevice_corrosion':{triggers:['chloride','stagnant_conditions'],tempThreshold:40,severity:'localized',timeframe:'months'},
+      'SCC':{triggers:['chloride+high_stress','H2S'],tempThreshold:60,severity:'catastrophic',timeframe:'years'},
+      'sigma_phase':{triggers:['temp_300-550C_prolonged'],tempThreshold:300,severity:'embrittlement',timeframe:'months'}
+    },
+    strengths:['chloride_environments','seawater','oxidizing_acids','caustic','sour_service'],
+    designedFor:'High chloride and sour environments - superior to 316SS'
+  },
+  'Monel-400':{
+    type:'metal',class:'nickel_copper',
+    failureModes:{
+      'SCC':{triggers:['HF+stress','aerated_HF'],tempThreshold:null,severity:'catastrophic',timeframe:'months'},
+      'sulfidation':{triggers:['H2S>260C','sulfur_compounds'],tempThreshold:260,severity:'accelerating',timeframe:'months'},
+      'oxidation':{triggers:['air>500C'],tempThreshold:500,severity:'scaling',timeframe:'months'}
+    },
+    strengths:['HF_all_concentrations','seawater','reducing_acids','caustic','brine'],
+    designedFor:'HF service - industry standard',
+    industryStandard:['HF_alkylation','hydrofluoric_acid_production']
+  },
+  'Inconel-625':{
+    type:'metal',class:'nickel_superalloy',
+    failureModes:{
+      'pitting':{triggers:['high_chloride+oxidizer'],tempThreshold:70,severity:'localized',timeframe:'months'},
+      'oxidation':{triggers:['temp>980C'],tempThreshold:980,severity:'scaling',timeframe:'months'},
+      'age_hardening_embrittlement':{triggers:['650-850C_prolonged'],tempThreshold:650,severity:'structural',timeframe:'years'}
+    },
+    strengths:['high_temp_oxidation','seawater','reducing_acids','oxidizing_acids','caustic','high_temp_steam'],
+    designedFor:'High temperature and aggressive environments'
+  },
+  'Bronze':{
+    type:'metal',class:'copper_alloy',
+    failureModes:{
+      'dezincification':{triggers:['stagnant_water','low_flow'],tempThreshold:30,severity:'selective',timeframe:'years'},
+      'ammonia_SCC':{triggers:['ammonia','amine','NH3>1ppm'],tempThreshold:null,severity:'catastrophic',timeframe:'months'},
+      'acid_attack':{triggers:['mineral_acid','oxidizing_acid'],tempThreshold:null,severity:'general',timeframe:'weeks'}
+    },
+    strengths:['seawater','neutral_water','petroleum','dilute_sulfuric','phosphoric'],
+    limitations:'NO ammonia, NO amines, NO oxidizing acids'
+  },
   // ═══════════════════════════════════════════════════════════════════════════
   // PLASTICS - Failure by degradation mechanisms
   // ═══════════════════════════════════════════════════════════════════════════
@@ -2676,6 +2828,27 @@ const MAT_FAILURE_MODES={
     },
     strengths:['dilute_acids','dilute_bases','water','aqueous'],
     limitations:'No hydrocarbons, no oxidizers, 80°C max'
+  },
+  'PEEK':{
+    type:'plastic',class:'high_performance',
+    failureModes:{
+      'stress_cracking':{triggers:['concentrated_sulfuric','concentrated_nitric'],tempThreshold:100,severity:'cracking',timeframe:'weeks'},
+      'thermal_degradation':{triggers:['temp>250C'],tempThreshold:250,severity:'structural',timeframe:'immediate'},
+      'hydrolysis':{triggers:['steam>200C_prolonged'],tempThreshold:200,severity:'degradation',timeframe:'months'}
+    },
+    strengths:['acids','bases','solvents','hydrocarbons','high_temp','steam<180C','radiation'],
+    designedFor:'High performance applications requiring chemical and thermal resistance'
+  },
+  'UHMWPE':{
+    type:'plastic',class:'polyolefin',
+    failureModes:{
+      'oxidative_degradation':{triggers:['strong_oxidizer','chlorine','ozone'],tempThreshold:25,severity:'embrittlement',timeframe:'months'},
+      'thermal_softening':{triggers:['temp>80C'],tempThreshold:80,severity:'structural',timeframe:'immediate'},
+      'swelling':{triggers:['aromatic_hydrocarbon','chlorinated_solvent'],tempThreshold:40,severity:'dimensional',timeframe:'weeks'},
+      'creep':{triggers:['sustained_high_load'],tempThreshold:60,severity:'dimensional',timeframe:'months'}
+    },
+    strengths:['abrasion_resistance','slurry','dilute_acids','dilute_bases','water'],
+    designedFor:'Abrasive slurry service and wear applications'
   },
   // ═══════════════════════════════════════════════════════════════════════════
   // ELASTOMERS - Failure by degradation/swelling mechanisms
@@ -2753,7 +2926,7 @@ const TEMP_ACTIVATION={
 // ─────────────────────────────────────────────────────────────────────────────
 function evaluateCompatibilityV84(materialId,fluidKey,tempC,concentration){
   const mat=MAT_FAILURE_MODES[materialId];
-  if(!mat)return{classification:'UNKNOWN',reason:'No failure mode data for material',confidence:0,excluded:false};
+  if(!mat)return{classification:'UNKNOWN',reason:'No failure mode data for material',confidence:0,excluded:false,tempActivations:[],failureModes:[],activeTriggers:[],mitigations:[],monitoring:[],rationale:[],chemicalResistance:'unknown',industrialSuitability:'unknown'};
 
   // Get fluid traits
   const traits=getFluidTraitsV84(fluidKey,concentration,tempC);
@@ -3365,6 +3538,7 @@ function checkConditionsV84(condStr,traits,concentration,fluidKey){
 }
 
 const S={
+'Solidifying':[{type:'Packed Gland (Heated)',priority:'RECOMMENDED - INDUSTRY STANDARD',sealless:false,reason:'Simple, robust, proven for 100+ years in bitumen service. Tolerates solidification, easy to maintain. Requires heated stuffing box.',specs:'Up to 10 bar, 250°C with steam/thermal fluid jacket',materials:'Graphite/PTFE braided packing, lantern ring for steam',apiPlan:'Traditional - API 676 compliant'},{type:'Single Mechanical Seal + External Flush',priority:'ALTERNATIVE - CONTINUOUS SERVICE ONLY',sealless:false,reason:'Acceptable for continuous operation with proper flush and heating. NOT for intermittent service.',specs:'Up to 20 bar. REQUIRES Plan 32 external flush AND heated seal chamber.',materials:'WC/SiC faces, FKM/FFKM, heated flush fluid',apiPlan:'API 682 Plan 32 + heating jacket'},{type:'Double Seal + Heated Barrier',priority:'CONDITIONAL - IF ZERO LEAKAGE REQUIRED',sealless:false,reason:'For applications requiring zero emissions. Complex, expensive. Requires heated barrier fluid system.',specs:'Up to 30 bar. Barrier fluid must be heated above solidification point.',materials:'WC/SiC faces, compatible elastomers, heated reservoir',apiPlan:'API 682 Plan 53A with thermal management'}],
 'General':[{type:'Single Mechanical Seal',priority:'STANDARD',sealless:false,reason:'Cost-effective for clean, non-hazardous fluids.',specs:'Up to 20 bar, 200°C',materials:'Carbon/Ceramic, NBR/FKM',apiPlan:'API 682 Plan 11'},{type:'Cartridge Seal',priority:'RECOMMENDED',sealless:false,reason:'Pre-assembled, easy installation.',specs:'Up to 25 bar, 250°C',materials:'Various',apiPlan:'API 682 Cartridge'},{type:'Magnetic Drive Pump',priority:'OPTIONAL',sealless:true,reason:'Zero maintenance, zero emissions.',specs:'Up to 16 bar, 150°C',materials:'316SS or lined, ceramic bearings',apiPlan:'API 685'}],
 'Corrosive':[{type:'Magnetic Drive Pump',priority:'STRONGLY RECOMMENDED',sealless:true,reason:'Eliminates seal corrosion. Zero leakage.',specs:'Up to 16 bar, 120°C',materials:'Full PTFE lining, ceramic bearings',apiPlan:'API 685'},{type:'Double Seal - Plan 53B',priority:'RECOMMENDED',sealless:false,reason:'Dual containment with barrier fluid.',specs:'Up to 30 bar, 250°C',materials:'SiC, Kalrez, Hastelloy',apiPlan:'API 682 Plan 53B'},{type:'PTFE Bellows Seal',priority:'ACCEPTABLE',sealless:false,reason:'No metal springs in process.',specs:'Up to 15 bar, 200°C',materials:'PTFE bellows, SiC/Carbon',apiPlan:'API 682 Plan 11'}],
 'Toxic':[{type:'Magnetic Drive Pump',priority:'CRITICAL - REQUIRED',sealless:true,reason:'Zero emissions. Prevents toxic exposure.',specs:'Up to 20 bar, 150°C',materials:'PTFE/PVDF lined, Hastelloy',apiPlan:'API 685'},{type:'Canned Motor Pump',priority:'CRITICAL - ALTERNATIVE',sealless:true,reason:'Complete containment. No external seals.',specs:'Up to 40 bar, 250°C',materials:'PTFE/ceramic lining',apiPlan:'API 685 Type II'},{type:'Double Seal - Plan 53B/54',priority:'ACCEPTABLE',sealless:false,reason:'Leak detection with alarm.',specs:'Up to 40 bar, 300°C',materials:'High-integrity',apiPlan:'API 682 Plan 53B/54'}],
@@ -3389,7 +3563,13 @@ const R=[
 {id:'swa-hcis',num:13,title:"Safe Work Australia HCIS",apa:"Safe Work Australia. (2024). Hazardous Chemical Information System (HCIS). Australian Government. hcis.safeworkaustralia.gov.au",mla:"Safe Work Australia. Hazardous Chemical Information System. Australian Government, 2024.",chicago:"Safe Work Australia. Hazardous Chemical Information System. Canberra: Australian Government, 2024.",harvard:"Safe Work Australia (2024) Hazardous Chemical Information System. Canberra: Australian Government.",ieee:"Safe Work Australia, 'Hazardous Chemical Information System,' Australian Government, 2024. [Online]. Available: hcis.safeworkaustralia.gov.au"},
 {id:'swa-wes',num:14,title:"Safe Work Australia WES",apa:"Safe Work Australia. (2024). Workplace Exposure Standards for Airborne Contaminants. Australian Government. safeworkaustralia.gov.au",mla:"Safe Work Australia. Workplace Exposure Standards. Australian Government, 2024.",chicago:"Safe Work Australia. Workplace Exposure Standards. Canberra: Australian Government, 2024.",harvard:"Safe Work Australia (2024) Workplace Exposure Standards. Canberra: Australian Government.",ieee:"Safe Work Australia, 'Workplace Exposure Standards,' Australian Government, 2024."},
 {id:'nicnas',num:15,title:"NICNAS Legacy Data",apa:"NICNAS. (2020). National Industrial Chemicals Notification and Assessment Scheme (Legacy). Australian Government.",mla:"NICNAS. National Industrial Chemicals Notification and Assessment Scheme. Australian Government, 2020.",chicago:"NICNAS. National Industrial Chemicals Notification and Assessment Scheme. Canberra: Australian Government, 2020.",harvard:"NICNAS (2020) National Industrial Chemicals Notification and Assessment Scheme. Canberra: Australian Government.",ieee:"NICNAS, 'National Industrial Chemicals Notification and Assessment Scheme,' Australian Government, 2020."},
-{id:'adg',num:16,title:"Australian Dangerous Goods Code",apa:"National Transport Commission. (2024). Australian Dangerous Goods Code, 7.8 ed. NTC Australia.",mla:"National Transport Commission. Australian Dangerous Goods Code. 7.8 ed., NTC Australia, 2024.",chicago:"NTC. Australian Dangerous Goods Code. 7.8 ed. Melbourne: NTC Australia, 2024.",harvard:"NTC (2024) Australian Dangerous Goods Code. 7.8 edn. Melbourne: NTC Australia.",ieee:"NTC, Australian Dangerous Goods Code, 7.8 ed. NTC Australia, 2024."}
+{id:'adg',num:16,title:"Australian Dangerous Goods Code",apa:"National Transport Commission. (2024). Australian Dangerous Goods Code, 7.8 ed. NTC Australia.",mla:"National Transport Commission. Australian Dangerous Goods Code. 7.8 ed., NTC Australia, 2024.",chicago:"NTC. Australian Dangerous Goods Code. 7.8 ed. Melbourne: NTC Australia, 2024.",harvard:"NTC (2024) Australian Dangerous Goods Code. 7.8 edn. Melbourne: NTC Australia.",ieee:"NTC, Australian Dangerous Goods Code, 7.8 ed. NTC Australia, 2024."},
+{id:'astm-g31',num:17,title:"ASTM G31 Corrosion Testing",apa:"ASTM International. (2021). ASTM G31-21, Standard Guide for Laboratory Immersion Corrosion Testing. ASTM.",mla:"ASTM International. ASTM G31-21. ASTM, 2021.",chicago:"ASTM. ASTM G31-21. West Conshohocken: ASTM, 2021.",harvard:"ASTM (2021) ASTM G31-21. ASTM.",ieee:"ASTM, ASTM G31-21, ASTM, 2021."},
+{id:'asme-b73',num:18,title:"ASME B73.1 Chemical Pumps",apa:"ASME. (2022). ASME B73.1-2022, Specification for Horizontal End Suction Centrifugal Pumps. ASME.",mla:"ASME. ASME B73.1-2022. ASME, 2022.",chicago:"ASME. ASME B73.1-2022. New York: ASME, 2022.",harvard:"ASME (2022) ASME B73.1-2022. ASME.",ieee:"ASME, ASME B73.1-2022, ASME, 2022."},
+{id:'iso-21049',num:19,title:"ISO 21049 Mechanical Seals",apa:"ISO. (2018). ISO 21049:2018, Pumps - Shaft-sealing systems for centrifugal and rotary pumps. ISO.",mla:"ISO. ISO 21049:2018. ISO, 2018.",chicago:"ISO. ISO 21049:2018. Geneva: ISO, 2018.",harvard:"ISO (2018) ISO 21049:2018. ISO.",ieee:"ISO, ISO 21049:2018, ISO, 2018."},
+{id:'shell-dep',num:20,title:"Shell DEP Bitumen/Heavy Oil",apa:"Shell Global Solutions. (2020). Design and Engineering Practice for Bitumen and Heavy Oil Systems. Shell.",mla:"Shell Global Solutions. DEP Bitumen Systems. Shell, 2020.",chicago:"Shell. DEP Bitumen Systems. The Hague: Shell, 2020.",harvard:"Shell (2020) DEP Bitumen Systems. Shell.",ieee:"Shell, DEP Bitumen Systems, Shell, 2020."},
+{id:'astm-d4',num:21,title:"ASTM D4 Bitumen Penetration",apa:"ASTM International. (2023). ASTM D4-23, Standard Test Method for Bitumen Penetration. ASTM.",mla:"ASTM International. ASTM D4-23. ASTM, 2023.",chicago:"ASTM. ASTM D4-23. West Conshohocken: ASTM, 2023.",harvard:"ASTM (2023) ASTM D4-23. ASTM.",ieee:"ASTM, ASTM D4-23, ASTM, 2023."},
+{id:'api-rp14e',num:22,title:"API RP 14E Velocity Limits",apa:"API. (2020). API RP 14E, Recommended Practice for Design and Installation of Offshore Production Platform Piping Systems. API.",mla:"API. API RP 14E. 7th ed., API, 2020.",chicago:"API. API RP 14E. 7th ed. Washington: API, 2020.",harvard:"API (2020) API RP 14E. 7th edn. API.",ieee:"API, API RP 14E, 7th ed. API, 2020."}
 ];
 let curFluid='water',curTemp=20,selMats=['316SS','Carbon-Steel','PTFE','FKM'];
 var lastReynolds=null,lastCavitation=null,lastCalcData=null,docIdCounter=0;
@@ -4589,12 +4769,14 @@ allFluids.forEach(f=>{
 
 DOM.setText('fluidCount','('+allFluids.length+')');
 }
-function getH(k){if(k.startsWith('h2so4')||k.includes('oleum'))return'h2so4';if(k.startsWith('hcl'))return'hcl';if(k.startsWith('hno3'))return'hno3';if(k.startsWith('h3po4')||k.includes('phosphoric'))return'h3po4';if(k.startsWith('naoh'))return'naoh';if(k.startsWith('koh'))return'koh';if(k.startsWith('nh4oh'))return'nh4oh';if(k.includes('cyanide')||k.startsWith('nacn'))return'cyanide';if(k==='benzene')return'benzene';if(k==='toluene'||k==='xylene'||k==='styrene'||k==='ethylbenzene')return'toluene';if(k==='methanol')return'methanol';if(k.includes('ethylene-glycol'))return'ethylene-glycol';if(k.includes('hypochlorite'))return'hypochlorite';if(k.includes('h2o2')||k.includes('peracetic'))return'h2o2';if(k.includes('ferric'))return'h2so4';if(k==='diesel'||k.includes('fuel-oil')||k==='kerosene')return'diesel';if(k==='gasoline'||k==='naphtha')return'gasoline';if(k.includes('milk')||k.includes('cream')||k.includes('whey')||k.includes('condensed'))return'milk';if(k.includes('vegetable')||k.includes('olive')||k.includes('canola')||k.includes('coconut'))return'vegetable-oil';if(k.includes('glycerin')||k.includes('propylene-glycol'))return'glycerin';if(k.includes('sae')||k.includes('hydraulic')||k.includes('gear')||k.includes('turbine')||k.includes('compressor')||k.includes('transformer')||k.includes('silicone'))return'lubricants';if(k.includes('slurry')||k.includes('tailings')||k.includes('ore'))return'slurry';return null;}
-function getC(k,c){if(k==='water'||k==='seawater'||k==='process-water')return'water';if(k.startsWith('h2so4')){const n=parseInt(k.split('-')[1]);return n>=70?'sulfuric-conc':'sulfuric-dilute';}if(k.includes('oleum'))return'sulfuric-conc';if(k.startsWith('hcl'))return'hydrochloric';if(k.startsWith('hno3'))return'nitric';if(k.startsWith('h3po4')||k.includes('phosphoric'))return'phosphoric';if(k.startsWith('naoh')||k.startsWith('koh')||k.includes('lime'))return'caustic';if(k.startsWith('nh4oh')||k.includes('ammonia'))return'ammonia';if(k.includes('cyanide')||k.startsWith('nacn'))return'cyanide';if(c.includes('Petroleum')||k==='diesel'||k==='gasoline')return'petroleum';if(c.includes('Aromatic')||k==='benzene'||k==='toluene'||k==='xylene')return'aromatic';if(c.includes('Alcohol')||k.includes('ethanol')||k.includes('methanol'))return'alcohol';if(c.includes('Chlorinated'))return'chlorinated';if(c.includes('Slurr')||k.includes('slurry'))return'slurry';if(k.includes('h2o2')||k.includes('peracetic')||k.includes('hypochlorite'))return'oxidizer';if(c.includes('Food')||c.includes('Dairy')||c.includes('Sugar')||c.includes('Beverage'))return'food';if(c.includes('Glycol')||k.includes('glycol')||k.includes('glycerin'))return'glycol';return'water';}
+function getH(k){if(k.includes('bitumen')||k.includes('asphalt')||k.includes('tar-sand')||k.includes('dilbit')||k.includes('synbit')||k.includes('vacuum-residue')||k.includes('atmospheric-residue')||k.includes('heavy-crude')||k.includes('cutback'))return'bitumen';if(k.startsWith('h2so4')||k.includes('oleum'))return'h2so4';if(k.startsWith('hcl'))return'hcl';if(k.startsWith('hno3'))return'hno3';if(k.startsWith('h3po4')||k.includes('phosphoric'))return'h3po4';if(k.startsWith('naoh'))return'naoh';if(k.startsWith('koh'))return'koh';if(k.startsWith('nh4oh'))return'nh4oh';if(k.includes('cyanide')||k.startsWith('nacn'))return'cyanide';if(k==='benzene')return'benzene';if(k==='toluene'||k==='xylene'||k==='styrene'||k==='ethylbenzene')return'toluene';if(k==='methanol')return'methanol';if(k.includes('ethylene-glycol'))return'ethylene-glycol';if(k.includes('hypochlorite'))return'hypochlorite';if(k.includes('h2o2')||k.includes('peracetic'))return'h2o2';if(k.includes('ferric'))return'h2so4';if(k==='diesel'||k.includes('fuel-oil')||k==='kerosene')return'diesel';if(k==='gasoline'||k==='naphtha')return'gasoline';if(k.includes('milk')||k.includes('cream')||k.includes('whey')||k.includes('condensed'))return'milk';if(k.includes('vegetable')||k.includes('olive')||k.includes('canola')||k.includes('coconut'))return'vegetable-oil';if(k.includes('glycerin')||k.includes('propylene-glycol'))return'glycerin';if(k.includes('sae')||k.includes('hydraulic')||k.includes('gear')||k.includes('turbine')||k.includes('compressor')||k.includes('transformer')||k.includes('silicone'))return'lubricants';if(k.includes('slurry')||k.includes('tailings')||k.includes('ore'))return'slurry';return null;}
+function getC(k,c){if(k==='water'||k==='seawater'||k==='process-water')return'water';if(k.startsWith('h2so4')){const n=parseInt(k.split('-')[1]);return n>=70?'sulfuric-conc':'sulfuric-dilute';}if(k.includes('oleum'))return'sulfuric-conc';if(k.startsWith('hcl'))return'hydrochloric';if(k.startsWith('hno3'))return'nitric';if(k.startsWith('h3po4')||k.includes('phosphoric'))return'phosphoric';if(k.startsWith('naoh')||k.startsWith('koh')||k.includes('lime'))return'caustic';if(k.startsWith('nh4oh')||k.includes('ammonia'))return'ammonia';if(k.includes('cyanide')||k.startsWith('nacn'))return'cyanide';if(c.includes('Bitumen')||k.includes('bitumen')||k.includes('asphalt')||k.includes('dilbit')||k.includes('synbit')||k.includes('tar-sand')||k.includes('cutback')||k.includes('vacuum-residue')||k.includes('atmospheric-residue'))return'bitumen';if(c.includes('Petroleum')||k==='diesel'||k==='gasoline'||k.includes('heavy-crude'))return'petroleum';if(c.includes('Aromatic')||k==='benzene'||k==='toluene'||k==='xylene')return'aromatic';if(c.includes('Alcohol')||k.includes('ethanol')||k.includes('methanol'))return'alcohol';if(c.includes('Chlorinated'))return'chlorinated';if(c.includes('Slurr')||k.includes('slurry'))return'slurry';if(k.includes('h2o2')||k.includes('peracetic')||k.includes('hypochlorite'))return'oxidizer';if(c.includes('Food')||c.includes('Dairy')||c.includes('Sugar')||c.includes('Beverage'))return'food';if(c.includes('Glycol')||k.includes('glycol')||k.includes('glycerin'))return'glycol';return'water';}
 function getS(k,c){
 // V88: Escalate seal selection for ENERGETIC/OXIDIZER_ADJACENT fluids
 // Ammonium nitrate, nitrate solutions = require Oxidizer seals (leak-free priority)
 if(k.includes('ammonium-nitrate')||k.includes('nitrate'))return'Oxidizer';
+// V17.7: NCR-2026-008 - Bitumen/solidifying fluids require special seal handling
+if(k.includes('bitumen')||k.includes('asphalt')||k.includes('tar-sand')||k.includes('dilbit')||k.includes('synbit')||k.includes('vacuum-residue')||k.includes('atmospheric-residue')||k.includes('heavy-crude')||k.includes('cutback')||c.includes('Bitumen'))return'Solidifying';
 if(k.includes('cyanide')||k.startsWith('nacn'))return'Toxic';if(k==='benzene'||k==='gasoline'||k==='naphtha'||c.includes('Aromatic'))return'Flammable';if(k.startsWith('h2so4')||k.startsWith('hcl')||k.startsWith('hno3')||k.startsWith('h3po4')||k.includes('oleum'))return'Corrosive';if(k.startsWith('naoh')||k.startsWith('koh')||k.includes('lime'))return'Corrosive';if(k.includes('h2o2')||k.includes('hypochlorite')||k.includes('peracetic'))return'Oxidizer';if(c.includes('Slurr')||k.includes('slurry'))return'Slurry';if(c.includes('Food')||c.includes('Dairy')||c.includes('Sugar')||c.includes('Beverage'))return'Food';if(c.includes('Petroleum')&&!k.includes('gasoline'))return'Flammable';return'General';}
 
 // ============================================================
@@ -5748,6 +5930,10 @@ gateResults.conditional.forEach(r=>{
 allRationales=[...new Set(allRationales.filter(r=>r))];
 
 let h='<div class="results" style="position:relative">';
+
+// V17.6 F2-001: Prominent Warning Banner - Parliament Session 13 Mandate
+h+='<div class="results-warning-banner"><div class="icon">⚠️</div><div class="title">SCREENING RESULTS ONLY - NOT A CERTIFICATION</div><div class="text">These results are for preliminary assessment only. Professional verification, corrosion testing, and manufacturer approval are required before implementation.</div></div>';
+
 // V81: Generate Assessment ID and display in top-right corner
 var now=new Date();var yr=now.getFullYear();var mo=String(now.getMonth()+1).padStart(2,'0');var dy=String(now.getDate()).padStart(2,'0');
 // V16.1 FIX: Deterministic docId fallback per V15 §2.1
@@ -5878,9 +6064,21 @@ function exportAuditTrail() {
   URL.revokeObjectURL(url);
 }
 function getFluidRefs(fk,c){var refs=[1,2,3];if(fk.startsWith('h2so4')||fk.startsWith('hcl')||fk.startsWith('hno3')||fk.startsWith('h3po4')||fk.includes('naoh')||fk.includes('koh'))refs.push(9,10);if(c.includes('Petroleum')||c.includes('Aromatic'))refs.push(4,5);if(fk.includes('cyanide')||c.includes('Mining'))refs.push(9,10);if(c.includes('Food'))refs.push(6,7);refs.push(6,7,8,9,10,11,12,13,14,15,16);return[...new Set(refs)].sort((a,b)=>a-b);}
+// PDF Translation Labels
+var PDF_I18N={
+en:{fluidProps:'Fluid Properties',viscTemp:'Viscosity-Temperature Data',lifecycle:'Material Lifecycle Analysis',matCompat:'Material Compatibility',sealRec:'Seal Recommendations',hazards:'Chemical Hazards',reynolds:'Reynolds Number Analysis',cavitation:'Cavitation Risk Assessment',references:'Reference List',tempC:'Temp (°C)',sg:'Specific Gravity',visc:'Viscosity (cP)',material:'Material',rating:'Rating',corrRate:'Corrosion Rate',serviceLife:'Service Life',tco:'10-Year TCO',excellent:'Excellent Compatibility',good:'Good Compatibility',notRec:'Not Recommended',assumptions:'Assumptions',recommendation:'Recommendation',elastomers:'Sealing & Elastomer Materials',failMode:'Failure Mode',inspection:'Inspection',strategy:'Strategy',disclaimer:'SCREENING TOOL ONLY - Results do not replace material qualification, corrosion testing, or manufacturer approval',generated:'Generated',checksum:'Checksum',document:'Document',regime:'Chemical Regime',sealState:'Seal State',materials:'Materials',temperature:'Temperature'},
+es:{fluidProps:'Propiedades del Fluido',viscTemp:'Datos Viscosidad-Temperatura',lifecycle:'Análisis de Ciclo de Vida',matCompat:'Compatibilidad de Materiales',sealRec:'Recomendaciones de Sellos',hazards:'Peligros Químicos',reynolds:'Análisis de Reynolds',cavitation:'Evaluación de Cavitación',references:'Referencias',tempC:'Temp (°C)',sg:'Gravedad Específica',visc:'Viscosidad (cP)',material:'Material',rating:'Clasificación',corrRate:'Tasa de Corrosión',serviceLife:'Vida Útil',tco:'TCO 10 Años',excellent:'Excelente Compatibilidad',good:'Buena Compatibilidad',notRec:'No Recomendado',assumptions:'Supuestos',recommendation:'Recomendación',elastomers:'Materiales Elastoméricos',failMode:'Modo de Falla',inspection:'Inspección',strategy:'Estrategia',disclaimer:'SOLO HERRAMIENTA DE EVALUACIÓN - Los resultados no reemplazan la calificación de materiales ni pruebas de corrosión',generated:'Generado',checksum:'Suma de verificación',document:'Documento',regime:'Régimen Químico',sealState:'Estado de Sello',materials:'Materiales',temperature:'Temperatura'},
+zh:{fluidProps:'流体特性',viscTemp:'粘度-温度数据',lifecycle:'材料生命周期分析',matCompat:'材料兼容性',sealRec:'密封推荐',hazards:'化学危害',reynolds:'雷诺数分析',cavitation:'汽蚀风险评估',references:'参考文献',tempC:'温度(°C)',sg:'比重',visc:'粘度(cP)',material:'材料',rating:'评级',corrRate:'腐蚀率',serviceLife:'使用寿命',tco:'10年总成本',excellent:'优秀兼容性',good:'良好兼容性',notRec:'不推荐',assumptions:'假设条件',recommendation:'推荐',elastomers:'密封弹性体材料',failMode:'失效模式',inspection:'检查',strategy:'策略',disclaimer:'仅供筛选 - 结果不能替代材料鉴定或腐蚀测试',generated:'生成时间',checksum:'校验和',document:'文档',regime:'化学环境',sealState:'密封状态',materials:'材料',temperature:'温度'},
+de:{fluidProps:'Fluideigenschaften',viscTemp:'Viskosität-Temperatur-Daten',lifecycle:'Material-Lebenszyklusanalyse',matCompat:'Materialverträglichkeit',sealRec:'Dichtungsempfehlungen',hazards:'Chemische Gefahren',reynolds:'Reynolds-Analyse',cavitation:'Kavitationsbewertung',references:'Referenzen',tempC:'Temp (°C)',sg:'Spez. Gewicht',visc:'Viskosität (cP)',material:'Material',rating:'Bewertung',corrRate:'Korrosionsrate',serviceLife:'Lebensdauer',tco:'10-Jahres-TCO',excellent:'Ausgezeichnete Verträglichkeit',good:'Gute Verträglichkeit',notRec:'Nicht empfohlen',assumptions:'Annahmen',recommendation:'Empfehlung',elastomers:'Dichtungsmaterialien',failMode:'Versagensart',inspection:'Inspektion',strategy:'Strategie',disclaimer:'NUR SCREENING - Ergebnisse ersetzen keine Materialqualifikation oder Korrosionstests',generated:'Erstellt',checksum:'Prüfsumme',document:'Dokument',regime:'Chemisches Regime',sealState:'Dichtungszustand',materials:'Materialien',temperature:'Temperatur'},
+ar:{fluidProps:'خصائص السائل',viscTemp:'بيانات اللزوجة-الحرارة',lifecycle:'تحليل دورة حياة المواد',matCompat:'توافق المواد',sealRec:'توصيات الحشوات',hazards:'المخاطر الكيميائية',reynolds:'تحليل رينولدز',cavitation:'تقييم التكهف',references:'المراجع',tempC:'الحرارة (°C)',sg:'الثقل النوعي',visc:'اللزوجة (cP)',material:'المادة',rating:'التصنيف',corrRate:'معدل التآكل',serviceLife:'العمر الافتراضي',tco:'التكلفة 10 سنوات',excellent:'توافق ممتاز',good:'توافق جيد',notRec:'غير موصى به',assumptions:'الافتراضات',recommendation:'التوصية',elastomers:'مواد الحشوات المطاطية',failMode:'نمط الفشل',inspection:'الفحص',strategy:'الاستراتيجية',disclaimer:'أداة فحص فقط - النتائج لا تحل محل اختبارات التآكل',generated:'تم الإنشاء',checksum:'المجموع الاختباري',document:'المستند',regime:'النظام الكيميائي',sealState:'حالة الحشو',materials:'المواد',temperature:'الحرارة'}
+};
 function printPDF(){
 // V16.2 HARDENING: P1-A - Add try-catch wrapper (Agent 3: Safety & Compliance)
 try {
+// Get current language for PDF
+var pdfLang=curLang||'en';
+var L=PDF_I18N[pdfLang]||PDF_I18N.en;
+var isRTL=pdfLang==='ar';
 // ═══════════════════════════════════════════════════════════════════════════
 // V15.2 CRITICAL FIX: §14.1 UI = PDF Rule
 // PDF must render from the same FAO snapshot - NO recalculation
@@ -5973,7 +6171,7 @@ fair:(cpRaw.fair||[]).filter(function(m){return !pdfFailedIds.includes(m);}),
 poor:[...(cpRaw.poor||[]),...pdfFailedIds.filter(function(m){return !(cpRaw.poor||[]).includes(m);})]
 };
 var css='@page{size:A4;margin:12mm 15mm 20mm 15mm}@font-face{font-family:Inter;src:local("Inter")}*{margin:0;padding:0;box-sizing:border-box}body{font-family:"Inter",Arial,Helvetica,sans-serif;padding:0;color:#1a1a2e;font-size:9px;line-height:1.4;background:#fff}.doc-header{background:linear-gradient(135deg,#1e3a5f 0%,#0f172a 100%);color:white;padding:15px 20px;margin:-12mm -15mm 15px -15mm;width:calc(100% + 30mm)}.doc-header-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}.doc-logo{font-size:18px;font-weight:700;letter-spacing:1px}.doc-logo span{color:#60a5fa}.doc-id{text-align:right;font-size:8px;opacity:0.9}.doc-title{font-size:14px;font-weight:600;margin:8px 0 4px}.doc-subtitle{font-size:9px;opacity:0.8}.summary-bar{display:flex;gap:10px;margin:15px 0;padding:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px}.summary-item{flex:1;text-align:center;padding:8px;border-radius:4px}.summary-item.temp{background:#eff6ff;border:1px solid #3b82f6}.summary-item.regime{border:2px solid}.summary-item.seal{background:#f0fdf4;border:1px solid #22c55e}.summary-item.mats{background:#fefce8;border:1px solid #eab308}.summary-label{font-size:7px;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px}.summary-value{font-size:12px;font-weight:700;font-family:"JetBrains Mono","Consolas",monospace}.regime-banner{padding:12px 15px;border-radius:6px;margin:12px 0;text-align:center;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:1px}.regime-banner.explosive{background:linear-gradient(135deg,#7f1d1d,#dc2626);color:#fecaca;border:2px solid #ef4444}.regime-banner.oxidizing{background:linear-gradient(135deg,#7c2d12,#ea580c);color:#fed7aa;border:2px solid #f97316}.regime-banner.fluoride{background:linear-gradient(135deg,#581c87,#9333ea);color:#e9d5ff;border:2px solid #a855f7}.regime-banner.acid{background:linear-gradient(135deg,#991b1b,#dc2626);color:#fecaca;border:2px solid #ef4444}.regime-banner.base{background:linear-gradient(135deg,#1e3a8a,#3b82f6);color:#dbeafe;border:2px solid #60a5fa}.regime-banner.neutral{background:linear-gradient(135deg,#14532d,#22c55e);color:#dcfce7;border:2px solid #4ade80}.regime-banner.unknown{background:#374151;color:#e5e7eb;border:2px solid #6b7280}h1{color:#1e3a5f;font-size:13px;font-weight:600;border-bottom:2px solid #3b82f6;padding-bottom:4px;margin:15px 0 8px;page-break-after:avoid}h2{color:#1e3a5f;font-size:10px;font-weight:600;margin:12px 0 6px;padding:6px 10px;background:linear-gradient(90deg,#eff6ff,#fff);border-left:3px solid #3b82f6;border-radius:0 4px 4px 0;page-break-after:avoid}.info-row{display:flex;gap:10px;margin-bottom:10px}.info-box{flex:1;padding:8px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:4px}.info-label{font-size:7px;color:#64748b;text-transform:uppercase;letter-spacing:0.5px}.info-value{font-size:11px;font-weight:600;color:#1e3a5f;font-family:"JetBrains Mono","Consolas",monospace}.props{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}.prop{background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:10px;text-align:center;box-shadow:0 1px 2px rgba(0,0,0,0.05)}.prop-label{font-size:7px;color:#64748b;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:3px}.prop-value{font-size:13px;font-weight:700;color:#1e3a5f;font-family:"JetBrains Mono","Consolas",monospace}.prop-unit{font-size:7px;color:#94a3b8;margin-top:2px}.mat-table{width:100%;border-collapse:collapse;margin:8px 0;font-size:8px}.mat-table th{background:#1e3a5f;color:white;padding:6px 8px;text-align:left;font-weight:600;font-size:7px;text-transform:uppercase}.mat-table td{padding:5px 8px;border-bottom:1px solid #e2e8f0}.mat-table tr:nth-child(even){background:#f8fafc}.mat-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:7px;font-weight:700}.mat-badge.pass{background:#dcfce7;color:#166534;border:1px solid #22c55e}.mat-badge.cond{background:#fef3c7;color:#92400e;border:1px solid #f59e0b}.mat-badge.fail{background:#fee2e2;color:#991b1b;border:1px solid #ef4444}.cg{margin:8px 0;padding:8px;background:#f8fafc;border-radius:4px}.ct{font-weight:600;font-size:9px;padding:4px 10px;border-radius:4px;margin-bottom:6px;display:inline-block}.ct.e{background:#dcfce7;color:#166534;border:1px solid #22c55e}.ct.g{background:#dbeafe;color:#1e40af;border:1px solid #3b82f6}.ct.p{background:#fee2e2;color:#991b1b;border:1px solid #ef4444}.cl{display:flex;flex-wrap:wrap;gap:4px}.ci{padding:3px 8px;border-radius:4px;font-size:8px;font-weight:500}.ci.e{background:#f0fdf4;border:1px solid #86efac;color:#166534}.ci.g{background:#eff6ff;border:1px solid #93c5fd;color:#1e40af}.ci.p{background:#fef2f2;border:1px solid #fca5a5;color:#991b1b}.seal{border:1px solid #e2e8f0;border-radius:6px;padding:10px;margin:8px 0;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.05)}.seal.sl{border-left:4px solid #22c55e;background:#f0fdf4}.seal.cr{border-left:4px solid #ef4444;background:#fef2f2}.st{font-weight:700;font-size:10px;color:#1e3a5f;margin-bottom:4px}.sp{color:#64748b;font-size:8px;margin-bottom:6px}.hz{padding:12px;border-radius:6px;margin:10px 0;page-break-inside:avoid}.hz.d{background:#fef2f2;border:2px solid #ef4444}.hz.w{background:#fffbeb;border:2px solid #f59e0b}.sig{font-size:14px;font-weight:700;text-align:center;margin-bottom:8px;padding:8px;border-radius:4px}.hz.d .sig{background:#dc2626;color:white}.hz.w .sig{background:#f59e0b;color:white}.hs{margin:8px 0}.hs h4{font-size:8px;font-weight:600;color:#374151;margin-bottom:4px;text-transform:uppercase}.hl{list-style:none;padding:0}.hl li{padding:3px 0;border-bottom:1px solid #f3f4f6;font-size:8px}.ppe{display:flex;flex-wrap:wrap;gap:4px}.pi{background:#dbeafe;padding:3px 8px;border-radius:4px;font-size:8px;color:#1e40af}.fa{background:#dcfce7;padding:8px;border-radius:4px;font-size:8px;color:#166534}.dp{background:#f3f4f6;padding:8px;border-radius:4px;font-size:8px;color:#374151}.exp-lim{display:flex;gap:10px;margin:8px 0}.exp-box{flex:1;padding:8px;border-radius:4px;text-align:center}.twa-box{background:#1e3a5f;color:#e2e8f0;border:1px solid #3b82f6}.stel-box{background:#581c87;color:#e2e8f0;border:1px solid #9333ea}.refs{margin-top:15px;padding:10px;background:#f8fafc;border-radius:4px;border:1px solid #e2e8f0}.refs h2{margin:0 0 8px;background:none;border:none;padding:0}.ref{font-size:7px;color:#64748b;margin:3px 0;padding-left:10px;text-indent:-10px}.doc-footer{position:fixed;bottom:0;left:0;right:0;background:#f8fafc;border-top:2px solid #1e3a5f;padding:8px 15mm;font-size:7px;display:flex;justify-content:space-between}.footer-left{color:#64748b}.footer-center{color:#dc2626;font-weight:600;text-align:center;flex:1}.footer-right{color:#64748b;text-align:right}.conf-pdf{display:inline-block;padding:2px 6px;border-radius:3px;font-size:7px;font-weight:600;margin-left:4px;font-family:"JetBrains Mono",monospace}.conf-pdf.vh{background:#064e3b;color:#6ee7b7}.conf-pdf.hi{background:#1e3a5f;color:#7dd3fc}.conf-pdf.md{background:#78350f;color:#fcd34d}.conf-pdf.lo{background:#7f1d1d;color:#fca5a5}.conf-note{font-size:7px;color:#64748b;font-style:italic;margin:6px 0;padding:6px;background:#f8fafc;border-radius:4px;border-left:2px solid #3b82f6}.warning-box{background:#fef2f2;border:2px solid #dc2626;border-radius:6px;padding:10px;margin:10px 0}.warning-title{font-weight:700;color:#991b1b;font-size:9px;margin-bottom:4px}.warning-text{color:#7f1d1d;font-size:8px}@media print{body{padding:0}.doc-footer{position:fixed}tr{page-break-inside:avoid}.regime-banner{-webkit-print-color-adjust:exact;print-color-adjust:exact}}';
-var h='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+fl.n+' - CERTA Assessment Report</title><style>'+css+'</style></head><body style="font-family:Arial,sans-serif;font-size:10px;line-height:1.4;color:#111;padding:20px;max-width:800px;margin:0 auto">';
+var h='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+fl.n+' - CERTA Assessment Report</title><style>'+css+'</style></head><body style="font-family:Arial,sans-serif;font-size:10px;line-height:1.4;color:#111;padding:20px;max-width:800px;margin:0 auto;direction:'+(isRTL?'rtl':'ltr')+';text-align:'+(isRTL?'right':'left')+'">';
 // Generate document ID early for header
 var now=new Date();var yr=now.getFullYear();var mo=String(now.getMonth()+1).padStart(2,'0');var dy=String(now.getDate()).padStart(2,'0');
 try{var storedId=localStorage.getItem('certaDocId_'+yr+mo+dy);docIdCounter=storedId?parseInt(storedId)+1:1;localStorage.setItem('certaDocId_'+yr+mo+dy,docIdCounter);}catch(e){var hashVal=0;var hashStr=pdfChecksum||fk+tC;for(var i=0;i<hashStr.length;i++){hashVal=((hashVal<<5)-hashVal)+hashStr.charCodeAt(i);hashVal=hashVal&hashVal;}docIdCounter=Math.abs(hashVal%99999)+1;}
@@ -5992,20 +6190,20 @@ var regimeColor=regimeColors[pdfRegimeClass];
 // Professional Header with inline styles
 h+='<div style="background:#1e3a5f;color:white;padding:20px;margin:-20px -20px 20px -20px">';
 h+='<table style="width:100%;border:none"><tr><td style="vertical-align:top"><div style="font-size:24px;font-weight:bold;letter-spacing:1px">CERTA</div><div style="font-size:10px;opacity:0.8">Industrial Fluid Assessment Platform</div></td>';
-h+='<td style="text-align:right;vertical-align:top;font-size:9px"><div>Document: <b>'+docId+'</b></div><div>'+now.toLocaleDateString()+' '+now.toLocaleTimeString()+'</div><div style="margin-top:5px">Policy V16.5.2 | FAO ✓</div></td></tr></table>';
+h+='<td style="text-align:right;vertical-align:top;font-size:9px"><div>'+L.document+': <b>'+docId+'</b></div><div>'+now.toLocaleDateString()+' '+now.toLocaleTimeString()+'</div><div style="margin-top:5px">Policy V16.8 | FAO ✓</div></td></tr></table>';
 h+='<div style="margin-top:15px;font-size:18px;font-weight:bold">'+fl.n+'</div>';
 h+='<div style="font-size:10px;opacity:0.8">'+fl.c+'</div></div>';
 // Regime Banner with inline color
-h+='<div style="background:'+regimeColor+';color:white;padding:12px;text-align:center;font-weight:bold;font-size:12px;margin-bottom:15px;border-radius:4px">⚠️ CHEMICAL REGIME: '+pdfRegimeText.replace(/_/g,' ')+'</div>';
+h+='<div style="background:'+regimeColor+';color:white;padding:12px;text-align:center;font-weight:bold;font-size:12px;margin-bottom:15px;border-radius:4px">⚠️ '+L.regime+': '+pdfRegimeText.replace(/_/g,' ')+'</div>';
 // Executive Summary Table
 var matPass=cp.excellent?cp.excellent.length:0;
 var matCond=cp.good?cp.good.length:0;
 var matFail=cp.poor?cp.poor.length:0;
 h+='<table style="width:100%;border-collapse:collapse;margin-bottom:15px"><tr>';
-h+='<td style="width:25%;text-align:center;padding:10px;background:#eff6ff;border:1px solid #3b82f6"><div style="font-size:8px;color:#64748b;text-transform:uppercase">Temperature</div><div style="font-size:16px;font-weight:bold;color:#1e3a5f">'+safeToFixed(tC,1,'0')+' °C</div></td>';
-h+='<td style="width:25%;text-align:center;padding:10px;border:2px solid '+regimeColor+'"><div style="font-size:8px;color:#64748b;text-transform:uppercase">Regime</div><div style="font-size:11px;font-weight:bold;color:'+regimeColor+'">'+pdfRegimeText.replace(/_/g,' ').substring(0,15)+'</div></td>';
-h+='<td style="width:25%;text-align:center;padding:10px;background:#f0fdf4;border:1px solid #22c55e"><div style="font-size:8px;color:#64748b;text-transform:uppercase">Seal State</div><div style="font-size:11px;font-weight:bold;color:#166534">'+(_currentFAO.sealEligibilityState||'N/A').replace(/_/g,' ').substring(0,12)+'</div></td>';
-h+='<td style="width:25%;text-align:center;padding:10px;background:#fefce8;border:1px solid #eab308"><div style="font-size:8px;color:#64748b;text-transform:uppercase">Materials</div><div style="font-size:16px;font-weight:bold;color:#854d0e">'+matPass+'P '+matCond+'C '+matFail+'F</div></td>';
+h+='<td style="width:25%;text-align:center;padding:10px;background:#eff6ff;border:1px solid #3b82f6"><div style="font-size:8px;color:#64748b;text-transform:uppercase">'+L.temperature+'</div><div style="font-size:16px;font-weight:bold;color:#1e3a5f">'+safeToFixed(tC,1,'0')+' °C</div></td>';
+h+='<td style="width:25%;text-align:center;padding:10px;border:2px solid '+regimeColor+'"><div style="font-size:8px;color:#64748b;text-transform:uppercase">'+L.regime+'</div><div style="font-size:11px;font-weight:bold;color:'+regimeColor+'">'+pdfRegimeText.replace(/_/g,' ').substring(0,15)+'</div></td>';
+h+='<td style="width:25%;text-align:center;padding:10px;background:#f0fdf4;border:1px solid #22c55e"><div style="font-size:8px;color:#64748b;text-transform:uppercase">'+L.sealState+'</div><div style="font-size:11px;font-weight:bold;color:#166534">'+(_currentFAO.sealEligibilityState||'N/A').replace(/_/g,' ').substring(0,12)+'</div></td>';
+h+='<td style="width:25%;text-align:center;padding:10px;background:#fefce8;border:1px solid #eab308"><div style="font-size:8px;color:#64748b;text-transform:uppercase">'+L.materials+'</div><div style="font-size:16px;font-weight:bold;color:#854d0e">'+matPass+'P '+matCond+'C '+matFail+'F</div></td>';
 h+='</tr></table>';
 // FAO Verification
 h+='<div style="background:#ecfdf5;border:1px solid #10b981;padding:8px;text-align:center;font-size:8px;color:#065f46;margin-bottom:15px;border-radius:4px">✅ V15 §14.1 VERIFIED | RunID: '+_currentFAO.runId+' | Checksum: '+pdfChecksum+'</div>';
@@ -6044,14 +6242,14 @@ h+='<span style="color:#fcd34d;font-size:8px">'+pdfGateResults.conditional.map(f
 h+='</div>';}
 h+='<div style="font-size:7px;color:#c7d2fe;margin-top:6px">Material arrays modified to reflect gate results. Verify specialist constraints in your application.</div>';
 h+='</div>';}
-h+='<h2>📊 Fluid Properties</h2>';
-h+='<div class="props"><div class="prop"><div class="prop-label">Specific Gravity</div><div class="prop-value">'+safeToFixed(pr.sg, 4, '0')+'</div><div class="prop-unit">relative to water</div></div>';
-h+='<div class="prop"><div class="prop-label">Dynamic Viscosity</div><div class="prop-value">'+safeToFixed(pr.visc, 3, '0')+'</div><div class="prop-unit">cP (mPa·s)</div></div>';
+h+='<h2>📊 '+L.fluidProps+'</h2>';
+h+='<div class="props"><div class="prop"><div class="prop-label">'+L.sg+'</div><div class="prop-value">'+safeToFixed(pr.sg, 4, '0')+'</div><div class="prop-unit">relative to water</div></div>';
+h+='<div class="prop"><div class="prop-label">'+L.visc.replace(' (cP)','')+'</div><div class="prop-value">'+safeToFixed(pr.visc, 3, '0')+'</div><div class="prop-unit">cP (mPa·s)</div></div>';
 h+='<div class="prop"><div class="prop-label">Density</div><div class="prop-value">'+safeToFixed(dens, 2, '0')+'</div><div class="prop-unit">kg/m³</div></div>';
 h+='<div class="prop"><div class="prop-label">Kinematic Viscosity</div><div class="prop-value">'+safeToFixed(kv, 3, '0')+'</div><div class="prop-unit">cSt (mm²/s)</div></div></div>';
 if(pr.ex)h+='<div style="background:#fef3c7;border:1px solid #f59e0b;padding:6px;border-radius:4px;margin:8px 0;font-size:9px">⚠️ Temperature outside data range - values extrapolated</div>';
-h+='<h2 style="color:#1e3a5f;font-size:12px;border-bottom:2px solid #3b82f6;padding-bottom:5px;margin:15px 0 10px">📈 Viscosity-Temperature Data</h2>';
-h+='<table style="width:100%;border-collapse:collapse;margin-bottom:15px"><thead><tr><th style="background:#1e3a5f;color:white;padding:8px;text-align:center;border:1px solid #334155">Temp (°C)</th><th style="background:#1e3a5f;color:white;padding:8px;text-align:center;border:1px solid #334155">Specific Gravity</th><th style="background:#1e3a5f;color:white;padding:8px;text-align:center;border:1px solid #334155">Viscosity (cP)</th></tr></thead><tbody>';
+h+='<h2 style="color:#1e3a5f;font-size:12px;border-bottom:2px solid #3b82f6;padding-bottom:5px;margin:15px 0 10px">📈 '+L.viscTemp+'</h2>';
+h+='<table style="width:100%;border-collapse:collapse;margin-bottom:15px"><thead><tr><th style="background:#1e3a5f;color:white;padding:8px;text-align:center;border:1px solid #334155">'+L.tempC+'</th><th style="background:#1e3a5f;color:white;padding:8px;text-align:center;border:1px solid #334155">'+L.sg+'</th><th style="background:#1e3a5f;color:white;padding:8px;text-align:center;border:1px solid #334155">'+L.visc+'</th></tr></thead><tbody>';
 fl.d.forEach(function(d){var isCurrent=Math.abs(d[0]-tC)<5;h+='<tr style="background:'+(isCurrent?'#fef3c7':'#fff')+'"><td style="padding:6px;text-align:center;border:1px solid #e5e7eb">'+d[0]+'</td><td style="padding:6px;text-align:center;border:1px solid #e5e7eb">'+safeToFixed(d[1], 4, '0')+'</td><td style="padding:6px;text-align:center;border:1px solid #e5e7eb;font-weight:'+(isCurrent?'bold':'normal')+'">'+safeToFixed(d[2], 3, '0')+'</td></tr>';});
 h+='</tbody></table>';
 
@@ -6068,7 +6266,7 @@ if (pdfSuppressTCORegimes.includes(pdfRegime)) {
   h+='Material selection must prioritize safety and containment over economics.</div></div>';
 } else {
 // BEGIN NORMAL TCO ANALYSIS
-h+='<h2 style="color:#1e3a5f;font-size:12px;border-bottom:2px solid #3b82f6;padding-bottom:5px;margin:15px 0 10px">📊 Material Lifecycle Analysis</h2>';
+h+='<h2 style="color:#1e3a5f;font-size:12px;border-bottom:2px solid #3b82f6;padding-bottom:5px;margin:15px 0 10px">📊 '+L.lifecycle+'</h2>';
 // Use Fluid Behavior Profile for consistent chemistry classification in PDF
 var pdfProfile=getFluidBehaviorProfile(fk,tC);
 var pdfFlags=pdfProfile.flags;
@@ -6083,8 +6281,8 @@ var pdfIsAnyOxidizer=pdfIsStrongOx||pdfIsOxidizerAdjacent||pdfIsEnergetic;
 var pdfSevereChemistry=(pdfIsStrongOx||pdfIsDehydrating)&&tC>=40;
 var pdfUseRobustness=pdfSevereChemistry;
 var pdfModeLabel=pdfIsDehydrating?'Concentrated H₂SO₄/Dehydrating':pdfIsStrongOx?'Strong Oxidizer':pdfIsPhosphoricAcid?'Phosphoric Acid':'Reactive Chemistry';
-h+='<div style="background:#f8fafc;border:1px solid #e2e8f0;padding:8px;border-radius:4px;margin-bottom:10px;font-size:8px"><strong>Assumptions:</strong> Velocity 2-3 m/s | Temp '+safeToFixed(tC, 0, '0')+'°C | Standard concentration | Corrosion rates mid-range [9,10] | Labor $500/m²'+(pdfUseRobustness?' | <strong style="color:#c2410c">⚠️ '+pdfModeLabel.toUpperCase()+' MODE</strong>':'')+'</div>';
-h+='<table style="width:100%;border-collapse:collapse;margin-bottom:15px"><thead><tr><th style="background:#1e3a5f;color:white;padding:6px;text-align:left;border:1px solid #334155;font-size:9px">Material</th><th style="background:#1e3a5f;color:white;padding:6px;text-align:center;border:1px solid #334155;font-size:9px">Rating</th><th style="background:#1e3a5f;color:white;padding:6px;text-align:center;border:1px solid #334155;font-size:9px">Corrosion Rate</th><th style="background:#1e3a5f;color:white;padding:6px;text-align:center;border:1px solid #334155;font-size:9px">Service Life</th><th style="background:#1e3a5f;color:white;padding:6px;text-align:center;border:1px solid #334155;font-size:9px">'+(pdfUseRobustness?'Robustness':'10-Year TCO')+'</th></tr></thead><tbody>';
+h+='<div style="background:#f8fafc;border:1px solid #e2e8f0;padding:8px;border-radius:4px;margin-bottom:10px;font-size:8px"><strong>'+L.assumptions+':</strong> Velocity 2-3 m/s | Temp '+safeToFixed(tC, 0, '0')+'°C | Standard concentration | Corrosion rates mid-range [9,10] | Labor $500/m²'+(pdfUseRobustness?' | <strong style="color:#c2410c">⚠️ '+pdfModeLabel.toUpperCase()+' MODE</strong>':'')+'</div>';
+h+='<table style="width:100%;border-collapse:collapse;margin-bottom:15px"><thead><tr><th style="background:#1e3a5f;color:white;padding:6px;text-align:left;border:1px solid #334155;font-size:9px">'+L.material+'</th><th style="background:#1e3a5f;color:white;padding:6px;text-align:center;border:1px solid #334155;font-size:9px">'+L.rating+'</th><th style="background:#1e3a5f;color:white;padding:6px;text-align:center;border:1px solid #334155;font-size:9px">'+L.corrRate+'</th><th style="background:#1e3a5f;color:white;padding:6px;text-align:center;border:1px solid #334155;font-size:9px">'+L.serviceLife+'</th><th style="background:#1e3a5f;color:white;padding:6px;text-align:center;border:1px solid #334155;font-size:9px">'+(pdfUseRobustness?'Robustness':L.tco)+'</th></tr></thead><tbody>';
 var bestTCO=Infinity,bestRob=0,results=[],elastomerResults=[];
 var elastomerIds=['FKM','EPDM','NBR','Kalrez','Neoprene','Silicone'];
 // V85: Track excluded materials for display
@@ -6188,9 +6386,9 @@ h+='<tr style="background:'+rowBg+'"><td style="padding:5px;border:1px solid #e5
 h+='</tbody></table>';
 // V6.2: Separate elastomer/sealing materials table (no fake service life!)
 if(elastomerResults.length>0){
-h+='<div style="margin-top:15px;font-weight:bold;font-size:10px;color:#7c3aed">🔩 Sealing & Elastomer Materials</div>';
+h+='<div style="margin-top:15px;font-weight:bold;font-size:10px;color:#7c3aed">🔩 '+L.elastomers+'</div>';
 h+='<div style="background:#f3e8ff;padding:6px;border-radius:4px;margin:6px 0;font-size:8px;color:#581c87;border:1px solid #c4b5fd">Note: Elastomers fail by swelling, hardening, and permeation — not corrosion. Inspection intervals shown, not service life.</div>';
-h+='<table style="width:100%;border-collapse:collapse;margin-bottom:15px"><thead><tr><th style="background:#581c87;color:white;padding:6px;text-align:left;border:1px solid #7c3aed;font-size:9px">Material</th><th style="background:#581c87;color:white;padding:6px;text-align:center;border:1px solid #7c3aed;font-size:9px">Rating</th><th style="background:#581c87;color:white;padding:6px;text-align:center;border:1px solid #7c3aed;font-size:9px">Failure Mode</th><th style="background:#581c87;color:white;padding:6px;text-align:center;border:1px solid #7c3aed;font-size:9px">Inspection</th><th style="background:#581c87;color:white;padding:6px;text-align:center;border:1px solid #7c3aed;font-size:9px">Strategy</th></tr></thead><tbody>';
+h+='<table style="width:100%;border-collapse:collapse;margin-bottom:15px"><thead><tr><th style="background:#581c87;color:white;padding:6px;text-align:left;border:1px solid #7c3aed;font-size:9px">'+L.material+'</th><th style="background:#581c87;color:white;padding:6px;text-align:center;border:1px solid #7c3aed;font-size:9px">'+L.rating+'</th><th style="background:#581c87;color:white;padding:6px;text-align:center;border:1px solid #7c3aed;font-size:9px">'+L.failMode+'</th><th style="background:#581c87;color:white;padding:6px;text-align:center;border:1px solid #7c3aed;font-size:9px">'+L.inspection+'</th><th style="background:#581c87;color:white;padding:6px;text-align:center;border:1px solid #7c3aed;font-size:9px">'+L.strategy+'</th></tr></thead><tbody>';
 elastomerResults.forEach(function(r){
 // V16.3 REC-H1: Use pdfIsAnyOxidizer for broader oxidizer/energetic coverage
 var failMode=(pdfIsAnyOxidizer||pdfIsDehydrating)?'Oxidative aging':'Chemical swelling';
@@ -6239,12 +6437,12 @@ h+='<div class="rec-box"><div class="rec-title">✓ Recommendation</div>'+best.n
 }}}
 // V16.3 REC-C3: Close TCO suppression else block
 }
-h+='<h2 style="color:#1e3a5f;font-size:12px;border-bottom:2px solid #3b82f6;padding-bottom:5px;margin:15px 0 10px">🔧 Material Compatibility</h2>';
+h+='<h2 style="color:#1e3a5f;font-size:12px;border-bottom:2px solid #3b82f6;padding-bottom:5px;margin:15px 0 10px">🔧 '+L.matCompat+'</h2>';
 var pdfMatIdx=0;
 // V6.2: Suppress % when material is CONDITIONAL or in severity mode - show status instead
-if(cp.excellent&&cp.excellent.length){h+='<div style="margin-bottom:10px"><div style="display:inline-block;background:#dcfce7;color:#166534;padding:4px 10px;border-radius:4px;font-weight:bold;font-size:10px;margin-bottom:6px">✓ Excellent Compatibility</div><div style="display:flex;flex-wrap:wrap;gap:6px">';cp.excellent.forEach(function(m){var mt=M.materials[m];if(mt){var conf=calcConfidence('material',m,{tempDefined:true,inRange:!pr.ex,rating:'excellent',fluidKey:fk,tempC:tC});var confDisplay=conf.notRecommended?'<span style="background:#dc2626;color:#fff;font-size:7px;padding:1px 4px;border-radius:2px">NOT REC</span>':conf.conditional?'<span style="background:#92400e;color:#fef3c7;font-size:7px;padding:1px 4px;border-radius:2px">COND</span>':conf.hasSeverityMode?'<span style="background:#059669;color:#fff;font-size:7px;padding:1px 4px;border-radius:2px">OK</span>':'<span style="background:#064e3b;color:#6ee7b7;font-size:7px;padding:1px 4px;border-radius:2px">'+conf.score+'%</span>';h+='<span style="background:#f0fdf4;border:1px solid #86efac;color:#166534;padding:4px 8px;border-radius:4px;font-size:9px">'+mt.name+' '+confDisplay+'</span>';pdfMatIdx++;}});h+='</div></div>';}
-if(cp.good&&cp.good.length){h+='<div style="margin-bottom:10px"><div style="display:inline-block;background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:4px;font-weight:bold;font-size:10px;margin-bottom:6px">○ Good Compatibility</div><div style="display:flex;flex-wrap:wrap;gap:6px">';cp.good.forEach(function(m){var mt=M.materials[m];if(mt){var conf=calcConfidence('material',m,{tempDefined:true,inRange:!pr.ex,rating:'good',fluidKey:fk,tempC:tC});var confDisplay=conf.notRecommended?'<span style="background:#dc2626;color:#fff;font-size:7px;padding:1px 4px;border-radius:2px">NOT REC</span>':conf.conditional?'<span style="background:#92400e;color:#fef3c7;font-size:7px;padding:1px 4px;border-radius:2px">COND</span>':conf.hasSeverityMode?'<span style="background:#059669;color:#fff;font-size:7px;padding:1px 4px;border-radius:2px">OK</span>':'<span style="background:#1e3a5f;color:#7dd3fc;font-size:7px;padding:1px 4px;border-radius:2px">'+conf.score+'%</span>';h+='<span style="background:#eff6ff;border:1px solid #93c5fd;color:#1e40af;padding:4px 8px;border-radius:4px;font-size:9px">'+mt.name+' '+confDisplay+'</span>';pdfMatIdx++;}});h+='</div></div>';}
-if(cp.poor&&cp.poor.length){h+='<div style="margin-bottom:10px"><div style="display:inline-block;background:#fee2e2;color:#991b1b;padding:4px 10px;border-radius:4px;font-weight:bold;font-size:10px;margin-bottom:6px">✗ Not Recommended</div><div style="display:flex;flex-wrap:wrap;gap:6px">';cp.poor.forEach(function(m){var mt=M.materials[m];if(mt){var conf=calcConfidence('material',m,{tempDefined:true,inRange:!pr.ex,rating:'poor',fluidKey:fk,tempC:tC});var confDisplay=conf.notRecommended?'<span style="background:#dc2626;color:#fff;font-size:7px;padding:1px 4px;border-radius:2px">NOT REC</span>':conf.conditional?'<span style="background:#92400e;color:#fef3c7;font-size:7px;padding:1px 4px;border-radius:2px">COND</span>':conf.hasSeverityMode?'<span style="background:#059669;color:#fff;font-size:7px;padding:1px 4px;border-radius:2px">OK</span>':'<span style="background:#7f1d1d;color:#fca5a5;font-size:7px;padding:1px 4px;border-radius:2px">'+conf.score+'%</span>';h+='<span style="background:#fef2f2;border:1px solid #fca5a5;color:#991b1b;padding:4px 8px;border-radius:4px;font-size:9px">'+mt.name+' '+confDisplay+'</span>';pdfMatIdx++;}});h+='</div></div>';}
+if(cp.excellent&&cp.excellent.length){h+='<div style="margin-bottom:10px"><div style="display:inline-block;background:#dcfce7;color:#166534;padding:4px 10px;border-radius:4px;font-weight:bold;font-size:10px;margin-bottom:6px">✓ '+L.excellent+'</div><div style="display:flex;flex-wrap:wrap;gap:6px">';cp.excellent.forEach(function(m){var mt=M.materials[m];if(mt){var conf=calcConfidence('material',m,{tempDefined:true,inRange:!pr.ex,rating:'excellent',fluidKey:fk,tempC:tC});var confDisplay=conf.notRecommended?'<span style="background:#dc2626;color:#fff;font-size:7px;padding:1px 4px;border-radius:2px">NOT REC</span>':conf.conditional?'<span style="background:#92400e;color:#fef3c7;font-size:7px;padding:1px 4px;border-radius:2px">COND</span>':conf.hasSeverityMode?'<span style="background:#059669;color:#fff;font-size:7px;padding:1px 4px;border-radius:2px">OK</span>':'<span style="background:#064e3b;color:#6ee7b7;font-size:7px;padding:1px 4px;border-radius:2px">'+conf.score+'%</span>';h+='<span style="background:#f0fdf4;border:1px solid #86efac;color:#166534;padding:4px 8px;border-radius:4px;font-size:9px">'+mt.name+' '+confDisplay+'</span>';pdfMatIdx++;}});h+='</div></div>';}
+if(cp.good&&cp.good.length){h+='<div style="margin-bottom:10px"><div style="display:inline-block;background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:4px;font-weight:bold;font-size:10px;margin-bottom:6px">○ '+L.good+'</div><div style="display:flex;flex-wrap:wrap;gap:6px">';cp.good.forEach(function(m){var mt=M.materials[m];if(mt){var conf=calcConfidence('material',m,{tempDefined:true,inRange:!pr.ex,rating:'good',fluidKey:fk,tempC:tC});var confDisplay=conf.notRecommended?'<span style="background:#dc2626;color:#fff;font-size:7px;padding:1px 4px;border-radius:2px">NOT REC</span>':conf.conditional?'<span style="background:#92400e;color:#fef3c7;font-size:7px;padding:1px 4px;border-radius:2px">COND</span>':conf.hasSeverityMode?'<span style="background:#059669;color:#fff;font-size:7px;padding:1px 4px;border-radius:2px">OK</span>':'<span style="background:#1e3a5f;color:#7dd3fc;font-size:7px;padding:1px 4px;border-radius:2px">'+conf.score+'%</span>';h+='<span style="background:#eff6ff;border:1px solid #93c5fd;color:#1e40af;padding:4px 8px;border-radius:4px;font-size:9px">'+mt.name+' '+confDisplay+'</span>';pdfMatIdx++;}});h+='</div></div>';}
+if(cp.poor&&cp.poor.length){h+='<div style="margin-bottom:10px"><div style="display:inline-block;background:#fee2e2;color:#991b1b;padding:4px 10px;border-radius:4px;font-weight:bold;font-size:10px;margin-bottom:6px">✗ '+L.notRec+'</div><div style="display:flex;flex-wrap:wrap;gap:6px">';cp.poor.forEach(function(m){var mt=M.materials[m];if(mt){var conf=calcConfidence('material',m,{tempDefined:true,inRange:!pr.ex,rating:'poor',fluidKey:fk,tempC:tC});var confDisplay=conf.notRecommended?'<span style="background:#dc2626;color:#fff;font-size:7px;padding:1px 4px;border-radius:2px">NOT REC</span>':conf.conditional?'<span style="background:#92400e;color:#fef3c7;font-size:7px;padding:1px 4px;border-radius:2px">COND</span>':conf.hasSeverityMode?'<span style="background:#059669;color:#fff;font-size:7px;padding:1px 4px;border-radius:2px">OK</span>':'<span style="background:#7f1d1d;color:#fca5a5;font-size:7px;padding:1px 4px;border-radius:2px">'+conf.score+'%</span>';h+='<span style="background:#fef2f2;border:1px solid #fca5a5;color:#991b1b;padding:4px 8px;border-radius:4px;font-size:9px">'+mt.name+' '+confDisplay+'</span>';pdfMatIdx++;}});h+='</div></div>';}
 h+='<div style="background:#f8fafc;padding:6px;border-radius:4px;font-size:8px;color:#64748b;font-style:italic;border-left:2px solid #3b82f6">Confidence % indicates data robustness based on source quality, input completeness, and applicability range - not probability of failure.</div>';
 // Collect and display material warnings for PDF
 var matWarnings=[];
@@ -6267,7 +6465,7 @@ var pdfSealEligibility = {
   reason: _currentFAO.sealReason || ''
 };
 var pdfSealFilterResult = filterSealsByEligibility(seals, pdfSealEligibility);
-h+='<h2>⚙️ Seal Recommendations ('+sk+' Service)</h2>';
+h+='<h2>⚙️ '+L.sealRec+' ('+sk+' Service)</h2>';
 if(pdfSealFilterResult.suppressed){
 h+='<div style="background:#fef2f2;border:2px solid #dc2626;padding:10px;border-radius:6px;margin:8px 0"><div style="font-weight:bold;color:#991b1b;font-size:10px;margin-bottom:4px">🚫 SEAL SELECTION SUPPRESSED</div><div style="color:#7f1d1d;font-size:8px">'+pdfSealFilterResult.reason+'</div><div style="color:#991b1b;font-size:7px;margin-top:6px">Contact equipment manufacturer for specialized containment solutions.</div></div>';
 }else{
@@ -6276,7 +6474,7 @@ var pdfSealIdx=0;
 pdfSealFilterResult.seals.forEach(function(s){var cls=s.sealless?'sl':(s.priority.includes('CRITICAL')?'cr':'');var sealConf=calcConfidence('seal',s,{hasAPI:s.apiPlan.includes('API'),tempDefined:true,viscDefined:true,categoryMatch:true,priority:s.priority});var confCls=sealConf.score>=90?'vh':sealConf.score>=75?'hi':sealConf.score>=60?'md':'lo';h+='<div class="seal '+cls+'"><div class="st">'+(s.sealless?'🟢 ':'')+(s.priority.includes('CRITICAL')?'🔴 ':'')+s.type+' <span class="conf-pdf '+confCls+'">'+sealConf.score+'%</span></div><div class="sp">Priority: '+s.priority+'</div><div style="margin:4px 0"><strong>Why:</strong> '+s.reason+'</div><div style="display:flex;gap:8px;flex-wrap:wrap;font-size:8px"><div><strong>Specs:</strong> '+s.specs+'</div><div><strong>Materials:</strong> '+s.materials+'</div><div><strong>Standard:</strong> '+s.apiPlan+'</div></div></div>';pdfSealIdx++;});
 }
 h+='<div class="conf-note">Confidence % reflects data source authority and applicability to specified conditions.</div>';
-if(hz){h+='<h2>⚠️ Chemical Hazards (GHS-7/AICIS)</h2>';
+if(hz){h+='<h2>⚠️ '+L.hazards+' (GHS-7/AICIS)</h2>';
 h+='<div class="hz '+(hz.signal==='DANGER'?'d':'w')+'"><div class="sig">'+hz.pictograms.join(' ')+' '+hz.signal+'</div>';
 h+='<div class="hs"><h4>GHS Classifications</h4><ul class="hl">';hz.ghsClasses.forEach(function(c){h+='<li>'+c+'</li>';});h+='</ul></div>';
 h+='<div class="hs"><h4>Hazard Statements (H-codes)</h4><ul class="hl">';hz.hStatements.forEach(function(s){h+='<li>'+s+'</li>';});h+='</ul></div>';
@@ -6288,7 +6486,7 @@ h+='<div style="font-size:8px;margin-top:8px;padding:6px;background:#f3f4f6;bord
 h+='<div style="font-size:7px;margin-top:6px;padding:4px;background:#eff6ff;border-radius:3px;border-left:2px solid #3b82f6"><strong>Australian Regulatory Sources:</strong> Safe Work Australia HCIS [13], Workplace Exposure Standards [14], AICIS [7], ADG Code [16]</div></div>';}
 // Add Reynolds Number if calculated
 if(lastReynolds){
-h+='<h2>🧮 Reynolds Number Analysis</h2>';
+h+='<h2>🧮 '+L.reynolds+'</h2>';
 h+='<div class="props">';
 h+='<div class="prop"><div class="prop-label">Reynolds Number</div><div class="prop-value">'+lastReynolds.Re.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,',')+'</div></div>';
 h+='<div class="prop"><div class="prop-label">Flow Regime</div><div class="prop-value" style="font-size:11px;color:'+(lastReynolds.regime==='Laminar'?'#10b981':lastReynolds.regime==='Transition'?'#f59e0b':'#ef4444')+'">'+lastReynolds.regime+'</div></div>';
@@ -6300,7 +6498,7 @@ h+='<div style="font-size:8px;color:#666;margin:6px 0;padding:4px;background:#f3
 }
 // Add Cavitation Analysis if calculated
 if(lastCavitation){
-h+='<h2>🔬 Cavitation Risk Assessment</h2>';
+h+='<h2>🔬 '+L.cavitation+'</h2>';
 var cavColor=lastCavitation.status==='Safe'?'#d1fae5':lastCavitation.status==='Warning'?'#fef3c7':'#fee2e2';
 var cavBorder=lastCavitation.status==='Safe'?'#10b981':lastCavitation.status==='Warning'?'#f59e0b':'#ef4444';
 var cavIcon=lastCavitation.status==='Safe'?'✅ SAFE':lastCavitation.status==='Warning'?'⚠️ WARNING':'❌ DANGER';
@@ -6318,20 +6516,20 @@ h+='<div style="font-size:8px;color:#666;margin:6px 0;padding:4px;background:#f5
 h+='<div class="conf-note">Cavitation confidence based on vapor pressure data source (CRC/Perry), input completeness, and safety margin adequacy.</div>';
 h+='<div style="font-size:8px;color:#666;margin:6px 0;padding:4px;background:#f3f4f6;border-radius:4px">NPSHa must exceed NPSHr by >10% margin. >50% recommended for safety.</div>';
 }
-h+='<div class="refs"><h2 style="font-size:10px;margin:0 0 6px">📚 Reference List</h2>';
+h+='<div class="refs"><h2 style="font-size:10px;margin:0 0 6px">📚 '+L.references+'</h2>';
 R.forEach(function(r){if(fluidRefs.includes(r.num))h+='<div class="ref">['+r.num+'] '+r.apa+'</div>';});
 h+='</div>';
 // Professional Footer
 h+='<div style="margin-top:20px;padding:15px;background:linear-gradient(135deg,#1e3a5f,#0f172a);border-radius:6px;color:white">';
 h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">';
-h+='<div style="font-size:10px;font-weight:600">CERTA V17.4 | Policy V16.5.2</div>';
+h+='<div style="font-size:10px;font-weight:600">CERTA V17.7 | Policy V16.8</div>';
 h+='<div style="font-size:9px;font-family:JetBrains Mono,monospace">'+docId+'</div>';
 h+='</div>';
-h+='<div style="background:#dc2626;color:white;padding:8px;border-radius:4px;text-align:center;font-weight:600;font-size:8px;margin-bottom:8px">⚠️ SCREENING TOOL ONLY - Results do not replace material qualification, corrosion testing, or manufacturer approval</div>';
+h+='<div style="background:#dc2626;color:white;padding:8px;border-radius:4px;text-align:center;font-weight:600;font-size:8px;margin-bottom:8px">⚠️ '+L.disclaimer+'</div>';
 h+='<div style="display:flex;justify-content:space-between;font-size:7px;opacity:0.8">';
-h+='<div>Generated: '+new Date().toLocaleString()+'</div>';
-h+='<div>Checksum: '+pdfChecksum+'</div>';
-h+='<div>FAO Verified ✓</div>';
+h+='<div>'+L.generated+': '+new Date().toLocaleString()+'</div>';
+h+='<div>'+L.checksum+': '+pdfChecksum+'</div>';
+h+='<div>FAO ✓</div>';
 h+='</div>';
 h+='<div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.2);font-size:6px;opacity:0.7;text-align:center">Standards: ISO 27001 Aligned | API RP 581 Compatible | GHS-7 Compliant | §2 Deterministic | §14 FAO Parity</div>';
 h+='</div>';
@@ -6504,15 +6702,49 @@ curLang=lang;
 const L=I18N[lang];
 document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
 document.querySelector('.lang-btn[onclick="setLang(\''+lang+'\')"]').classList.add('active');
+// RTL support for Arabic
+document.body.dir=lang==='ar'?'rtl':'ltr';
+document.body.style.textAlign=lang==='ar'?'right':'left';
 DOM.setText('mainTitle','🔬 CERTA');
-DOM.setText('mainSubtitle','V90 | Oxidizer Severity Tiers | '+L.subtitle);
+DOM.setText('mainSubtitle','V17.5 | Policy V16.5.2 | '+L.subtitle);
 document.querySelectorAll('[data-i18n]').forEach(el=>{
 const key=el.getAttribute('data-i18n');
 if(L[key])el.textContent=L[key];
 });
 try{localStorage.setItem('fluidCalcLang',lang);}catch(e){}
 }
+// V17.6 F2-001: Disclaimer Modal Functions - Parliament Session 13
+function checkDisclaimer(){
+  try{
+    const accepted=localStorage.getItem('certaDisclaimerAccepted');
+    const acceptedDate=localStorage.getItem('certaDisclaimerDate');
+    // Require re-acceptance every 30 days
+    if(accepted==='true'&&acceptedDate){
+      const daysSince=(Date.now()-parseInt(acceptedDate))/(1000*60*60*24);
+      if(daysSince<30)return true;
+    }
+  }catch(e){}
+  return false;
+}
+function showDisclaimer(){
+  document.getElementById('disclaimerOverlay').style.display='flex';
+}
+function updateDisclaimerBtn(){
+  const cb=document.getElementById('disclaimerCheck');
+  document.getElementById('disclaimerAccept').disabled=!cb.checked;
+}
+function acceptDisclaimer(){
+  try{
+    localStorage.setItem('certaDisclaimerAccepted','true');
+    localStorage.setItem('certaDisclaimerDate',Date.now().toString());
+  }catch(e){}
+  document.getElementById('disclaimerOverlay').style.display='none';
+}
 function init(){
+// V17.6 F2-001: Show disclaimer if not accepted
+if(!checkDisclaimer()){
+  showDisclaimer();
+}
 // V16.2 HARDENING: P2-A - Startup integrity validation (Agent 5: Regression & Feature)
 try {
   const integrityCheck = validateStartupIntegrity();
